@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  AddGoalViewController.h
 //  Keep Fit
 //
 //  Created by Iain Cuthbertson on 09/02/2015.
@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KeepFitGoal.h"
 
-@interface ViewController : UIViewController
+@interface AddGoalViewController : UIViewController
 
+@property KeepFitGoal *goal;
 
 @end
-
