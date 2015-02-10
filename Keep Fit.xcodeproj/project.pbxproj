@@ -16,6 +16,8 @@
 		AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6C21A896755000DD45A /* AddGoalViewController.m */; };
 		AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */; };
 		AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */; };
+		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
+		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,9 @@
 		AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoalListTableViewController.m; sourceTree = "<group>"; };
 		AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeepFitGoal.h; sourceTree = "<group>"; };
 		AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeepFitGoal.m; sourceTree = "<group>"; };
+		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
+		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
+		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +75,7 @@
 		AE40A68F1A8946BB000DD45A = {
 			isa = PBXGroup;
 			children = (
+				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
 				AE40A69A1A8946BB000DD45A /* Keep Fit */,
 				AE40A6B41A8946BB000DD45A /* Keep FitTests */,
 				AE40A6991A8946BB000DD45A /* Products */,
@@ -91,6 +98,8 @@
 				AE40A6C21A896755000DD45A /* AddGoalViewController.m */,
 				AE40A69F1A8946BB000DD45A /* AppDelegate.h */,
 				AE40A6A01A8946BB000DD45A /* AppDelegate.m */,
+				AEA0C38A1A8AB5BC00647E6E /* DBManager.h */,
+				AEA0C38B1A8AB5BC00647E6E /* DBManager.m */,
 				AE40A6C71A89680A000DD45A /* GoalListTableViewController.h */,
 				AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */,
 				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
@@ -233,6 +242,7 @@
 				AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */,
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
 				AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */,
+				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
 				AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */,
 				AE40A69E1A8946BB000DD45A /* main.m in Sources */,
 			);
@@ -429,6 +439,7 @@
 				AE40A6BD1A8946BB000DD45A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AE40A6BE1A8946BB000DD45A /* Build configuration list for PBXNativeTarget "Keep FitTests" */ = {
 			isa = XCConfigurationList;
@@ -437,6 +448,7 @@
 				AE40A6C01A8946BB000DD45A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
