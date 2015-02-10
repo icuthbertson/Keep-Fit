@@ -18,6 +18,7 @@
 		AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
+		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		AEA0C3971A8ABD9100647E6E /* goalsDB.sql */ = {isa = PBXFileReference; lastKnownFileType = file; path = goalsDB.sql; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				AEA0C38B1A8AB5BC00647E6E /* DBManager.m */,
 				AE40A6C71A89680A000DD45A /* GoalListTableViewController.h */,
 				AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */,
+				AEA0C3971A8ABD9100647E6E /* goalsDB.sql */,
 				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
 				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
 				AE40A6A51A8946BB000DD45A /* Main.storyboard */,
@@ -220,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */,
+				AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
 			);
