@@ -48,7 +48,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="neP-fI-1g1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="210.13333333333333" y="304.82666666666665"/>
+            <point key="canvasLocation" x="200" y="304"/>
         </scene>
         <!--Add New Goal-->
         <scene sceneID="ufC-wZ-h7g">
@@ -62,10 +62,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New to-do item" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-fI-Wnr">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Goal Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-fI-Wnr">
                                 <rect key="frame" x="16" y="269" width="288" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -130,7 +130,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="e0K-U8-4Sy">
-                        <barButtonItem key="backBarButtonItem" title="Go Back" id="58g-Fb-jlm"/>
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="Ufl-K9-ewk">
+                            <connections>
+                                <segue destination="t27-sP-Cfk" kind="unwind" unwindAction="unwindFromView:" id="HqZ-a3-oO3"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="M2g-Dz-met">
                             <connections>
                                 <segue destination="4uL-hu-mZb" kind="push" identifier="showEditGoal" id="BYg-sL-HhW"/>
@@ -139,6 +143,7 @@
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5mT-6q-Fyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="t27-sP-Cfk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="635.73333333333335" y="-359.73333333333335"/>
         </scene>
@@ -153,7 +158,20 @@
                     <view key="view" contentMode="scaleToFill" id="5DY-Gr-0eS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Edit Goal Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Z1-XI-R2Q">
+                                <rect key="frame" x="16" y="269" width="288" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="5Z1-XI-R2Q" secondAttribute="centerX" id="FhD-po-n2k"/>
+                            <constraint firstItem="5Z1-XI-R2Q" firstAttribute="leading" secondItem="5DY-Gr-0eS" secondAttribute="leadingMargin" id="T6c-wf-aOi"/>
+                            <constraint firstItem="5Z1-XI-R2Q" firstAttribute="trailing" secondItem="5DY-Gr-0eS" secondAttribute="trailingMargin" id="nki-jw-pHl"/>
+                            <constraint firstAttribute="centerY" secondItem="5Z1-XI-R2Q" secondAttribute="centerY" id="p7T-9M-btK"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mH9-kk-yHC">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="vsZ-De-yPu">
@@ -167,6 +185,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="saveButton" destination="jOc-um-6UR" id="Mnf-LD-Da6"/>
+                        <outlet property="textTitleField" destination="5Z1-XI-R2Q" id="vuj-S4-ZT4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CGO-wx-c3O" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Opy-hE-SPC" userLabel="Exit" sceneMemberID="exit"/>

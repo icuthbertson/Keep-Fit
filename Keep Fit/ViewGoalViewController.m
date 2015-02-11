@@ -10,21 +10,44 @@
 #import "KeepFitGoal.h"
 #import "GoalListTableViewController.h"
 #import "EditGoalViewController.h"
+#import "DBManager.h"
 
 
 @interface ViewGoalViewController ()
+
+@property (nonatomic, strong) DBManager *dbManager;
 
 @end
 
 @implementation ViewGoalViewController
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue {
-    //EditGoalViewController *source = [segue sourceViewController];
+    EditGoalViewController *source = [segue sourceViewController];
+    
+    self.viewGoal = source.editGoal;
+    if (self.viewGoal != nil) {
+        NSString *query;
+        query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%d", self.viewGoal.goalName, self.viewGoal.goalID];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    // Initialize the dbManager object.
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
 }

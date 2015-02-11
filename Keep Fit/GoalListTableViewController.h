@@ -11,5 +11,6 @@
 @interface GoalListTableViewController : UITableViewController
 
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue;
+-(IBAction)unwindFromView:(UIStoryboardSegue *)segue;
 
 @end

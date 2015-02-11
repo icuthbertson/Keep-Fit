@@ -44,6 +44,10 @@
     }
 }
 
+-(IBAction)unwindFromView:(UIStoryboardSegue *)segue {
+    [self.tableView reloadData];
+}
+
 -(void)loadFromDB {
     /*// Form the query.
     NSString *query = @"select * from goals";
@@ -176,6 +180,13 @@
         
         // Execute the query.
         [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
         
         // Reload the table view.
         [self loadFromDB];
