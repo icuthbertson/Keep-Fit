@@ -9,40 +9,107 @@
 #import "GoalListTableViewController.h"
 #import "KeepFitGoal.h"
 #import "AddGoalViewController.h"
+#import "DBManager.h"
 
 @interface GoalListTableViewController ()
 
 @property NSMutableArray *keepFitGoals;
+@property (nonatomic, strong) DBManager *dbManager;
+
+@property (nonatomic, strong) NSArray *arrDBResults;
 
 @end
 
 @implementation GoalListTableViewController
 
--(void)loadInitialData {
-    KeepFitGoal *goal1 = [[KeepFitGoal alloc] init];
-    goal1.goalName = @"Goal1";
-    [self.keepFitGoals addObject:goal1];
-    KeepFitGoal *goal2 = [[KeepFitGoal alloc] init];
-    goal2.goalName = @"Goal2";
-    [self.keepFitGoals addObject:goal2];
-    KeepFitGoal *goal3 = [[KeepFitGoal alloc] init];
-    goal3.goalName = @"Goal3";
-    [self.keepFitGoals addObject:goal3];
-}
-
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue {
     AddGoalViewController *source = [segue sourceViewController];
     KeepFitGoal *goal = source.goal;
     if (goal != nil) {
+        NSString *query;
+        query = [NSString stringWithFormat:@"insert into goals values(null, '%@')", goal.goalName];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+        
         [self.keepFitGoals addObject:goal];
         [self.tableView reloadData];
     }
 }
 
+-(void)loadFromDB {
+    /*// Form the query.
+    NSString *query = @"select * from goals";
+    
+    // Get the results.
+    if (self.keepFitGoals != nil) {
+        self.keepFitGoals = nil;
+    }
+    NSMutableArray *data = [[NSMutableArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+    
+    for (int i=0; i<[data count]; i++) {
+        KeepFitGoal *goal;
+        goal.goalName = [NSString stringWithFormat:@"%@", [[data objectAtIndex:i] objectAtIndex:indexOfGoalName]];
+        goal.completed = NO;
+        [self.keepFitGoals addObject:goal];
+    }
+    
+    // Reload the table view.
+    [self.tableView reloadData];*/
+    
+    if (self.keepFitGoals != nil) {
+        self.keepFitGoals = nil;
+    }
+    self.keepFitGoals = [[NSMutableArray alloc] init];
+    
+    // Form the query.
+    NSString *query = @"select * from goals";
+    
+    // Get the results.
+    if (self.arrDBResults != nil) {
+        self.arrDBResults = nil;
+    }
+    self.arrDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+    
+    //NSLog(@"arrDBResults: %@", self.arrDBResults);
+    
+    for (int i=0; i<[self.arrDBResults count]; i++) {
+        //NSLog(@"Goal Name %d: %@", i,[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]);
+        
+        KeepFitGoal *goal;
+        goal = [[KeepFitGoal alloc] init];
+        goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
+        goal.completed = NO;
+        [self.keepFitGoals addObject:goal];
+    }
+    
+    //NSLog(@"%@", self.keepFitGoals);
+    
+    // Reload the table view.
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (self.keepFitGoals != nil) {
+        self.keepFitGoals = nil;
+    }
     self.keepFitGoals = [[NSMutableArray alloc] init];
-    [self loadInitialData];
+    
+    // Initialize the dbManager object.
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
+    
+    [self loadFromDB];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,8 +140,34 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
+    
+    /*NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+    
+    // Set the loaded data to the appropriate cell labels.
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:indexPath.row] objectAtIndex:indexOfGoalName]];
+    
+    return cell;*/
 }
 
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the selected record.
+        // Find the record ID.
+        int recordIDToDelete = [[[self.keepFitGoals objectAtIndex:indexPath.row] objectAtIndex:0] intValue];
+        
+        NSLog(@"%d", recordIDToDelete);
+        
+        // Prepare the query.
+        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%d", recordIDToDelete];
+        
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        // Reload the table view.
+        [self loadFromDB];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.
