@@ -226,7 +226,7 @@
     if ([segue.identifier isEqualToString:@"showViewGoal"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         ViewGoalViewController *destViewController = segue.destinationViewController;
-        destViewController.goal = [self.keepFitGoals objectAtIndex:indexPath.row];
+        destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
     }
 }
 

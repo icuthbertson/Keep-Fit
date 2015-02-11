@@ -1,5 +1,5 @@
 //
-//  ViewGoalViewController.h
+//  EditGoalViewController.h
 //  Keep Fit
 //
 //  Created by Iain Cuthbertson on 11/02/2015.
@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 
-@interface ViewGoalViewController : UIViewController
+@interface EditGoalViewController : UIViewController
 
-@property KeepFitGoal *viewGoal;
-
--(IBAction)unwindToView:(UIStoryboardSegue *)segue;
+@property KeepFitGoal *editGoal;
 
 @end
