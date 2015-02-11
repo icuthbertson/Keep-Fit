@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="N0T-8z-OTu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="N0T-8z-OTu">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--List-->
+        <!--Goals-->
         <scene sceneID="Dno-3a-v5x">
             <objects>
                 <tableViewController id="Kag-Mo-E2e" customClass="GoalListTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="CR6-u3-dJp">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ListPrototypeCell" textLabel="kQP-BC-Qlq" style="IBUITableViewCellStyleDefault" id="mgt-ym-LJh">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ListPrototypeCell" textLabel="kQP-BC-Qlq" style="IBUITableViewCellStyleDefault" id="mgt-ym-LJh">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mgt-ym-LJh" id="uyN-pg-bd0">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -27,6 +27,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="u7R-gc-2Mv" kind="push" identifier="showViewGoal" id="ya4-43-u7K"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -35,17 +38,17 @@
                             <outlet property="delegate" destination="Kag-Mo-E2e" id="iaw-Ex-2iy"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="List" id="kPE-WU-Ofd">
+                    <navigationItem key="navigationItem" title="Goals" id="kPE-WU-Ofd">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z4i-pw-33h">
                             <connections>
-                                <segue destination="LH5-hh-SQ8" kind="presentation" id="Cnp-Bv-8Jo"/>
+                                <segue destination="LH5-hh-SQ8" kind="modal" id="Cnp-Bv-8Jo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="neP-fI-1g1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="394" y="322"/>
+            <point key="canvasLocation" x="210.13333333333333" y="304.82666666666665"/>
         </scene>
         <!--Add New Goal-->
         <scene sceneID="ufC-wZ-h7g">
@@ -56,11 +59,11 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New to-do item" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-fI-Wnr">
-                                <rect key="frame" x="16" y="285" width="568" height="30"/>
+                                <rect key="frame" x="16" y="269" width="288" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -93,7 +96,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <exit id="yZe-JB-kbO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2004" y="322"/>
+            <point key="canvasLocation" x="1068.8" y="304.82666666666665"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XeW-Tr-iM7">
@@ -111,7 +114,28 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uxg-dl-6Dg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-418" y="322"/>
+            <point key="canvasLocation" x="-222.93333333333334" y="304.82666666666665"/>
+        </scene>
+        <!--View Goal View Controller-->
+        <scene sceneID="xwG-6H-grv">
+            <objects>
+                <viewController id="u7R-gc-2Mv" customClass="ViewGoalViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="K48-DJ-8zt"/>
+                        <viewControllerLayoutGuide type="bottom" id="WLI-PT-c5f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GuH-7Q-4tF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="e0K-U8-4Sy">
+                        <barButtonItem key="backBarButtonItem" title="Go Back" id="58g-Fb-jlm"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5mT-6q-Fyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="635.73333333333335" y="-359.73333333333335"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5u-ay-RJb">
@@ -129,7 +153,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jT3-zf-G1e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1192" y="322"/>
+            <point key="canvasLocation" x="635.73333333333335" y="304.82666666666665"/>
         </scene>
     </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

@@ -7,9 +7,10 @@
 //
 
 #import "GoalListTableViewController.h"
-#import "KeepFitGoal.h"
 #import "AddGoalViewController.h"
 #import "DBManager.h"
+#import "ViewGoalViewController.h"
+#import "KeepFitGoal.h"
 
 @interface GoalListTableViewController ()
 
@@ -103,6 +104,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"Goals";
+    
     if (self.keepFitGoals != nil) {
         self.keepFitGoals = nil;
     }
@@ -155,8 +159,6 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the selected record.
-        // Find the record ID.
-        NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
         
         //NSLog(@"index of goal: %ld", (long)indexOfGoalID);
         //NSLog(@"index of goal: %ld", (long)indexPath.row);
@@ -167,10 +169,7 @@
         
         goal = [self.keepFitGoals objectAtIndex:objectIndex];
         
-        NSInteger recordIDToDelete = [goal goalID];
-        
         //NSLog(@"ID from goal: %d", [goal goalID]);
-        
         
         // Prepare the query.
         NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%d", [goal goalID]];
@@ -217,16 +216,21 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"showViewGoal"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        ViewGoalViewController *destViewController = segue.destinationViewController;
+        destViewController.goal = [self.keepFitGoals objectAtIndex:indexPath.row];
+    }
 }
-*/
 
+/*
 #pragma mark - Table view delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -234,6 +238,6 @@
     KeepFitGoal *tappedItem = [self.keepFitGoals objectAtIndex:indexPath.row];
     tappedItem.completed = !tappedItem.completed;
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
+}*/
 
 @end
