@@ -79,6 +79,7 @@
     }
     self.arrDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
     
+    NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
     NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
     
     //NSLog(@"arrDBResults: %@", self.arrDBResults);
@@ -88,12 +89,13 @@
         
         KeepFitGoal *goal;
         goal = [[KeepFitGoal alloc] init];
+        goal.goalID = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalID] intValue];
         goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
         goal.completed = NO;
         [self.keepFitGoals addObject:goal];
     }
     
-    //NSLog(@"%@", self.keepFitGoals);
+    //NSLog(@"%@", self.arrDBResults);
     
     // Reload the table view.
     [self.tableView reloadData];
@@ -154,12 +156,24 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the selected record.
         // Find the record ID.
-        int recordIDToDelete = [[[self.keepFitGoals objectAtIndex:indexPath.row] objectAtIndex:0] intValue];
+        NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
         
-        NSLog(@"%d", recordIDToDelete);
+        //NSLog(@"index of goal: %ld", (long)indexOfGoalID);
+        //NSLog(@"index of goal: %ld", (long)indexPath.row);
+        NSInteger objectIndex = indexPath.row;
+        
+        KeepFitGoal *goal;
+        goal = [[KeepFitGoal alloc] init];
+        
+        goal = [self.keepFitGoals objectAtIndex:objectIndex];
+        
+        NSInteger recordIDToDelete = [goal goalID];
+        
+        //NSLog(@"ID from goal: %d", [goal goalID]);
+        
         
         // Prepare the query.
-        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%d", recordIDToDelete];
+        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%d", [goal goalID]];
         
         // Execute the query.
         [self.dbManager executeQuery:query];

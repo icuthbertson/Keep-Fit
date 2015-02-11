@@ -10,6 +10,7 @@
 
 @interface KeepFitGoal : NSObject
 
+@property NSInteger goalID;
 @property NSString *goalName;
 @property BOOL completed;
 @property (readonly) NSDate *creationDate;
