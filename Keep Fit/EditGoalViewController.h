@@ -12,5 +12,6 @@
 @interface EditGoalViewController : UIViewController
 
 @property KeepFitGoal *editGoal;
+@property BOOL wasEdit;
 
 @end

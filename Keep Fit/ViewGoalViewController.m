@@ -24,18 +24,20 @@
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue {
     EditGoalViewController *source = [segue sourceViewController];
     
-    self.viewGoal = source.editGoal;
-    if (self.viewGoal != nil) {
-        NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%d", self.viewGoal.goalName, self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
+    if (source.wasEdit) {
+        self.viewGoal = source.editGoal;
+        if (self.viewGoal != nil) {
+            NSString *query;
+            query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%d", self.viewGoal.goalName, self.viewGoal.goalID];
+            // Execute the query.
+            [self.dbManager executeQuery:query];
         
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
+            if (self.dbManager.affectedRows != 0) {
+                NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+            }
+            else {
+                NSLog(@"Could not execute the query.");
+            }
         }
     }
     

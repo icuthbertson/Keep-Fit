@@ -143,6 +143,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ListPrototypeCell" forIndexPath:indexPath];
     KeepFitGoal *goal = [self.keepFitGoals objectAtIndex:indexPath.row];
+    cell.textLabel.font = [UIFont systemFontOfSize:20];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
     cell.textLabel.text = goal.goalName;
     if (goal.completed) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -191,6 +193,10 @@
         // Reload the table view.
         [self loadFromDB];
     }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 60.0;
 }
 
 /*
