@@ -12,5 +12,6 @@
 @interface AddGoalViewController : UIViewController
 
 @property KeepFitGoal *goal;
+@property NSMutableArray *listGoalNames;
 
 @end

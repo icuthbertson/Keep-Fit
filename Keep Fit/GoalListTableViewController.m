@@ -245,6 +245,17 @@
         ViewGoalViewController *destViewController = segue.destinationViewController;
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
     }
+    else if ([segue.identifier isEqualToString:@"addGoal"]) {
+        UINavigationController *navigationController = segue.destinationViewController;
+        AddGoalViewController *destAddController = [[navigationController viewControllers]objectAtIndex:0];
+        NSMutableArray *goalNamesForChecking = [[NSMutableArray alloc] init];
+        for (int i=0; i<[self.keepFitGoals count]; i++) {
+            NSString *goalNameForArray = [[NSString alloc] init];
+            goalNameForArray = [[self.keepFitGoals objectAtIndex:i] goalName];
+            [goalNamesForChecking addObject:goalNameForArray];
+        }
+        destAddController.listGoalNames = goalNamesForChecking;
+    }
 }
 
 /*

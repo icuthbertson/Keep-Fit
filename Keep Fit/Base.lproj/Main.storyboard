@@ -47,7 +47,7 @@
                     <navigationItem key="navigationItem" title="Goals" id="kPE-WU-Ofd">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z4i-pw-33h">
                             <connections>
-                                <segue destination="LH5-hh-SQ8" kind="modal" id="Cnp-Bv-8Jo"/>
+                                <segue destination="LH5-hh-SQ8" kind="modal" identifier="addGoal" id="Cnp-Bv-8Jo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

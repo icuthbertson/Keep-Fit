@@ -46,7 +46,8 @@
     if (sender != self.saveButton) return;
     if (self.textField.text.length > 0) {
         self.goal = [[KeepFitGoal alloc] init];
-        self.goal.goalName = self.textField.text;
+        NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        self.goal.goalName = trimmedString;
         self.goal.completed = NO;
     }
 }
@@ -55,8 +56,9 @@
     //NSLog(@"Date Picker: %@",self.datePicker.date);
     //NSLog(@"NSDate date: %@",[NSDate date]);
     //NSLog(@"Earlier Date: %@",[self.datePicker.date earlierDate:[NSDate date]]);
+    NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (sender == self.saveButton)  {
-        if ((self.textField.text.length == 0)) {
+        if ((trimmedString.length == 0)) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Please enter a name for the goal." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -65,6 +67,13 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
+        }
+        for (int i=0; i<[self.listGoalNames count]; i++) {
+            if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alert show];
+                return NO;
+            }
         }
     }
     return YES;
