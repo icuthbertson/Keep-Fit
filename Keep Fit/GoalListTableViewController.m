@@ -178,7 +178,7 @@
         //NSLog(@"ID from goal: %d", [goal goalID]);
         
         // Prepare the query.
-        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%d", [goal goalID]];
+        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%ld", (long)[goal goalID]];
         
         // Execute the query.
         [self.dbManager executeQuery:query];

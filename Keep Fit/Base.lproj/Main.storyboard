@@ -68,19 +68,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Goal Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-fI-Wnr">
-                                <rect key="frame" x="16" y="269" width="288" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Goal Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-fI-Wnr">
+                                <rect key="frame" x="16" y="101" width="288" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="xHm-o7-iSv">
+                                <rect key="frame" x="0.0" y="283" width="320" height="162"/>
+                                <date key="date" timeIntervalSinceReferenceDate="445528184.50142998">
+                                    <!--2015-02-13 13:49:44 +0000-->
+                                </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="444484800">
+                                    <!--2015-02-01 12:00:00 +0000-->
+                                </date>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Goal Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJl-Zo-pTT">
+                                <rect key="frame" x="16" y="161" width="288" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="New Goal Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fRJ-m8-nr9">
+                                <rect key="frame" x="16" y="72" width="288" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Completion Data &amp; Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jhl-SD-z4f">
+                                <rect key="frame" x="16" y="254" width="288" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="33L-t3-vdv">
+                                <rect key="frame" x="16" y="190" width="288" height="29"/>
+                                <segments>
+                                    <segment title="Steps"/>
+                                    <segment title="Stairs"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="Yvw-fI-Wnr" secondAttribute="centerX" id="FRu-sn-t6g"/>
-                            <constraint firstItem="Yvw-fI-Wnr" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="IzE-YE-I5k"/>
-                            <constraint firstAttribute="centerY" secondItem="Yvw-fI-Wnr" secondAttribute="centerY" id="Wcl-1C-VUz"/>
-                            <constraint firstItem="Yvw-fI-Wnr" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="ubW-D8-aeh"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Add New Goal" id="P6b-c2-NLw">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Lq8-yk-vvu">
@@ -95,14 +123,16 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="datePicker" destination="xHm-o7-iSv" id="B5g-2i-r7v"/>
                         <outlet property="saveButton" destination="bwb-fe-Z5L" id="3YV-fB-xs4"/>
                         <outlet property="textField" destination="Yvw-fI-Wnr" id="Eon-7z-tVb"/>
+                        <outlet property="typeSelecter" destination="33L-t3-vdv" id="y62-Fd-u0x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <exit id="yZe-JB-kbO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1068.8" y="304.82666666666665"/>
+            <point key="canvasLocation" x="1068" y="304"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XeW-Tr-iM7">

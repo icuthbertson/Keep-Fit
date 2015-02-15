@@ -11,6 +11,8 @@
 @interface AddGoalViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
+@property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *typeSelecter;
 
 @end
 
@@ -25,6 +27,7 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    [self.datePicker setMinimumDate: [NSDate date]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,6 +50,26 @@
         self.goal.completed = NO;
     }
 }
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    //NSLog(@"Date Picker: %@",self.datePicker.date);
+    //NSLog(@"NSDate date: %@",[NSDate date]);
+    //NSLog(@"Earlier Date: %@",[self.datePicker.date earlierDate:[NSDate date]]);
+    if (sender == self.saveButton)  {
+        if ((self.textField.text.length == 0)) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Please enter a name for the goal." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+        else if ([[self.datePicker.date earlierDate:[NSDate date]]isEqualToDate: self.datePicker.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+    }
+    return YES;
+}
+
 
 
 @end

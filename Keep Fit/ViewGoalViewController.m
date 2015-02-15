@@ -28,7 +28,7 @@
         self.viewGoal = source.editGoal;
         if (self.viewGoal != nil) {
             NSString *query;
-            query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%d", self.viewGoal.goalName, self.viewGoal.goalID];
+            query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%ld", self.viewGoal.goalName, (long)self.viewGoal.goalID];
             // Execute the query.
             [self.dbManager executeQuery:query];
         
