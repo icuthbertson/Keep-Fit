@@ -159,7 +159,39 @@
     KeepFitGoal *goal = [self.keepFitGoals objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:20];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
-    cell.textLabel.text = goal.goalName;
+    NSString *typeText;
+    switch (goal.goalType) {
+        case Steps:
+            typeText = [NSString stringWithFormat:@"Steps"];
+            break;
+        case Stairs:
+            typeText = [NSString stringWithFormat:@"Stairs"];
+            break;
+        default:
+            break;
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", goal.goalName, typeText];
+    NSString *statusText;
+    switch (goal.goalStatus) {
+        case Pending:
+            statusText = [NSString stringWithFormat:@"Pending"];
+            break;
+        case Active:
+            statusText = [NSString stringWithFormat:@"Active"];
+            break;
+        case Overdue:
+            statusText = [NSString stringWithFormat:@"Overdue"];
+            break;
+        case Suspended:
+            statusText = [NSString stringWithFormat:@"Suspended"];
+            break;
+        case Abandoned:
+            statusText = [NSString stringWithFormat:@"Abandoned"];
+            break;
+        default:
+            break;
+    }
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%d - Status: %@", goal.goalProgress, goal.goalAmount, statusText];
     /*if (goal.completed) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
