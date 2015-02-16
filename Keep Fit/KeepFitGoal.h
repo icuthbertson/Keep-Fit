@@ -10,9 +10,24 @@
 
 @interface KeepFitGoal : NSObject
 
+typedef NS_ENUM(NSInteger, GoalStatus) {
+    Pending = 0,
+    Active,
+    Overdue,
+    Suspended,
+    Abandoned
+};
+
+typedef NS_ENUM(NSInteger, GoalType) {
+    Steps = 0,
+    Stairs
+};
+
 @property NSInteger goalID;
 @property NSString *goalName;
-@property BOOL completed;
-@property (readonly) NSDate *creationDate;
-
+@property GoalStatus goalStatus;
+@property GoalType goalType;
+@property NSInteger goalAmount;
+@property NSInteger goalProgress;
+@property NSDate *goalCompletionDate;
 @end

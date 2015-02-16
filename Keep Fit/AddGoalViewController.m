@@ -73,19 +73,19 @@
 #pragma mark - PickerView
 
 // The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+- (int)numberOfComponentsInPickerView:(UIPickerView *)amountPicker
 {
     return 1;
 }
 
 // The number of rows of data
-- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+- (int)pickerView:(UIPickerView *)amountPicker numberOfRowsInComponent:(NSInteger)component
 {
-    return self.pickerSteps.count;
+    return self.goalAmount.count;
 }
 
 // The data to return for the row and component (column) that's being passed in
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (NSString*)pickerView:(UIPickerView *)amountPicker titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return [NSString stringWithFormat:@"%@", self.goalAmount[row]];
 }
@@ -95,18 +95,34 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if (sender != self.saveButton) return;
-    if (self.textField.text.length > 0) {
-        self.goal = [[KeepFitGoal alloc] init];
-        NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        self.goal.goalName = trimmedString;
-        self.goal.completed = NO;
+    
+    self.goal = [[KeepFitGoal alloc] init];
+    NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.goal.goalName = trimmedString;
+    self.goal.goalStatus = Pending;
+    if(self.typeSelecter.selectedSegmentIndex == 0) {
+        self.goal.goalType = Steps;
     }
+    else {
+        self.goal.goalType = Stairs;
+    }
+    self.goal.goalAmount = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] longValue];
+    self.goal.goalProgress = 0;
+    self.goal.goalCompletionDate = self.datePicker.date;
+    NSLog(@"Goal Name: %@",self.goal.goalName);
+    NSLog(@"Goal Status: %d",self.goal.goalStatus);
+    NSLog(@"Goal Type: %d",self.goal.goalType);
+    NSLog(@"Goal Amount: %ld",(long)self.goal.goalAmount);
+    NSLog(@"Goal Progress: %ld",(long)self.goal.goalProgress);
+    NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
+    
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     //NSLog(@"Date Picker: %@",self.datePicker.date);
     //NSLog(@"NSDate date: %@",[NSDate date]);
     //NSLog(@"Earlier Date: %@",[self.datePicker.date earlierDate:[NSDate date]]);
+    //NSLog(@"%ld",(long)[self.amountPicker selectedRowInComponent:0]);
     NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (sender == self.saveButton)  {
         if ((trimmedString.length == 0)) {

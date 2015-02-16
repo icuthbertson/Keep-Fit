@@ -121,7 +121,6 @@
         goal = [[KeepFitGoal alloc] init];
         goal.goalID = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalID] intValue];
         goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
-        goal.completed = NO;
         [self.keepFitGoals addObject:goal];
     }
     
@@ -150,19 +149,19 @@
     cell.textLabel.font = [UIFont systemFontOfSize:20];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
     cell.textLabel.text = goal.goalName;
-    if (goal.completed) {
+    /*if (goal.completed) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    return cell;
+    return cell;*/
     
     /*NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
     
     // Set the loaded data to the appropriate cell labels.
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:indexPath.row] objectAtIndex:indexOfGoalName]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:indexPath.row] objectAtIndex:indexOfGoalName]];*/
     
-    return cell;*/
+    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
