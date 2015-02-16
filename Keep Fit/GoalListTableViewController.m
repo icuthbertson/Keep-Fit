@@ -23,6 +23,29 @@
 
 @implementation GoalListTableViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.navigationItem.title = @"Goals";
+    
+    if (self.keepFitGoals != nil) {
+        self.keepFitGoals = nil;
+    }
+    self.keepFitGoals = [[NSMutableArray alloc] init];
+    
+    // Initialize the dbManager object.
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
+    
+    [self loadFromDB];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Segues
+
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue {
     AddGoalViewController *source = [segue sourceViewController];
     KeepFitGoal *goal = source.goal;
@@ -47,6 +70,8 @@
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue {
     [self.tableView reloadData];
 }
+
+#pragma mark - Database
 
 -(void)loadFromDB {
     /*// Form the query.
@@ -104,27 +129,6 @@
     
     // Reload the table view.
     [self.tableView reloadData];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.navigationItem.title = @"Goals";
-    
-    if (self.keepFitGoals != nil) {
-        self.keepFitGoals = nil;
-    }
-    self.keepFitGoals = [[NSMutableArray alloc] init];
-    
-    // Initialize the dbManager object.
-    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
-    
-    [self loadFromDB];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source

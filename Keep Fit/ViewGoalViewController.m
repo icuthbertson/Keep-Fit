@@ -21,6 +21,23 @@
 
 @implementation ViewGoalViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    // Initialize the dbManager object.
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Segue
+
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue {
     EditGoalViewController *source = [segue sourceViewController];
     
@@ -43,22 +60,6 @@
     
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
 }
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    // Initialize the dbManager object.
-    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
-    
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 #pragma mark - Navigation
 
