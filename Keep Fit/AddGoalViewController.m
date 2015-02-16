@@ -109,13 +109,12 @@
     self.goal.goalAmount = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] longValue];
     self.goal.goalProgress = 0;
     self.goal.goalCompletionDate = self.datePicker.date;
-    NSLog(@"Goal Name: %@",self.goal.goalName);
-    NSLog(@"Goal Status: %d",self.goal.goalStatus);
-    NSLog(@"Goal Type: %d",self.goal.goalType);
-    NSLog(@"Goal Amount: %ld",(long)self.goal.goalAmount);
-    NSLog(@"Goal Progress: %ld",(long)self.goal.goalProgress);
-    NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
-    
+    //NSLog(@"Goal Name: %@",self.goal.goalName);
+    //NSLog(@"Goal Status: %d",self.goal.goalStatus);
+    //NSLog(@"Goal Type: %d",self.goal.goalType);
+    //NSLog(@"Goal Amount: %ld",(long)self.goal.goalAmount);
+    //NSLog(@"Goal Progress: %ld",(long)self.goal.goalProgress);
+    //NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {

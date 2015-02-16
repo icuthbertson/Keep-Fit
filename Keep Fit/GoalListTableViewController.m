@@ -51,7 +51,7 @@
     KeepFitGoal *goal = source.goal;
     if (goal != nil) {
         NSString *query;
-        query = [NSString stringWithFormat:@"insert into goals values(null, '%@')", goal.goalName];
+        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%d', '%d', '%f')", goal.goalName, goal.goalStatus, goal.goalType, goal.goalAmount, goal.goalProgress, [goal.goalCompletionDate timeIntervalSince1970]];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -111,8 +111,13 @@
     
     NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
     NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+    NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
+    NSInteger indexOfGoalType = [self.dbManager.arrColumnNames indexOfObject:@"goalType"];
+    NSInteger indexOfGoalAmount = [self.dbManager.arrColumnNames indexOfObject:@"goalAmount"];
+    NSInteger indexOfGoalProgress = [self.dbManager.arrColumnNames indexOfObject:@"goalProgress"];
+    NSInteger indexOfGoalDate = [self.dbManager.arrColumnNames indexOfObject:@"goalDate"];
     
-    //NSLog(@"arrDBResults: %@", self.arrDBResults);
+    NSLog(@"arrDBResults: %@", self.arrDBResults);
     
     for (int i=0; i<[self.arrDBResults count]; i++) {
         //NSLog(@"Goal Name %d: %@", i,[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]);
@@ -121,6 +126,12 @@
         goal = [[KeepFitGoal alloc] init];
         goal.goalID = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalID] intValue];
         goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
+        goal.goalStatus = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue];
+        goal.goalType = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalType] intValue];
+        goal.goalAmount = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmount] intValue];
+        goal.goalProgress = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgress] intValue];
+        goal.goalCompletionDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalDate] doubleValue]];
+        NSLog(@"%@", goal.goalCompletionDate);
         [self.keepFitGoals addObject:goal];
     }
     
