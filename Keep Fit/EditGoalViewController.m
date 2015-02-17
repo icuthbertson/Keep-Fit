@@ -11,6 +11,11 @@
 @interface EditGoalViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UITextField *textTitleField;
+@property (weak, nonatomic) IBOutlet UITextField *editTitleField;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *editTypeField;
+@property (weak, nonatomic) IBOutlet UITextField *editStepsField;
+@property (weak, nonatomic) IBOutlet UITextField *editStairsField;
+@property (weak, nonatomic) IBOutlet UIDatePicker *editDateField;
 
 @end
 
@@ -27,6 +32,12 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
+    self.editTitleField.text = self.editGoal.goalName;
+    self.editTypeField.selectedSegmentIndex = self.editGoal.goalType;
+    self.editStepsField.text = [NSString stringWithFormat:@"%d",self.editGoal.goalAmountSteps];
+    self.editStairsField.text = [NSString stringWithFormat:@"%d",self.editGoal.goalAmountStairs];
+    [self.editDateField setDate:self.editGoal.goalCompletionDate];
 }
 
 - (void)didReceiveMemoryWarning {

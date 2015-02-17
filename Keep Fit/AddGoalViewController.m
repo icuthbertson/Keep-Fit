@@ -40,7 +40,7 @@
     
     [self.view addGestureRecognizer:tap];
     
-    [self.datePicker setMinimumDate: [NSDate date]];
+    [self.datePicker setMinimumDate:[NSDate date]];
     self.numStepsField.userInteractionEnabled = YES;
     self.numStairsField.userInteractionEnabled = NO;
     
