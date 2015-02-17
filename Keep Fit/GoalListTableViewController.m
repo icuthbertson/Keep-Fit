@@ -51,7 +51,7 @@
     KeepFitGoal *goal = source.goal;
     if (goal != nil) {
         NSString *query;
-        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%d', '%d', '%f')", goal.goalName, goal.goalStatus, goal.goalType, goal.goalAmount, goal.goalProgress, [goal.goalCompletionDate timeIntervalSince1970]];
+        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f')", goal.goalName, goal.goalStatus, goal.goalType, goal.goalAmountSteps, goal.goalProgressSteps, goal.goalAmountStairs, goal.goalProgressStairs, [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970]];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -113,9 +113,12 @@
     NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
     NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
     NSInteger indexOfGoalType = [self.dbManager.arrColumnNames indexOfObject:@"goalType"];
-    NSInteger indexOfGoalAmount = [self.dbManager.arrColumnNames indexOfObject:@"goalAmount"];
-    NSInteger indexOfGoalProgress = [self.dbManager.arrColumnNames indexOfObject:@"goalProgress"];
+    NSInteger indexOfGoalAmountSteps = [self.dbManager.arrColumnNames indexOfObject:@"goalAmountSteps"];
+    NSInteger indexOfGoalProgressSteps = [self.dbManager.arrColumnNames indexOfObject:@"goalProgressSteps"];
+    NSInteger indexOfGoalAmountStairs = [self.dbManager.arrColumnNames indexOfObject:@"goalAmountStairs"];
+    NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"goalProgressStairs"];
     NSInteger indexOfGoalDate = [self.dbManager.arrColumnNames indexOfObject:@"goalDate"];
+    NSInteger indexOfGoalCreationDate = [self.dbManager.arrColumnNames indexOfObject:@"goalCreationDate"];
     
     NSLog(@"arrDBResults: %@", self.arrDBResults);
     
@@ -128,9 +131,12 @@
         goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
         goal.goalStatus = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue];
         goal.goalType = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalType] intValue];
-        goal.goalAmount = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmount] intValue];
-        goal.goalProgress = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgress] intValue];
+        goal.goalAmountSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountSteps] intValue];
+        goal.goalProgressSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
+        goal.goalAmountStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountStairs] intValue];
+        goal.goalProgressStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
         goal.goalCompletionDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalDate] doubleValue]];
+        goal.goalCreationDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalCreationDate] doubleValue]];
         NSLog(@"%@", goal.goalCompletionDate);
         [self.keepFitGoals addObject:goal];
     }
@@ -159,18 +165,6 @@
     KeepFitGoal *goal = [self.keepFitGoals objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:20];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
-    NSString *typeText;
-    switch (goal.goalType) {
-        case Steps:
-            typeText = [NSString stringWithFormat:@"Steps"];
-            break;
-        case Stairs:
-            typeText = [NSString stringWithFormat:@"Stairs"];
-            break;
-        default:
-            break;
-    }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", goal.goalName, typeText];
     NSString *statusText;
     switch (goal.goalStatus) {
         case Pending:
@@ -191,7 +185,20 @@
         default:
             break;
     }
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%d - Status: %@", goal.goalProgress, goal.goalAmount, statusText];
+    NSString *typeText;
+    switch (goal.goalType) {
+        case Steps:
+            typeText = [NSString stringWithFormat:@"Steps"];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%ld - Status: %@", goal.goalProgressSteps, (long)goal.goalAmountSteps, statusText];
+            break;
+        case Stairs:
+            typeText = [NSString stringWithFormat:@"Stairs"];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%ld - Status: %@", goal.goalProgressStairs, (long)goal.goalAmountStairs, statusText];
+            break;
+        default:
+            break;
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", goal.goalName, typeText];
     /*if (goal.completed) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {

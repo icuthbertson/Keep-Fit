@@ -99,22 +99,33 @@
     self.goal = [[KeepFitGoal alloc] init];
     NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.goal.goalName = trimmedString;
+    NSLog(@"Goal Name: %@",self.goal.goalName);
     self.goal.goalStatus = Pending;
+    NSLog(@"Goal Status: %d",self.goal.goalStatus);
     if(self.typeSelecter.selectedSegmentIndex == 0) {
         self.goal.goalType = Steps;
+        NSLog(@"Goal Type: %d",self.goal.goalType);
+        self.goal.goalAmountSteps = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] intValue];
+        NSLog(@"Goal Amount Steps: %d",self.goal.goalAmountSteps);
+        self.goal.goalAmountStairs = 0;
+        NSLog(@"Goal Amount Stairs: %d",self.goal.goalAmountStairs);
     }
     else {
         self.goal.goalType = Stairs;
+        NSLog(@"Goal Type: %d",self.goal.goalType);
+        self.goal.goalAmountStairs = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] intValue];
+        NSLog(@"Goal Amount: %d Stairs",self.goal.goalAmountStairs);
+        self.goal.goalAmountSteps = 0;
+        NSLog(@"Goal Amount: %d Steps",self.goal.goalAmountSteps);
     }
-    self.goal.goalAmount = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] longValue];
-    self.goal.goalProgress = 0;
+    self.goal.goalProgressSteps = 0;
+    NSLog(@"Goal Progress Steps: %d",self.goal.goalProgressSteps);
+    self.goal.goalProgressStairs = 0;
+    NSLog(@"Goal Progress Stairs: %d",self.goal.goalProgressSteps);
     self.goal.goalCompletionDate = self.datePicker.date;
-    //NSLog(@"Goal Name: %@",self.goal.goalName);
-    //NSLog(@"Goal Status: %d",self.goal.goalStatus);
-    //NSLog(@"Goal Type: %d",self.goal.goalType);
-    //NSLog(@"Goal Amount: %ld",(long)self.goal.goalAmount);
-    //NSLog(@"Goal Progress: %ld",(long)self.goal.goalProgress);
-    //NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
+    NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
+    self.goal.goalCreationDate = [NSDate date];
+    NSLog(@"Goal Date: %@",self.goal.goalCreationDate);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {

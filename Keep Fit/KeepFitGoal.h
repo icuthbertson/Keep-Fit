@@ -27,7 +27,10 @@ typedef NS_ENUM(NSInteger, GoalType) {
 @property NSString *goalName;
 @property GoalStatus goalStatus;
 @property GoalType goalType;
-@property NSInteger goalAmount;
-@property NSInteger goalProgress;
+@property NSInteger goalAmountSteps;
+@property NSInteger goalProgressSteps;
+@property NSInteger goalAmountStairs;
+@property NSInteger goalProgressStairs;
 @property NSDate *goalCompletionDate;
+@property NSDate *goalCreationDate;
 @end

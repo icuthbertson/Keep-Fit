@@ -16,6 +16,12 @@
 @interface ViewGoalViewController ()
 
 @property (nonatomic, strong) DBManager *dbManager;
+@property (weak, nonatomic) IBOutlet UILabel *viewTitle;
+@property (weak, nonatomic) IBOutlet UILabel *viewType;
+@property (weak, nonatomic) IBOutlet UILabel *viewDateCreated;
+@property (weak, nonatomic) IBOutlet UILabel *viewDateCompletion;
+@property (weak, nonatomic) IBOutlet UIProgressView *viewProgressBar;
+@property (weak, nonatomic) IBOutlet UILabel *viewProgress;
 
 @end
 
@@ -29,6 +35,49 @@
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
+    self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - ", self.viewGoal.goalName];
+    switch (self.viewGoal.goalStatus) {
+        case Pending:
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Pending", self.viewGoal.goalName];
+            break;
+        case Active:
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
+            break;
+        case Overdue:
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Overdue", self.viewGoal.goalName];
+            break;
+        case Suspended:
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Suspended", self.viewGoal.goalName];
+            break;
+        case Abandoned:
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Abandoned", self.viewGoal.goalName];
+            break;
+        default:
+            break;
+    }
+
+    switch (self.viewGoal.goalType) {
+        case Steps:
+            self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps"];
+            self.viewProgress.text = [NSString stringWithFormat:@"Progress: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps];
+            self.viewProgressBar.progress = (self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps);
+            break;
+        case Stairs:
+            self.viewType.text = [NSString stringWithFormat:@"Goal Type: Stairs"];
+            self.viewProgress.text = [NSString stringWithFormat:@"Progress: %d/%d",self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
+            self.viewProgressBar.progress = (self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs);
+            break;
+        default:
+            break;
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    //uncomment to get the time only
+    //[formatter setDateFormat:@"hh:mm a"];
+    //[formatter setDateFormat:@"MMM dd, YYYY"];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    
+    self.viewDateCreated.text = [NSString stringWithFormat:@"Date Created: %@",[formatter stringFromDate:self.viewGoal.goalCreationDate]];
+    self.viewDateCompletion.text = [NSString stringWithFormat:@"Completion Date: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
 }
 
 - (void)didReceiveMemoryWarning {
