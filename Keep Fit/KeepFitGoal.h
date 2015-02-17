@@ -20,7 +20,8 @@ typedef NS_ENUM(NSInteger, GoalStatus) {
 
 typedef NS_ENUM(NSInteger, GoalType) {
     Steps = 0,
-    Stairs
+    Stairs,
+    Both
 };
 
 @property NSInteger goalID;

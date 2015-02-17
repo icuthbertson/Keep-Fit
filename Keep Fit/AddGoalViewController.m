@@ -14,13 +14,15 @@
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *typeSelecter;
 - (IBAction)typeSelecterAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UIPickerView *amountPicker;
-@property (weak, nonatomic) IBOutlet UILabel *amountLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITextField *numStepsField;
+@property (weak, nonatomic) IBOutlet UITextField *numStairsField;
 
-@property NSArray *pickerSteps;
-@property NSArray *pickerStairs;
-@property NSArray *goalAmount;
+/*@property NSArray *pickerStepsArray;
+@property NSArray *pickerStairsArray;
+
+@property UIPickerView *stepsPicker;
+@property UIPickerView *stairsPicker;*/
 
 @end
 
@@ -39,12 +41,23 @@
     [self.view addGestureRecognizer:tap];
     
     [self.datePicker setMinimumDate: [NSDate date]];
-
-    self.pickerSteps = @[@500, @1000, @1500, @2000, @2500, @3000, @3500, @4000, @4500, @5000, @5500, @6000, @6500, @7000, @7500, @8000, @8500, @9000, @9500, @10000];
-    self.pickerStairs = @[@5, @10, @15, @20, @25, @30, @35, @40, @45, @50, @55, @60, @65, @70, @75, @80, @85, @90, @95, @100];
-    self.goalAmount = self.pickerSteps;
-    self.amountPicker.dataSource = self;
-    self.amountPicker.delegate = self;
+    self.numStepsField.userInteractionEnabled = YES;
+    self.numStairsField.userInteractionEnabled = NO;
+    
+    /*self.pickerStepsArray = @[@500, @1000, @1500, @2000, @2500, @3000, @3500, @4000, @4500, @5000, @5500, @6000, @6500, @7000, @7500, @8000, @8500, @9000, @9500, @10000];
+    self.pickerStairsArray = @[@5, @10, @15, @20, @25, @30, @35, @40, @45, @50, @55, @60, @65, @70, @75, @80, @85, @90, @95, @100];
+    
+    self.stepsPicker = [[UIPickerView alloc] init];
+    [self.stepsPicker setDataSource: self];
+    [self.stepsPicker setDelegate: self];
+    self.stepsPicker.showsSelectionIndicator = YES;
+    self.numStepsField.inputView = self.stepsPicker;
+    
+    self.stairsPicker = [[UIPickerView alloc] init];
+    [self.stairsPicker setDataSource: self];
+    [self.stairsPicker setDelegate: self];
+    self.stairsPicker.showsSelectionIndicator = YES;
+    self.numStairsField.inputView = self.stairsPicker;*/
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,40 +67,60 @@
 
 -(void)dismissKeyboard {
     [self.textField resignFirstResponder];
+    [self.numStepsField resignFirstResponder];
+    [self.numStairsField resignFirstResponder];
 }
-
-#pragma mark - Segmented Control
-
-- (IBAction)typeSelecterAction:(id)sender {
-    if(self.typeSelecter.selectedSegmentIndex == 0) {
-        self.amountLabel.text = @"Number of Steps";
-        self.goalAmount = self.pickerSteps;
-    }
-    else {
-        self.amountLabel.text = @"Number of Stairs";
-        self.goalAmount = self.pickerStairs;
-    }
-    [self.amountPicker reloadAllComponents];
-}
-
+/*
 #pragma mark - PickerView
 
+//Steps
 // The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)amountPicker
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 1;
 }
 
 // The number of rows of data
-- (int)pickerView:(UIPickerView *)amountPicker numberOfRowsInComponent:(NSInteger)component
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return self.goalAmount.count;
+    if ([pickerView isEqual:self.stepsPicker]) return self.pickerStepsArray.count;
+    return self.pickerStairsArray.count;
 }
 
 // The data to return for the row and component (column) that's being passed in
-- (NSString*)pickerView:(UIPickerView *)amountPicker titleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (NSString*)stepsPicker:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%@", self.goalAmount[row]];
+    if ([pickerView isEqual:self.stepsPicker]) return [NSString stringWithFormat:@"%@", self.pickerStepsArray[row]];
+    return [NSString stringWithFormat:@"%@", self.pickerStairsArray[row]];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if ([pickerView isEqual:self.stepsPicker]) {
+        self.numStepsField.text = [self.pickerStepsArray objectAtIndex:row];
+    }
+    else if ([pickerView isEqual:self.stairsPicker]) {
+        self.numStairsField.text = [self.pickerStairsArray objectAtIndex:row];
+    }
+}*/
+
+#pragma mark - Segmented Control
+
+- (IBAction)typeSelecterAction:(id)sender {
+    if(self.typeSelecter.selectedSegmentIndex == 0) {
+        self.numStepsField.userInteractionEnabled = YES;
+        self.numStairsField.userInteractionEnabled = NO;
+        self.numStairsField.text = 0;
+    }
+    else if (self.typeSelecter.selectedSegmentIndex == 1) {
+        self.numStepsField.userInteractionEnabled = NO;
+        self.numStairsField.userInteractionEnabled = YES;
+        self.numStepsField.text = 0;
+    }
+    else {
+        self.numStepsField.userInteractionEnabled = YES;
+        self.numStairsField.userInteractionEnabled = YES;
+    }
 }
 
 #pragma mark - Navigation
@@ -105,18 +138,26 @@
     if(self.typeSelecter.selectedSegmentIndex == 0) {
         self.goal.goalType = Steps;
         NSLog(@"Goal Type: %d",self.goal.goalType);
-        self.goal.goalAmountSteps = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] intValue];
+        self.goal.goalAmountSteps = [self.numStepsField.text intValue];
         NSLog(@"Goal Amount Steps: %d",self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = 0;
         NSLog(@"Goal Amount Stairs: %d",self.goal.goalAmountStairs);
     }
-    else {
+    else if (self.typeSelecter.selectedSegmentIndex == 1) {
         self.goal.goalType = Stairs;
         NSLog(@"Goal Type: %d",self.goal.goalType);
-        self.goal.goalAmountStairs = [[self.goalAmount objectAtIndex:[self.amountPicker selectedRowInComponent:0]] intValue];
+        self.goal.goalAmountStairs = [self.numStairsField.text intValue];
         NSLog(@"Goal Amount: %d Stairs",self.goal.goalAmountStairs);
         self.goal.goalAmountSteps = 0;
         NSLog(@"Goal Amount: %d Steps",self.goal.goalAmountSteps);
+    }
+    else {
+        self.goal.goalType = Both;
+        NSLog(@"Goal Type: %d",self.goal.goalType);
+        self.goal.goalAmountSteps = [self.numStepsField.text intValue];
+        NSLog(@"Goal Amount Steps: %d",self.goal.goalAmountSteps);
+        self.goal.goalAmountStairs = [self.numStairsField.text intValue];
+        NSLog(@"Goal Amount Stairs: %d",self.goal.goalAmountStairs);
     }
     self.goal.goalProgressSteps = 0;
     NSLog(@"Goal Progress Steps: %d",self.goal.goalProgressSteps);

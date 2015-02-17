@@ -189,16 +189,20 @@
     switch (goal.goalType) {
         case Steps:
             typeText = [NSString stringWithFormat:@"Steps"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%ld - Status: %@", goal.goalProgressSteps, (long)goal.goalAmountSteps, statusText];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %d/%d", goal.goalProgressSteps, goal.goalAmountSteps];
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Progress Made: %d/%ld - Status: %@", goal.goalProgressStairs, (long)goal.goalAmountStairs, statusText];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %d/%d", goal.goalProgressStairs, goal.goalAmountStairs];
+            break;
+        case Both:
+            typeText = [NSString stringWithFormat:@"Steps and Stairs"];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %d/%d Stairs: %d/%d", goal.goalProgressSteps, goal.goalAmountSteps, goal.goalProgressStairs, goal.goalAmountStairs];
             break;
         default:
             break;
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", goal.goalName, typeText];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", goal.goalName, statusText];
     /*if (goal.completed) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 
-@interface AddGoalViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface AddGoalViewController : UIViewController /*<UIPickerViewDataSource, UIPickerViewDelegate>*/
 
 @property KeepFitGoal *goal;
 @property NSMutableArray *listGoalNames;

@@ -59,13 +59,18 @@
     switch (self.viewGoal.goalType) {
         case Steps:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Progress: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps];
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps];
             self.viewProgressBar.progress = (self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps);
             break;
         case Stairs:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Progress: %d/%d",self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
+            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %d/%d",self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
             self.viewProgressBar.progress = (self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs);
+            break;
+        case Both:
+            self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps and Stairs"];
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %d/%d  Stairs: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps,self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
+            self.viewProgressBar.progress = (((self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps)/2)+((self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs)/2));
             break;
         default:
             break;
