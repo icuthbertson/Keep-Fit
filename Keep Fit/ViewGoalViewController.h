@@ -12,6 +12,7 @@
 @interface ViewGoalViewController : UIViewController
 
 @property KeepFitGoal *viewGoal;
+@property NSMutableArray *listGoalNames;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue;
 

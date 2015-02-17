@@ -316,6 +316,7 @@
                                             <segment title="Both"/>
                                         </segments>
                                         <connections>
+                                            <action selector="typeSelecterAction:" destination="4uL-hu-mZb" eventType="valueChanged" id="11k-Yi-nXB"/>
                                             <action selector="typeSelecterAction:" destination="vXZ-lx-hvc" eventType="valueChanged" id="mhE-i5-0Jb"/>
                                         </connections>
                                     </segmentedControl>

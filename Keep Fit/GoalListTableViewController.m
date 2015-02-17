@@ -51,7 +51,7 @@
     KeepFitGoal *goal = source.goal;
     if (goal != nil) {
         NSString *query;
-        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f')", goal.goalName, goal.goalStatus, goal.goalType, goal.goalAmountSteps, goal.goalProgressSteps, goal.goalAmountStairs, goal.goalProgressStairs, [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970]];
+        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%ld', '%ld', '%ld', '%ld', '%f', '%f')", goal.goalName, goal.goalStatus, goal.goalType, (long)goal.goalAmountSteps, (long)goal.goalProgressSteps, (long)goal.goalAmountStairs, (long)goal.goalProgressStairs, [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970]];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -189,15 +189,15 @@
     switch (goal.goalType) {
         case Steps:
             typeText = [NSString stringWithFormat:@"Steps"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %d/%d", goal.goalProgressSteps, goal.goalAmountSteps];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps];
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %d/%d", goal.goalProgressStairs, goal.goalAmountStairs];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld", (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
             break;
         case Both:
             typeText = [NSString stringWithFormat:@"Steps and Stairs"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %d/%d Stairs: %d/%d", goal.goalProgressSteps, goal.goalAmountSteps, goal.goalProgressStairs, goal.goalAmountStairs];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld Stairs: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps, (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
             break;
         default:
             break;

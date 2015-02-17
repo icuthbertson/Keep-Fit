@@ -139,30 +139,30 @@
         self.goal.goalType = Steps;
         NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountSteps = [self.numStepsField.text intValue];
-        NSLog(@"Goal Amount Steps: %d",self.goal.goalAmountSteps);
+        NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = 0;
-        NSLog(@"Goal Amount Stairs: %d",self.goal.goalAmountStairs);
+        NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
     }
     else if (self.typeSelecter.selectedSegmentIndex == 1) {
         self.goal.goalType = Stairs;
         NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountStairs = [self.numStairsField.text intValue];
-        NSLog(@"Goal Amount: %d Stairs",self.goal.goalAmountStairs);
+        NSLog(@"Goal Amount: %ld Stairs",(long)self.goal.goalAmountStairs);
         self.goal.goalAmountSteps = 0;
-        NSLog(@"Goal Amount: %d Steps",self.goal.goalAmountSteps);
+        NSLog(@"Goal Amount: %ld Steps",(long)self.goal.goalAmountSteps);
     }
     else {
         self.goal.goalType = Both;
         NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountSteps = [self.numStepsField.text intValue];
-        NSLog(@"Goal Amount Steps: %d",self.goal.goalAmountSteps);
+        NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = [self.numStairsField.text intValue];
-        NSLog(@"Goal Amount Stairs: %d",self.goal.goalAmountStairs);
+        NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
     }
     self.goal.goalProgressSteps = 0;
-    NSLog(@"Goal Progress Steps: %d",self.goal.goalProgressSteps);
+    NSLog(@"Goal Progress Steps: %ld",(long)self.goal.goalProgressSteps);
     self.goal.goalProgressStairs = 0;
-    NSLog(@"Goal Progress Stairs: %d",self.goal.goalProgressSteps);
+    NSLog(@"Goal Progress Stairs: %ld",(long)self.goal.goalProgressSteps);
     self.goal.goalCompletionDate = self.datePicker.date;
     NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
     self.goal.goalCreationDate = [NSDate date];

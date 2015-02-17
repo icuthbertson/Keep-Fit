@@ -34,6 +34,10 @@
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
+    [self showDetails];
+}
+
+-(void)showDetails {
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
     self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - ", self.viewGoal.goalName];
     switch (self.viewGoal.goalStatus) {
@@ -55,21 +59,21 @@
         default:
             break;
     }
-
+    
     switch (self.viewGoal.goalType) {
         case Steps:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps];
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
             self.viewProgressBar.progress = (self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps);
             break;
         case Stairs:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %d/%d",self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
+            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
             self.viewProgressBar.progress = (self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs);
             break;
         case Both:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps and Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %d/%d  Stairs: %d/%d",self.viewGoal.goalProgressSteps,self.viewGoal.goalAmountSteps,self.viewGoal.goalProgressStairs,self.viewGoal.goalAmountStairs];
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
             self.viewProgressBar.progress = (((self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps)/2)+((self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs)/2));
             break;
         default:
@@ -99,7 +103,7 @@
         self.viewGoal = source.editGoal;
         if (self.viewGoal != nil) {
             NSString *query;
-            query = [NSString stringWithFormat:@"update goals set goalName='%@' where goalID=%ld", self.viewGoal.goalName, (long)self.viewGoal.goalID];
+            query = [NSString stringWithFormat:@"update goals set goalName='%@', goalType='%d', goalAmountSteps='%ld', goalAmountStairs='%ld', goalDate='%f' where goalID=%ld", self.viewGoal.goalName, self.viewGoal.goalType, (long)self.viewGoal.goalAmountSteps, (long)self.viewGoal.goalAmountStairs, [self.viewGoal.goalCompletionDate timeIntervalSince1970], (long)self.viewGoal.goalID];
             // Execute the query.
             [self.dbManager executeQuery:query];
         
@@ -112,7 +116,7 @@
         }
     }
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
+    [self showDetails];
 }
 
 #pragma mark - Navigation
@@ -124,6 +128,7 @@
     if ([segue.identifier isEqualToString:@"showEditGoal"]) {
         EditGoalViewController *destViewController = segue.destinationViewController;
         destViewController.editGoal = self.viewGoal;
+        destViewController.listGoalNames = self.listGoalNames;
     }
 }
 

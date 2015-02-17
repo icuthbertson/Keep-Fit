@@ -13,5 +13,6 @@
 
 @property KeepFitGoal *editGoal;
 @property BOOL wasEdit;
+@property NSMutableArray *listGoalNames;
 
 @end
