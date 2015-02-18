@@ -241,6 +241,28 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ig3-9D-it8">
+                                <rect key="frame" x="16" y="336" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Set Active">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="setActiveButton:" destination="u7R-gc-2Mv" eventType="touchUpInside" id="rrc-Xq-tag"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="B5f-He-k1R">
+                                <rect key="frame" x="169" y="336" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Suspend">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="suspendButton:" destination="u7R-gc-2Mv" eventType="touchUpInside" id="Pcd-GL-OUu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -257,6 +279,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="outletActiveButton" destination="ig3-9D-it8" id="EvU-nQ-c1F"/>
+                        <outlet property="outletSuspendButton" destination="B5f-He-k1R" id="krS-xv-6NY"/>
                         <outlet property="viewDateCompletion" destination="Hcs-1S-JDQ" id="CWy-do-0o8"/>
                         <outlet property="viewDateCreated" destination="C6R-Zv-Tlz" id="PPH-DJ-rh9"/>
                         <outlet property="viewProgress" destination="XON-mD-FF7" id="hq2-gf-aJH"/>

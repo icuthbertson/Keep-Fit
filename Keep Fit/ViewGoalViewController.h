@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 
-@interface ViewGoalViewController : UIViewController
+@interface ViewGoalViewController : UIViewController<UIAlertViewDelegate>
 
 @property KeepFitGoal *viewGoal;
 @property NSMutableArray *listGoalNames;
+@property KeepFitGoal *activeGoal;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue;
 

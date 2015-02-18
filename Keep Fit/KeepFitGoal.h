@@ -15,7 +15,8 @@ typedef NS_ENUM(NSInteger, GoalStatus) {
     Active,
     Overdue,
     Suspended,
-    Abandoned
+    Abandoned,
+    Completed
 };
 
 typedef NS_ENUM(NSInteger, GoalType) {

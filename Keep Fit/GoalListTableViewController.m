@@ -63,11 +63,13 @@
         }
         
         [self.keepFitGoals addObject:goal];
+        [self loadFromDB];
         [self.tableView reloadData];
     }
 }
 
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue {
+    [self loadFromDB];
     [self.tableView reloadData];
 }
 
@@ -137,7 +139,27 @@
         goal.goalProgressStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
         goal.goalCompletionDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalDate] doubleValue]];
         goal.goalCreationDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalCreationDate] doubleValue]];
-        NSLog(@"%@", goal.goalCompletionDate);
+        //NSLog(@"%@", goal.goalCompletionDate);
+        NSLog(@"%@", [[NSDate date] earlierDate:goal.goalCompletionDate]);
+        
+        if ((goal.goalStatus != Active) && [[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+            NSLog(@"overdue");
+            
+            goal.goalStatus = Overdue;
+            
+            NSString *query;
+            query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus, (long)goal.goalID];
+            // Execute the query.
+            [self.dbManager executeQuery:query];
+            
+            if (self.dbManager.affectedRows != 0) {
+                NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+            }
+            else {
+                NSLog(@"Could not execute the query.");
+            }
+        }
+        
         [self.keepFitGoals addObject:goal];
     }
     
@@ -182,6 +204,9 @@
         case Abandoned:
             statusText = [NSString stringWithFormat:@"Abandoned"];
             break;
+        case Completed:
+            statusText = [NSString stringWithFormat:@"Completed"];
+            break;
         default:
             break;
     }
@@ -218,10 +243,27 @@
     return cell;
 }
 
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger objectIndex = indexPath.row;
+    
+    KeepFitGoal *goal;
+    goal = [[KeepFitGoal alloc] init];
+    
+    goal = [self.keepFitGoals objectAtIndex:objectIndex];
+    
+    if (goal.goalStatus == Completed) {
+        return UITableViewCellEditingStyleNone;
+    }
+    return UITableViewCellEditingStyleDelete;
+
+}
+
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the selected record.
+        NSLog(@"Abandon");
         
         //NSLog(@"index of goal: %ld", (long)indexOfGoalID);
         //NSLog(@"index of goal: %ld", (long)indexPath.row);
@@ -232,10 +274,24 @@
         
         goal = [self.keepFitGoals objectAtIndex:objectIndex];
         
+        if (goal.goalStatus == Abandoned) {
+            if ([[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+                goal.goalStatus = Overdue;
+            }
+            else {
+                goal.goalStatus = Pending;
+            }
+        }
+        else {
+            goal.goalStatus = Abandoned;
+        }
+        
         //NSLog(@"ID from goal: %d", [goal goalID]);
         
         // Prepare the query.
-        NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%ld", (long)[goal goalID]];
+        //NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%ld", (long)[goal goalID]];
+        
+        NSString *query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus,(long)goal.goalID];
         
         // Execute the query.
         [self.dbManager executeQuery:query];
@@ -250,6 +306,21 @@
         // Reload the table view.
         [self loadFromDB];
     }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSInteger objectIndex = indexPath.row;
+    
+    KeepFitGoal *goal;
+    goal = [[KeepFitGoal alloc] init];
+    
+    goal = [self.keepFitGoals objectAtIndex:objectIndex];
+    
+    if (goal.goalStatus == Abandoned) {
+        return @"Re-instate";
+    }
+    return @"Abandon";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -301,6 +372,12 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         ViewGoalViewController *destViewController = segue.destinationViewController;
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
+        destViewController.activeGoal = nil;
+        for (int i=0; i<[self.keepFitGoals count]; i++) {
+            if (Active == [[self.keepFitGoals objectAtIndex:i] goalStatus]) {
+                destViewController.activeGoal = [self.keepFitGoals objectAtIndex:i];
+            }
+        }
     }
     else if ([segue.identifier isEqualToString:@"addGoal"]) {
         UINavigationController *navigationController = segue.destinationViewController;
