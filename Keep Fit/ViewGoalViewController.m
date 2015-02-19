@@ -13,7 +13,11 @@
 #import "DBManager.h"
 
 
-@interface ViewGoalViewController ()
+@interface ViewGoalViewController () {
+    NSThread *BackgroundThread;
+    NSTimer *timerStep;
+    NSTimer *timerStair;
+}
 
 @property (nonatomic, strong) DBManager *dbManager;
 @property (weak, nonatomic) IBOutlet UILabel *viewTitle;
@@ -54,6 +58,7 @@
             [self.outletActiveButton setTitle:@"Stop" forState:UIControlStateNormal];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
+            [self hideAndDisableLeftNavigationItem];
             [self hideAndDisableRightNavigationItem];
             break;
         case Overdue:
@@ -181,8 +186,10 @@
         }
         self.activeGoal = self.viewGoal;
         self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
+        [self hideAndDisableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Stop" forState:UIControlStateNormal];
+        [self startBackgroundThread];
     } /**********************************set pending*****************************************/
     else if (self.activeGoal.goalID == self.viewGoal.goalID) {
         if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
@@ -209,8 +216,10 @@
         else {
             NSLog(@"Could not execute the query.");
         }
+        [self showAndEnableLeftNavigationItem];
         [self showAndEnableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Set Active" forState:UIControlStateNormal];
+        [self cancelBackgroundThread];
     } else { /**********************************switch active*****************************************/
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Another goal already active" message:@"Would you like to make this goal the active goal?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
         [alert addButtonWithTitle:@"Yes"];
@@ -237,9 +246,14 @@
         }
         self.activeGoal = nil;
         self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Suspended", self.viewGoal.goalName];
+        [self showAndEnableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         self.outletActiveButton.hidden = YES;
+        [self.outletActiveButton setTitle:@"Set Active" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
+        if (self.viewGoal.goalStatus == Active) {
+            [self cancelBackgroundThread];
+        }
     }/**********************************Re-instate*****************************************/
     else if (self.viewGoal.goalStatus == Suspended) {
         if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
@@ -305,23 +319,168 @@
         }
         self.activeGoal = self.viewGoal;
         self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
+        [self hideAndDisableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Stop" forState:UIControlStateNormal];
+        [self startBackgroundThread];
     }
 }
 
 //hide edit button
--(void) hideAndDisableRightNavigationItem
-{
+-(void) hideAndDisableRightNavigationItem {
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor clearColor]];
     [self.navigationItem.rightBarButtonItem setEnabled:NO];
 }
 
 //show edit button
--(void) showAndEnableRightNavigationItem
-{
+-(void) showAndEnableRightNavigationItem {
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor blackColor]];
     [self.navigationItem.rightBarButtonItem setEnabled:YES];
+}
+
+//hide edit button
+-(void) hideAndDisableLeftNavigationItem {
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor clearColor]];
+    [self.navigationItem.leftBarButtonItem setEnabled:NO];
+}
+
+//show edit button
+-(void) showAndEnableLeftNavigationItem {
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor blackColor]];
+    [self.navigationItem.leftBarButtonItem setEnabled:YES];
+}
+
+/*************Background Thread***************/
+-(void) startBackgroundThread {
+    //create and start background thread
+    BackgroundThread = [[NSThread alloc]initWithTarget:self selector:@selector(backgroundThread) object:nil];
+    [BackgroundThread start];
+}
+
+-(void) backgroundThread {
+    NSLog(@"performing background thread");
+    
+    if ((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) {
+        timerStep = [NSTimer timerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(takeStep)
+                                           userInfo:nil
+                                            repeats:YES ];
+        [[NSRunLoop mainRunLoop] addTimer:timerStep forMode:NSRunLoopCommonModes];
+    }
+    if ((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) {
+        timerStair = [NSTimer timerWithTimeInterval:3.0
+                                             target:self
+                                           selector:@selector(takeStair)
+                                           userInfo:nil
+                                            repeats:YES ];
+        [[NSRunLoop mainRunLoop] addTimer:timerStair forMode:NSRunLoopCommonModes];
+    }
+    
+    BOOL cancelThread = NO;
+    while (!cancelThread) {
+        cancelThread = [BackgroundThread isCancelled];
+    }
+    NSLog(@"Cancel");
+    [self cleanUpBackgroundThread];
+}
+
+-(void) takeStep {
+    NSLog(@"Take Step");
+    if (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps) {
+        self.viewGoal.goalProgressSteps++;
+        [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
+    }
+    else {
+        [timerStep invalidate];
+        timerStep = nil;
+        if ((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs)) {
+            [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
+            [self cancelBackgroundThread];
+        }
+    }
+}
+
+-(void) takeStair {
+    NSLog(@"Take Stair");
+    if (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs) {
+        self.viewGoal.goalProgressStairs++;
+        [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
+    }
+    else {
+        [timerStair invalidate];
+        timerStair = nil;
+        if ((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs)) {
+            [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
+            [self cancelBackgroundThread];
+        }
+    }
+}
+
+-(void) updateView {
+    NSLog(@"Update View");
+    switch (self.viewGoal.goalType) {
+        case Steps:
+            if (self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) {
+                [self completedView];
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+            self.viewProgressBar.progress = (self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps);
+            break;
+        case Stairs:
+            if (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs) {
+                [self completedView];
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.viewProgressBar.progress = (self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs);
+            break;
+        case Both:
+            if (((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs))) {
+                [self completedView];
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.viewProgressBar.progress = (((self.viewGoal.goalProgressSteps/self.viewGoal.goalAmountSteps)/2)+((self.viewGoal.goalProgressStairs/self.viewGoal.goalAmountStairs)/2));
+            break;
+        default:
+            break;
+    }
+    NSString *query;
+    query = [NSString stringWithFormat:@"update goals set goalStatus='%d', goalProgressSteps='%d', goalProgressStairs='%d' where goalID=%ld", self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+
+}
+
+-(void) completedView {
+    self.viewGoal.goalStatus = Completed;
+    self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Completed", self.viewGoal.goalName];
+    self.outletActiveButton.hidden = YES;
+    self.outletSuspendButton.hidden = YES;
+    [self showAndEnableLeftNavigationItem];
+}
+
+-(void) cancelBackgroundThread {
+    NSLog(@"Cancel BackgroundThread");
+    [BackgroundThread cancel];
+}
+
+-(void) cleanUpBackgroundThread {
+    NSLog(@"Clean Up BackgroundThread");
+    if (timerStep) {
+        [timerStep invalidate];
+        timerStep = nil;
+    }
+    if (timerStair) {
+        [timerStep invalidate];
+        timerStep = nil;
+    }
 }
 
 @end
