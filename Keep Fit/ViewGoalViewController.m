@@ -11,6 +11,7 @@
 #import "GoalListTableViewController.h"
 #import "EditGoalViewController.h"
 #import "DBManager.h"
+#import "HistoryTableViewController.h"
 
 
 @interface ViewGoalViewController () {
@@ -163,6 +164,10 @@
         destViewController.editGoal = self.viewGoal;
         destViewController.listGoalNames = self.listGoalNames;
     }
+    else if ([segue.identifier isEqualToString:@"showHistory"]) {
+        HistoryTableViewController *destViewController = segue.destinationViewController;
+        destViewController.viewHistoryGoal = self.viewGoal;
+    }
 }
 
 #pragma mark - Buttons
@@ -173,17 +178,7 @@
         self.viewGoal.goalStatus = Active;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now active" message:@"This goal is now active." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB];
         self.activeGoal = self.viewGoal;
         self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
         [self hideAndDisableLeftNavigationItem];
@@ -205,17 +200,7 @@
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Pending", self.viewGoal.goalName];
             self.activeGoal = nil;
         }
-        NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB];
         [self showAndEnableLeftNavigationItem];
         [self showAndEnableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Set Active" forState:UIControlStateNormal];
@@ -233,17 +218,7 @@
         self.viewGoal.goalStatus = Suspended;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now suspended" message:@"This goal is now suspended." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-        NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB];
         self.activeGoal = nil;
         self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Suspended", self.viewGoal.goalName];
         [self showAndEnableLeftNavigationItem];
@@ -268,17 +243,7 @@
             [alert show];
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Pending", self.viewGoal.goalName];
         }
-        NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB];
         self.outletActiveButton.hidden = NO;
         [self showAndEnableRightNavigationItem];
         [self.outletSuspendButton setTitle:@"Set Active" forState:UIControlStateNormal];
@@ -297,16 +262,7 @@
             self.activeGoal.goalStatus = Pending;
         }
         NSString *query;
-        query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalID];
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB];
         query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.activeGoal.goalStatus, (long)self.activeGoal.goalID];
         // Execute the query.
         [self.dbManager executeQuery:query];
@@ -480,6 +436,56 @@
     if (timerStair) {
         [timerStep invalidate];
         timerStep = nil;
+    }
+}
+
+/*****************************History DB*****************************/
+
+-(int) getHistoryRowID:(int) goalID {
+    NSString *query = [NSString stringWithFormat:@"select * from history where goalId='%d' and statusEndDate='%f'", goalID, 0.0];
+    
+    NSArray *historyResults;
+    
+    historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSInteger indexOfHistoryID = [self.dbManager.arrColumnNames indexOfObject:@"historyID"];
+    
+    return [[[historyResults objectAtIndex:0] objectAtIndex:indexOfHistoryID] intValue];
+}
+
+-(void) storeGoalStatusChangeToDB {
+    NSString *query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", self.viewGoal.goalStatus,(long)self.viewGoal.goalID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld)", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"insert into history values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
     }
 }
 

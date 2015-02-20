@@ -133,7 +133,7 @@
             [alert show];
             return NO;
         }
-        else if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
+        if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;

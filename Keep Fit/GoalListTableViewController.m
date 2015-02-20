@@ -64,6 +64,25 @@
         
         [self.keepFitGoals addObject:goal];
         [self loadFromDB];
+        
+        KeepFitGoal *history;
+        
+        for (int i=0; i<[self.keepFitGoals count]; i++) {
+            history = [self.keepFitGoals objectAtIndex:i];
+            if ([goal.goalName isEqualToString:history.goalName]) {
+                query = [NSString stringWithFormat:@"insert into history values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)history.goalID, history.goalStatus, [history.goalCreationDate timeIntervalSince1970], 0.0, 0, 0];
+                // Execute the query.
+                [self.dbManager executeQuery:query];
+                
+                if (self.dbManager.affectedRows != 0) {
+                    NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+                }
+                else {
+                    NSLog(@"Could not execute the query.");
+                }
+            }
+        }
+        
         [self.tableView reloadData];
     }
 }
@@ -75,28 +94,7 @@
 
 #pragma mark - Database
 
--(void)loadFromDB {
-    /*// Form the query.
-    NSString *query = @"select * from goals";
-    
-    // Get the results.
-    if (self.keepFitGoals != nil) {
-        self.keepFitGoals = nil;
-    }
-    NSMutableArray *data = [[NSMutableArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
-    
-    NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
-    
-    for (int i=0; i<[data count]; i++) {
-        KeepFitGoal *goal;
-        goal.goalName = [NSString stringWithFormat:@"%@", [[data objectAtIndex:i] objectAtIndex:indexOfGoalName]];
-        goal.completed = NO;
-        [self.keepFitGoals addObject:goal];
-    }
-    
-    // Reload the table view.
-    [self.tableView reloadData];*/
-    
+-(void)loadFromDB {    
     if (self.keepFitGoals != nil) {
         self.keepFitGoals = nil;
     }
@@ -147,17 +145,7 @@
             
             goal.goalStatus = Overdue;
             
-            NSString *query;
-            query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus, (long)goal.goalID];
-            // Execute the query.
-            [self.dbManager executeQuery:query];
-            
-            if (self.dbManager.affectedRows != 0) {
-                NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-            }
-            else {
-                NSLog(@"Could not execute the query.");
-            }
+            [self storeGoalStatusChangeToDB:goal];
         }
         
         [self.keepFitGoals addObject:goal];
@@ -291,17 +279,7 @@
         // Prepare the query.
         //NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%ld", (long)[goal goalID]];
         
-        NSString *query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus,(long)goal.goalID];
-        
-        // Execute the query.
-        [self.dbManager executeQuery:query];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
+        [self storeGoalStatusChangeToDB:goal];
         
         // Reload the table view.
         [self loadFromDB];
@@ -401,5 +379,53 @@
     tappedItem.completed = !tappedItem.completed;
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }*/
+
+-(int) getHistoryRowID:(int) goalID {
+    NSString *query = [NSString stringWithFormat:@"select * from history where goalId='%d' and statusEndDate='%f'", goalID, 0.0];
+    
+    NSArray *historyResults;
+    
+    historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSInteger indexOfHistoryID = [self.dbManager.arrColumnNames indexOfObject:@"historyID"];
+    
+    return [[[historyResults objectAtIndex:0] objectAtIndex:indexOfHistoryID] intValue];
+}
+
+-(void) storeGoalStatusChangeToDB:(KeepFitGoal*) goal {
+    NSString *query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus,(long)goal.goalID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld)", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:goal.goalID]];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"insert into history values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)goal.goalID, goal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+}
 
 @end
