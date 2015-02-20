@@ -49,6 +49,9 @@
     }
     self.editStepsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountSteps];
     self.editStairsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
+    if (self.editGoal.goalStatus == Overdue) {
+        self.editDateField.userInteractionEnabled = NO;
+    }
     [self.editDateField setDate:self.editGoal.goalCompletionDate];
 }
 

@@ -263,6 +263,17 @@
                                     <action selector="suspendButton:" destination="u7R-gc-2Mv" eventType="touchUpInside" id="Pcd-GL-OUu"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GLX-P1-fV4">
+                                <rect key="frame" x="16" y="442" width="288" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="View Goal History">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="iGS-Nc-2iI" kind="push" id="RFW-0r-9Bf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -293,6 +304,41 @@
                 <exit id="t27-sP-Cfk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="635" y="-360"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="B1j-DA-Uvt">
+            <objects>
+                <tableViewController id="iGS-Nc-2iI" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zgJ-bP-IVU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListProtoHistory" textLabel="qZ9-hO-ccS" style="IBUITableViewCellStyleDefault" id="tU5-ra-cJK">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tU5-ra-cJK" id="99h-bK-2Yf">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qZ9-hO-ccS">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="iGS-Nc-2iI" id="Mvl-vO-zja"/>
+                            <outlet property="delegate" destination="iGS-Nc-2iI" id="lEY-cz-jsd"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="tCb-RY-vgX"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8gV-40-jBs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1068" y="-1036"/>
         </scene>
         <!--Edit Goal View Controller-->
         <scene sceneID="sjF-z7-pIb">
