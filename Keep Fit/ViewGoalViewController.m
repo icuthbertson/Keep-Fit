@@ -466,7 +466,7 @@
         NSLog(@"Could not execute the query.");
     }
     
-    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld)", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

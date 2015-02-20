@@ -107,38 +107,38 @@
     
     // Configure the cell...
     GoalHistory *history = [self.historyGoals objectAtIndex:indexPath.row];
-    cell.textLabel.font = [UIFont systemFontOfSize:15];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:8];
+    cell.textLabel.font = [UIFont systemFontOfSize:18];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
     
     switch (history.goalStatus) {
         case Pending:
-            cell.textLabel.text = [NSString stringWithFormat:@"Pending - From: %@ To: %@", history.startDate, history.endDate];
-            cell.detailTextLabel.text = @"";
+            cell.textLabel.text = @"Pending";
             break;
         case Active:
-            cell.textLabel.text = [NSString stringWithFormat:@"Active - From: %@ To: %@", history.startDate, history.endDate];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+            cell.textLabel.text = [NSString stringWithFormat:@"Active - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
             break;
         case Suspended:
-            cell.textLabel.text = [NSString stringWithFormat:@"Suspended - From: %@ To: %@", history.startDate, history.endDate];
-            cell.detailTextLabel.text = @"";
+            cell.textLabel.text = @"Suspended";
             break;
         case Overdue:
-            cell.textLabel.text = [NSString stringWithFormat:@"Overdue - From: %@ To: %@", history.startDate, history.endDate];
-            cell.detailTextLabel.text = @"";
+            cell.textLabel.text = @"Overdue";
             break;
         case Abandoned:
-            cell.textLabel.text = [NSString stringWithFormat:@"Abandoned - From: %@ To: %@", history.startDate, history.endDate];
-            cell.detailTextLabel.text = @"";
+            cell.textLabel.text = @"Abandoned";
             break;
         case Completed:
             cell.textLabel.text = [NSString stringWithFormat:@"Completed - On: %@", history.startDate];
-            cell.detailTextLabel.text = @"";
             break;
         default:
             break;
     }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    //uncomment to get the time only
+    //[formatter setDateFormat:@"hh:mm a"];
+    //[formatter setDateFormat:@"MMM dd, YYYY"];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
     
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@ To: %@", [formatter stringFromDate:history.startDate], [formatter stringFromDate:history.endDate]];
     
     return cell;
 }
