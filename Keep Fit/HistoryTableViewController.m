@@ -133,10 +133,7 @@
             break;
     }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    //uncomment to get the time only
-    //[formatter setDateFormat:@"hh:mm a"];
-    //[formatter setDateFormat:@"MMM dd, YYYY"];
-    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
     cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@ To: %@", [formatter stringFromDate:history.startDate], [formatter stringFromDate:history.endDate]];
     

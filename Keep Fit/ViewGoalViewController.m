@@ -32,6 +32,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *outletActiveButton;
 @property (weak, nonatomic) IBOutlet UIButton *outletSuspendButton;
 
+@property int progressSteps;
+@property int progressStairs;
+
 @end
 
 @implementation ViewGoalViewController
@@ -215,6 +218,9 @@
 - (IBAction)suspendButton:(id)sender {
     /**********************************Suspend*****************************************/
     if ((self.viewGoal.goalStatus == Pending) || (self.viewGoal.goalStatus == Active) || (self.viewGoal.goalStatus == Overdue)) {
+        if (self.viewGoal.goalStatus == Active) {
+            [self cancelBackgroundThread];
+        }
         self.viewGoal.goalStatus = Suspended;
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now suspended" message:@"This goal is now suspended." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
@@ -226,9 +232,6 @@
         self.outletActiveButton.hidden = YES;
         [self.outletActiveButton setTitle:@"Set Active" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
-        if (self.viewGoal.goalStatus == Active) {
-            [self cancelBackgroundThread];
-        }
     }/**********************************Re-instate*****************************************/
     else if (self.viewGoal.goalStatus == Suspended) {
         if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
@@ -316,7 +319,7 @@
 -(void) backgroundThread {
     NSLog(@"performing background thread");
     
-    if ((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) {
+    if (((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps)) {
         timerStep = [NSTimer timerWithTimeInterval:1.0
                                              target:self
                                            selector:@selector(takeStep)
@@ -324,7 +327,7 @@
                                             repeats:YES ];
         [[NSRunLoop mainRunLoop] addTimer:timerStep forMode:NSRunLoopCommonModes];
     }
-    if ((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) {
+    if (((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs)) {
         timerStair = [NSTimer timerWithTimeInterval:3.0
                                              target:self
                                            selector:@selector(takeStair)
@@ -345,6 +348,7 @@
     NSLog(@"Take Step");
     if (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps) {
         self.viewGoal.goalProgressSteps++;
+        self.progressSteps++;
         [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
     }
     else {
@@ -361,6 +365,7 @@
     NSLog(@"Take Stair");
     if (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs) {
         self.viewGoal.goalProgressStairs++;
+        self.progressStairs++;
         [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
     }
     else {
@@ -429,14 +434,10 @@
 
 -(void) cleanUpBackgroundThread {
     NSLog(@"Clean Up BackgroundThread");
-    if (timerStep) {
-        [timerStep invalidate];
-        timerStep = nil;
-    }
-    if (timerStair) {
-        [timerStep invalidate];
-        timerStep = nil;
-    }
+    [timerStep invalidate];
+    timerStep = nil;
+    [timerStair invalidate];
+    timerStair = nil;
 }
 
 /*****************************History DB*****************************/
@@ -466,7 +467,8 @@
         NSLog(@"Could not execute the query.");
     }
     
-    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    NSLog(@"%d - %d",self.progressSteps, self.progressStairs);
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f', progressSteps='%d', progressStairs='%d' where historyID=%ld", [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -487,6 +489,8 @@
     else {
         NSLog(@"Could not execute the query.");
     }
+    self.progressSteps = 0;
+    self.progressStairs = 0;
 }
 
 @end
