@@ -181,6 +181,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Recording" message:@"This goal is now recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = YES;
+        [self storeGoalStatusChangeToDB];
         [self hideAndDisableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Stop" forState:UIControlStateNormal];
@@ -191,6 +192,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now not recording" message:@"This goal is now not recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             self.isRecording = NO;
+        [self storeGoalStatusChangeToDB];
         [self showAndEnableLeftNavigationItem];
         [self showAndEnableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];

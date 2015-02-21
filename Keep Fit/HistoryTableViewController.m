@@ -121,7 +121,7 @@
             cell.textLabel.text = @"Suspended";
             break;
         case Overdue:
-            cell.textLabel.text = @"Overdue";
+            cell.textLabel.text = [NSString stringWithFormat:@"Overdue - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
             break;
         case Abandoned:
             cell.textLabel.text = @"Abandoned";

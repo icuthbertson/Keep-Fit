@@ -145,14 +145,14 @@
         //NSLog(@"%@", goal.goalCompletionDate);
         //NSLog(@"%@", [[NSDate date] earlierDate:goal.goalCompletionDate]);
         
-        if ((goal.goalStatus != Suspended) && [[[NSDate date] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
+        if ((goal.goalStatus == Pending) && [[[NSDate date] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
             NSLog(@"active");
             
             goal.goalStatus = Active;
             
             [self storeGoalStatusChangeToDB:goal];
         }
-        if ((goal.goalStatus != Suspended) && [[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+        if ((goal.goalStatus == Active) && [[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
             NSLog(@"overdue");
             
             goal.goalStatus = Overdue;
