@@ -54,7 +54,7 @@
     self.editStepsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountSteps];
     self.editStairsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
     if (self.editGoal.goalStatus == Active) {
-        self.editDateField.userInteractionEnabled = NO;
+        self.editStartDateField.userInteractionEnabled = NO;
     }
     else if (self.editGoal.goalStatus == Overdue) {
         self.editDateField.userInteractionEnabled = NO;
@@ -147,17 +147,17 @@
             [alert show];
             return NO;
         }
-        else if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
+        if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
-        else if ([[self.editDateField.date earlierDate:self.editStartDateField.date]isEqualToDate: self.editDateField.date]) {
+        if ([[self.editDateField.date earlierDate:self.editStartDateField.date]isEqualToDate: self.editDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
-        else if ([[self.editStartDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editStartDateField.date]) {
+        if ([[self.editStartDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editStartDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -185,7 +185,7 @@
                 return NO;
             }
         }
-        else if (self.editTypeField.selectedSegmentIndex == 1) {
+        if (self.editTypeField.selectedSegmentIndex == 1) {
             if (self.editGoal.goalProgressStairs > [self.editStairsField.text intValue]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal Edit" message:@"Number of stairs for the goal cannot be less than the curret progress." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
