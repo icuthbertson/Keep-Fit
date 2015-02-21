@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *outletSuspendButton;
 @property (weak, nonatomic) IBOutlet UILabel *viewDateStart;
 @property (weak, nonatomic) IBOutlet UIButton *outletHistoryButton;
+@property (weak, nonatomic) IBOutlet UILabel *viewStatus;
 
 @property int progressSteps;
 @property int progressStairs;
@@ -58,36 +59,42 @@
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
     switch (self.viewGoal.goalStatus) {
         case Pending:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Pending", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             break;
         case Active:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
             [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Overdue:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Overdue", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Suspended:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Suspended", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
             [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = NO;
             [self hideAndDisableRightNavigationItem];
             break;
         case Abandoned:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Abandoned", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Abandoned"];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
             break;
         case Completed:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Completed", self.viewGoal.goalName];
+            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Completed"];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
@@ -212,7 +219,7 @@
         [alert show];
         [self storeGoalStatusChangeToDB];
         self.isRecording = NO;
-        self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Suspended", self.viewGoal.goalName];
+        self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
         [self showAndEnableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         self.outletActiveButton.hidden = YES;
@@ -225,19 +232,19 @@
             self.viewGoal.goalStatus = Pending;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now pending" message:@"This goal is now pending." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Pending", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
         }
         else if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
             self.viewGoal.goalStatus = Overdue;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now overdue" message:@"This goal is now overdue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Overdue", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
         }
         else {
             self.viewGoal.goalStatus = Active;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Active" message:@"This goal is now Active." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@ - Active", self.viewGoal.goalName];
+            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
             
         }
         [self storeGoalStatusChangeToDB];
