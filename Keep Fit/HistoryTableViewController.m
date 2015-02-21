@@ -115,13 +115,23 @@
             cell.textLabel.text = @"Pending";
             break;
         case Active:
-            cell.textLabel.text = [NSString stringWithFormat:@"Active - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+            if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+            }
+            else {
+                cell.textLabel.text = [NSString stringWithFormat:@"Active"];
+            }
             break;
         case Suspended:
             cell.textLabel.text = @"Suspended";
             break;
         case Overdue:
-            cell.textLabel.text = [NSString stringWithFormat:@"Overdue - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+            if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+            }
+            else {
+                cell.textLabel.text = [NSString stringWithFormat:@"Overdue"];
+            }
             break;
         case Abandoned:
             cell.textLabel.text = @"Abandoned";
