@@ -20,13 +20,13 @@ typedef NS_ENUM(NSInteger, GoalStatus) {
 };
 
 typedef NS_ENUM(NSInteger, GoalType) {
-    Steps = 1,
+    Steps = 0,
     Stairs,
     Both
 };
 
 typedef NS_ENUM(NSInteger, Conversion) {
-    StepsStairs = 1,
+    StepsStairs = 0,
     Feet,
     Meters,
     Miles,

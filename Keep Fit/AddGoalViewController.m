@@ -15,9 +15,14 @@
 @property (weak, nonatomic) IBOutlet UIDatePicker *dateStartPicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *typeSelecter;
 - (IBAction)typeSelecterAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UITextField *numStepsField;
-@property (weak, nonatomic) IBOutlet UITextField *numStairsField;
+- (IBAction)stepsStepperAction:(id)sender;
+- (IBAction)stairsStepperAction:(id)sender;
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UILabel *numStepsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numStairsLabel;
+@property (weak, nonatomic) IBOutlet UIStepper *stepsStepper;
+@property (weak, nonatomic) IBOutlet UIStepper *stairsStepper;
 
 /*@property NSArray *pickerStepsArray;
 @property NSArray *pickerStairsArray;
@@ -37,8 +42,10 @@
     
     [self.dateStartPicker setMinimumDate:[NSDate date]];
     [self.datePicker setMinimumDate:[NSDate date]];
-    self.numStepsField.userInteractionEnabled = YES;
-    self.numStairsField.userInteractionEnabled = NO;
+    self.stepsStepper.userInteractionEnabled = YES;
+    self.stairsStepper.userInteractionEnabled = NO;
+    self.numStepsLabel.text = @"0";
+    self.numStairsLabel.text = @"0";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -69,8 +76,6 @@
 
 -(void)dismissKeyboard {
     [self.textField resignFirstResponder];
-    [self.numStepsField resignFirstResponder];
-    [self.numStairsField resignFirstResponder];
 }
 /*
 #pragma mark - PickerView
@@ -106,22 +111,38 @@
     }
 }*/
 
+#pragma mark - Stepper Control
+
+- (IBAction)stepsStepperAction:(id)sender{
+    self.numStepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
+
+- (IBAction)stairsStepperAction:(id)sender{
+    self.numStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
 #pragma mark - Segmented Control
 
 - (IBAction)typeSelecterAction:(id)sender {
     if(self.typeSelecter.selectedSegmentIndex == 0) {
-        self.numStepsField.userInteractionEnabled = YES;
-        self.numStairsField.userInteractionEnabled = NO;
-        self.numStairsField.text = 0;
+        NSLog(@"Selecter 0");
+        self.stepsStepper.userInteractionEnabled = YES;
+        self.stairsStepper.userInteractionEnabled = NO;
+        self.numStairsLabel.text = @"0";
+        self.stairsStepper.value = 0;
     }
     else if (self.typeSelecter.selectedSegmentIndex == 1) {
-        self.numStepsField.userInteractionEnabled = NO;
-        self.numStairsField.userInteractionEnabled = YES;
-        self.numStepsField.text = 0;
+        NSLog(@"Selecter 1");
+        self.stepsStepper.userInteractionEnabled = NO;
+        self.stairsStepper.userInteractionEnabled = YES;
+        self.numStepsLabel.text = @"0";
+        self.stepsStepper.value = 0;
     }
     else {
-        self.numStepsField.userInteractionEnabled = YES;
-        self.numStairsField.userInteractionEnabled = YES;
+        NSLog(@"Selecter 2");
+        self.stepsStepper.userInteractionEnabled = YES;
+        self.stairsStepper.userInteractionEnabled = YES;
     }
 }
 
@@ -140,7 +161,7 @@
     if(self.typeSelecter.selectedSegmentIndex == 0) {
         self.goal.goalType = Steps;
         NSLog(@"Goal Type: %d",self.goal.goalType);
-        self.goal.goalAmountSteps = [self.numStepsField.text intValue];
+        self.goal.goalAmountSteps = [self.numStepsLabel.text intValue];
         NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = 0;
         NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
@@ -148,7 +169,7 @@
     else if (self.typeSelecter.selectedSegmentIndex == 1) {
         self.goal.goalType = Stairs;
         NSLog(@"Goal Type: %d",self.goal.goalType);
-        self.goal.goalAmountStairs = [self.numStairsField.text intValue];
+        self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
         NSLog(@"Goal Amount: %ld Stairs",(long)self.goal.goalAmountStairs);
         self.goal.goalAmountSteps = 0;
         NSLog(@"Goal Amount: %ld Steps",(long)self.goal.goalAmountSteps);
@@ -156,9 +177,9 @@
     else {
         self.goal.goalType = Both;
         NSLog(@"Goal Type: %d",self.goal.goalType);
-        self.goal.goalAmountSteps = [self.numStepsField.text intValue];
+        self.goal.goalAmountSteps = [self.numStepsLabel.text intValue];
         NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
-        self.goal.goalAmountStairs = [self.numStairsField.text intValue];
+        self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
         NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
     }
     self.goal.goalProgressSteps = 0;
@@ -204,26 +225,26 @@
         }
         switch (self.typeSelecter.selectedSegmentIndex) {
             case 0: //steps
-                if ([self.numStepsField.text intValue] == 0) {
+                if ([self.numStepsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of steps cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
                     return NO;
                 }
                 break;
             case 1: //stairs
-                if ([self.numStairsField.text intValue] == 0) {
+                if ([self.numStairsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of stairs cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
                     return NO;
                 }
                 break;
             case 2: //both
-                if ([self.numStepsField.text intValue] == 0) {
+                if ([self.numStepsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of steps cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
                     return NO;
                 }
-                if ([self.numStairsField.text intValue] == 0) {
+                if ([self.numStairsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of stairs cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
                     return NO;
