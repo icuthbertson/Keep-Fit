@@ -20,9 +20,17 @@ typedef NS_ENUM(NSInteger, GoalStatus) {
 };
 
 typedef NS_ENUM(NSInteger, GoalType) {
-    Steps = 0,
+    Steps = 1,
     Stairs,
     Both
+};
+
+typedef NS_ENUM(NSInteger, Conversion) {
+    StepsStairs = 1,
+    Feet,
+    Meters,
+    Miles,
+    Km
 };
 
 @property NSInteger goalID;
@@ -33,6 +41,9 @@ typedef NS_ENUM(NSInteger, GoalType) {
 @property NSInteger goalProgressSteps;
 @property NSInteger goalAmountStairs;
 @property NSInteger goalProgressStairs;
+@property NSDate *goalStartDate;
 @property NSDate *goalCompletionDate;
 @property NSDate *goalCreationDate;
+@property Conversion goalConversion;
+@property NSArray *conversionTable;
 @end

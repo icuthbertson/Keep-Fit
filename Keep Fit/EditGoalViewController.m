@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *editStepsField;
 @property (weak, nonatomic) IBOutlet UITextField *editStairsField;
 @property (weak, nonatomic) IBOutlet UIDatePicker *editDateField;
+@property (weak, nonatomic) IBOutlet UIDatePicker *editStartDateField;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -24,6 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.scrollView setScrollEnabled:YES];
+    [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
     self.navigationItem.title = [NSString stringWithFormat:@"Edit %@", self.editGoal.goalName];
     
@@ -49,9 +53,14 @@
     }
     self.editStepsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountSteps];
     self.editStairsField.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
-    if (self.editGoal.goalStatus == Overdue) {
+    if (self.editGoal.goalStatus == Active) {
         self.editDateField.userInteractionEnabled = NO;
     }
+    else if (self.editGoal.goalStatus == Overdue) {
+        self.editDateField.userInteractionEnabled = NO;
+        self.editStartDateField.userInteractionEnabled = NO;
+    }
+    [self.editStartDateField setDate:self.editGoal.goalStartDate];
     [self.editDateField setDate:self.editGoal.goalCompletionDate];
 }
 
@@ -114,9 +123,14 @@
         NSLog(@"Stairs - Save: %ld",(long)self.editGoal.goalAmountStairs);
         self.wasEdit = YES;
     }
+    if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
+        self.editGoal.goalStartDate = self.editStartDateField.date;
+        NSLog(@"Start Date - Save: %@",self.editGoal.goalStartDate);
+        self.wasEdit = YES;
+    }
     if (!([self.editGoal.goalCompletionDate isEqualToDate:self.editDateField.date])) {
         self.editGoal.goalCompletionDate = self.editDateField.date;
-        NSLog(@"Date - Save: %@",self.editGoal.goalCompletionDate);
+        NSLog(@"Completion Date - Save: %@",self.editGoal.goalCompletionDate);
         self.wasEdit = YES;
     }
 }
@@ -133,8 +147,18 @@
             [alert show];
             return NO;
         }
-        if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
+        else if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+        else if ([[self.editDateField.date earlierDate:self.editStartDateField.date]isEqualToDate: self.editDateField.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+        else if ([[self.editStartDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editStartDateField.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }

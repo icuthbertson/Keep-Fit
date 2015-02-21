@@ -13,7 +13,6 @@
 
 @property KeepFitGoal *viewGoal;
 @property NSMutableArray *listGoalNames;
-@property KeepFitGoal *activeGoal;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue;
 

@@ -12,11 +12,12 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet UIDatePicker *dateStartPicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *typeSelecter;
 - (IBAction)typeSelecterAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITextField *numStepsField;
 @property (weak, nonatomic) IBOutlet UITextField *numStairsField;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 /*@property NSArray *pickerStepsArray;
 @property NSArray *pickerStairsArray;
@@ -32,17 +33,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 600)];
+    [self.scrollView setContentSize:CGSizeMake(320, 800)];
+    
+    [self.dateStartPicker setMinimumDate:[NSDate date]];
+    [self.datePicker setMinimumDate:[NSDate date]];
+    self.numStepsField.userInteractionEnabled = YES;
+    self.numStairsField.userInteractionEnabled = NO;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
-    
-    [self.datePicker setMinimumDate:[NSDate date]];
-    self.numStepsField.userInteractionEnabled = YES;
-    self.numStairsField.userInteractionEnabled = NO;
     
     /*self.pickerStepsArray = @[@500, @1000, @1500, @2000, @2500, @3000, @3500, @4000, @4500, @5000, @5500, @6000, @6500, @7000, @7500, @8000, @8500, @9000, @9500, @10000];
     self.pickerStairsArray = @[@5, @10, @15, @20, @25, @30, @35, @40, @45, @50, @55, @60, @65, @70, @75, @80, @85, @90, @95, @100];
@@ -163,10 +165,14 @@
     NSLog(@"Goal Progress Steps: %ld",(long)self.goal.goalProgressSteps);
     self.goal.goalProgressStairs = 0;
     NSLog(@"Goal Progress Stairs: %ld",(long)self.goal.goalProgressSteps);
+    self.goal.goalStartDate = self.dateStartPicker.date;
+    NSLog(@"Goal Start Date: %@",self.goal.goalStartDate);
     self.goal.goalCompletionDate = self.datePicker.date;
-    NSLog(@"Goal Date: %@",self.goal.goalCompletionDate);
+    NSLog(@"Goal Completion Date: %@",self.goal.goalCompletionDate);
     self.goal.goalCreationDate = [NSDate date];
-    NSLog(@"Goal Date: %@",self.goal.goalCreationDate);
+    NSLog(@"Goal Creation Date: %@",self.goal.goalCreationDate);
+    self.goal.goalConversion = 0;
+    NSLog(@"Goal Conversion: %d",self.goal.goalConversion);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -186,11 +192,23 @@
             [alert show];
             return NO;
         }
-        for (int i=0; i<[self.listGoalNames count]; i++) {
-            if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                [alert show];
-                return NO;
+        else if ([[self.datePicker.date earlierDate:self.dateStartPicker.date]isEqualToDate: self.datePicker.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+        else if ([[self.dateStartPicker.date earlierDate:[NSDate date]]isEqualToDate: self.dateStartPicker.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+        else {
+            for (int i=0; i<[self.listGoalNames count]; i++) {
+                if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    return NO;
+                }
             }
         }
     }
