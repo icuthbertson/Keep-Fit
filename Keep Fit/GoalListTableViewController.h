@@ -12,5 +12,8 @@
 
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue;
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue;
+-(void)loadFromDB;
+
+@property NSInteger listType;
 
 @end

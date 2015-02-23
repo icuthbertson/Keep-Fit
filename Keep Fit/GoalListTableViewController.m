@@ -45,6 +45,7 @@
     
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
+    self.listType = 6;
     
     [self loadFromDB];
 }
@@ -110,8 +111,11 @@
     }
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
-    // Form the query.
     NSString *query = @"select * from goals";
+    // Form the query.
+    if (self.listType != 6) {
+        query = [NSString stringWithFormat:@"select * from goals where goalType='%d'",self.listType];
+    }
     
     // Get the results.
     if (self.arrDBResults != nil) {

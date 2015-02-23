@@ -8,6 +8,7 @@
 
 #import "MenuTableViewController.h"
 #import "SWRevealViewController.h"
+#import "GoalListTableViewController.h"
 
 
 @interface MenuTableViewController ()
@@ -64,6 +65,55 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //SWRevealViewController *revealController = self.revealViewController;
+    
+    NSInteger row = indexPath.row;
+    
+    //GoalListTableViewController *frontController = nil;
+    //frontController = [[GoalListTableViewController alloc] init];
+    
+    //[revealController pushFrontViewController:frontController animated:YES];
+    
+    UINavigationController *navigationController = (UINavigationController *)self.revealViewController.frontViewController;
+    GoalListTableViewController *destAddController = [[navigationController viewControllers]objectAtIndex:0];
+    
+    switch (row) {
+        case 0:
+            destAddController.listType = 6;
+            break;
+        case 1:
+            destAddController.listType = 0;
+            break;
+        case 2:
+            destAddController.listType = 1;
+            break;
+        case 3:
+            destAddController.listType = 2;
+            break;
+        case 4:
+            destAddController.listType = 3;
+            break;
+        case 5:
+            destAddController.listType = 4;
+            break;
+        case 6:
+            destAddController.listType = 5;
+            break;
+        case 9:
+            //to settings
+            break;
+            
+        default:
+            break;
+    }
+    
+    [destAddController loadFromDB];
+    
+    [self.revealViewController revealToggleAnimated:YES];
 }
 
 
