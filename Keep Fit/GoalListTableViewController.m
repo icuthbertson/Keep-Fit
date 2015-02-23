@@ -11,6 +11,7 @@
 #import "DBManager.h"
 #import "ViewGoalViewController.h"
 #import "KeepFitGoal.h"
+#import "SWRevealViewController.h"
 
 @interface GoalListTableViewController ()
 
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) DBManager *dbManager;
 
 @property (nonatomic, strong) NSArray *arrDBResults;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton;
 
 @end
 
@@ -25,6 +27,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    SWRevealViewController *revealViewController = self.revealViewController;
+    if ( revealViewController )
+    {
+        [self.sidebarButton setTarget: self.revealViewController];
+        [self.sidebarButton setAction: @selector( revealToggle: )];
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    }
     
     self.navigationItem.title = @"Goals";
     

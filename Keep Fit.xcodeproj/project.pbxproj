@@ -23,6 +23,10 @@
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
 		AEA0C39B1A8BBDFA00647E6E /* ViewGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */; };
+		AEBF72D41A9B54D5001505F2 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBF72D31A9B54D5001505F2 /* SWRevealViewController.m */; };
+		AEBF72D81A9B5F56001505F2 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = AEBF72D71A9B5F56001505F2 /* menu.png */; };
+		AEBF72DA1A9B628E001505F2 /* Settings-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AEBF72D91A9B628E001505F2 /* Settings-icon.png */; };
+		AEBF72DD1A9B659A001505F2 /* MenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBF72DC1A9B659A001505F2 /* MenuTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +69,12 @@
 		AEA0C3971A8ABD9100647E6E /* goalsDB.sql */ = {isa = PBXFileReference; lastKnownFileType = file; path = goalsDB.sql; sourceTree = "<group>"; };
 		AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewGoalViewController.h; sourceTree = "<group>"; };
 		AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewGoalViewController.m; sourceTree = "<group>"; };
+		AEBF72D21A9B54D5001505F2 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		AEBF72D31A9B54D5001505F2 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		AEBF72D71A9B5F56001505F2 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
+		AEBF72D91A9B628E001505F2 /* Settings-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Settings-icon.png"; sourceTree = "<group>"; };
+		AEBF72DB1A9B659A001505F2 /* MenuTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewController.h; sourceTree = "<group>"; };
+		AEBF72DC1A9B659A001505F2 /* MenuTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +101,7 @@
 			children = (
 				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
 				AE40A69A1A8946BB000DD45A /* Keep Fit */,
+				AE40A69B1A8946BB000DD45A /* Supporting Files */,
 				AE40A6B41A8946BB000DD45A /* Keep FitTests */,
 				AE40A6991A8946BB000DD45A /* Products */,
 			);
@@ -125,12 +136,15 @@
 				AE49D69C1A975F2C00A2C63C /* HistoryTableViewController.m */,
 				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
 				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
+				AEBF72DB1A9B659A001505F2 /* MenuTableViewController.h */,
+				AEBF72DC1A9B659A001505F2 /* MenuTableViewController.m */,
+				AEBF72D21A9B54D5001505F2 /* SWRevealViewController.h */,
+				AEBF72D31A9B54D5001505F2 /* SWRevealViewController.m */,
 				AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */,
 				AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */,
 				AE40A6A51A8946BB000DD45A /* Main.storyboard */,
 				AE40A6A81A8946BB000DD45A /* Images.xcassets */,
 				AE40A6AA1A8946BB000DD45A /* LaunchScreen.xib */,
-				AE40A69B1A8946BB000DD45A /* Supporting Files */,
 			);
 			path = "Keep Fit";
 			sourceTree = "<group>";
@@ -138,10 +152,12 @@
 		AE40A69B1A8946BB000DD45A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AEBF72D61A9B5F19001505F2 /* Images */,
 				AE40A69C1A8946BB000DD45A /* Info.plist */,
 				AE40A69D1A8946BB000DD45A /* main.m */,
 			);
 			name = "Supporting Files";
+			path = "Keep Fit";
 			sourceTree = "<group>";
 		};
 		AE40A6B41A8946BB000DD45A /* Keep FitTests */ = {
@@ -159,6 +175,15 @@
 				AE40A6B61A8946BB000DD45A /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AEBF72D61A9B5F19001505F2 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				AEBF72D91A9B628E001505F2 /* Settings-icon.png */,
+				AEBF72D71A9B5F56001505F2 /* menu.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,7 +268,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */,
+				AEBF72D81A9B5F56001505F2 /* menu.png in Resources */,
 				AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */,
+				AEBF72DA1A9B628E001505F2 /* Settings-icon.png in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
 			);
@@ -267,10 +294,12 @@
 				AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */,
 				AEA0C39B1A8BBDFA00647E6E /* ViewGoalViewController.m in Sources */,
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
+				AEBF72DD1A9B659A001505F2 /* MenuTableViewController.m in Sources */,
 				AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */,
 				AE49D6A01A97629800A2C63C /* GoalHistory.m in Sources */,
 				AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */,
 				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
+				AEBF72D41A9B54D5001505F2 /* SWRevealViewController.m in Sources */,
 				AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */,
 				AE40A69E1A8946BB000DD45A /* main.m in Sources */,
 			);
