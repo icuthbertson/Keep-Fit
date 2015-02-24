@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */; };
 		AE2490BE1A9CC6F800A6D816 /* SettingsTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490BD1A9CC6F800A6D816 /* SettingsTabBarViewController.m */; };
+		AE2490C51A9CD78900A6D816 /* TestGoalListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490C41A9CD78900A6D816 /* TestGoalListTableViewController.m */; };
+		AE2490C81A9CD7AA00A6D816 /* TestAddGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490C71A9CD7AA00A6D816 /* TestAddGoalViewController.m */; };
+		AE2490CB1A9CD7B800A6D816 /* TestViewGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490CA1A9CD7B800A6D816 /* TestViewGoalViewController.m */; };
+		AE2490CE1A9CE7B400A6D816 /* TestHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490CD1A9CE7B400A6D816 /* TestHistoryTableViewController.m */; };
+		AE2490D11A9CEBB900A6D816 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D01A9CEBB900A6D816 /* ScheduleViewController.m */; };
+		AE2490D41A9CEBCB00A6D816 /* ChangeTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */; };
+		AE2490DA1A9CF37700A6D816 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D91A9CF37700A6D816 /* Schedule.m */; };
 		AE40A69E1A8946BB000DD45A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A69D1A8946BB000DD45A /* main.m */; };
 		AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6A01A8946BB000DD45A /* AppDelegate.m */; };
 		AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE40A6A51A8946BB000DD45A /* Main.storyboard */; };
@@ -22,17 +29,13 @@
 		AE49D6A01A97629800A2C63C /* GoalHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = AE49D69F1A97629800A2C63C /* GoalHistory.m */; };
 		AE72D4681A9B9CE3008570B0 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */; };
 		AE72D46A1A9B9D37008570B0 /* walking-icon-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */; };
-		AE72D46C1A9BA561008570B0 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D46B1A9BA561008570B0 /* settings.png */; };
-		AE72D46E1A9BA65B008570B0 /* 154_Settings@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D46D1A9BA65B008570B0 /* 154_Settings@3x.png */; };
 		AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */; };
-		AE72D4721A9BA6A1008570B0 /* 154_Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D4711A9BA6A1008570B0 /* 154_Settings.png */; };
 		AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE969A631A8BD1B80032B287 /* EditGoalViewController.m */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
 		AEA0C39B1A8BBDFA00647E6E /* ViewGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */; };
 		AEBF72D81A9B5F56001505F2 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = AEBF72D71A9B5F56001505F2 /* menu.png */; };
-		AEBF72DA1A9B628E001505F2 /* Settings-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AEBF72D91A9B628E001505F2 /* Settings-icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,20 @@
 		AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListSelectionViewController.m; sourceTree = "<group>"; };
 		AE2490BC1A9CC6F800A6D816 /* SettingsTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabBarViewController.h; sourceTree = "<group>"; };
 		AE2490BD1A9CC6F800A6D816 /* SettingsTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabBarViewController.m; sourceTree = "<group>"; };
+		AE2490C31A9CD78900A6D816 /* TestGoalListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGoalListTableViewController.h; sourceTree = "<group>"; };
+		AE2490C41A9CD78900A6D816 /* TestGoalListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestGoalListTableViewController.m; sourceTree = "<group>"; };
+		AE2490C61A9CD7AA00A6D816 /* TestAddGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAddGoalViewController.h; sourceTree = "<group>"; };
+		AE2490C71A9CD7AA00A6D816 /* TestAddGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAddGoalViewController.m; sourceTree = "<group>"; };
+		AE2490C91A9CD7B800A6D816 /* TestViewGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewGoalViewController.h; sourceTree = "<group>"; };
+		AE2490CA1A9CD7B800A6D816 /* TestViewGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewGoalViewController.m; sourceTree = "<group>"; };
+		AE2490CC1A9CE7B400A6D816 /* TestHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestHistoryTableViewController.h; sourceTree = "<group>"; };
+		AE2490CD1A9CE7B400A6D816 /* TestHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHistoryTableViewController.m; sourceTree = "<group>"; };
+		AE2490CF1A9CEBB900A6D816 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
+		AE2490D01A9CEBB900A6D816 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
+		AE2490D21A9CEBCB00A6D816 /* ChangeTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeTimeViewController.h; sourceTree = "<group>"; };
+		AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeTimeViewController.m; sourceTree = "<group>"; };
+		AE2490D81A9CF37700A6D816 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Schedule.h; sourceTree = "<group>"; };
+		AE2490D91A9CF37700A6D816 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Schedule.m; sourceTree = "<group>"; };
 		AE40A6981A8946BB000DD45A /* Keep Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Keep Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE40A69C1A8946BB000DD45A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE40A69D1A8946BB000DD45A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -74,10 +91,7 @@
 		AE72D4661A9B9CE3008570B0 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walking-icon-hi.png"; sourceTree = "<group>"; };
-		AE72D46B1A9BA561008570B0 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
-		AE72D46D1A9BA65B008570B0 /* 154_Settings@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "154_Settings@3x.png"; sourceTree = "<group>"; };
 		AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "154_Settings@2x.png"; sourceTree = "<group>"; };
-		AE72D4711A9BA6A1008570B0 /* 154_Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 154_Settings.png; sourceTree = "<group>"; };
 		AE969A621A8BD1B80032B287 /* EditGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditGoalViewController.h; sourceTree = "<group>"; };
 		AE969A631A8BD1B80032B287 /* EditGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditGoalViewController.m; sourceTree = "<group>"; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
@@ -87,7 +101,6 @@
 		AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewGoalViewController.h; sourceTree = "<group>"; };
 		AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewGoalViewController.m; sourceTree = "<group>"; };
 		AEBF72D71A9B5F56001505F2 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
-		AEBF72D91A9B628E001505F2 /* Settings-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Settings-icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +169,20 @@
 		AE2490C21A9CCC0000A6D816 /* TestingMode */ = {
 			isa = PBXGroup;
 			children = (
+				AE2490D21A9CEBCB00A6D816 /* ChangeTimeViewController.h */,
+				AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */,
+				AE2490D81A9CF37700A6D816 /* Schedule.h */,
+				AE2490D91A9CF37700A6D816 /* Schedule.m */,
+				AE2490CF1A9CEBB900A6D816 /* ScheduleViewController.h */,
+				AE2490D01A9CEBB900A6D816 /* ScheduleViewController.m */,
+				AE2490C61A9CD7AA00A6D816 /* TestAddGoalViewController.h */,
+				AE2490C71A9CD7AA00A6D816 /* TestAddGoalViewController.m */,
+				AE2490C31A9CD78900A6D816 /* TestGoalListTableViewController.h */,
+				AE2490C41A9CD78900A6D816 /* TestGoalListTableViewController.m */,
+				AE2490CC1A9CE7B400A6D816 /* TestHistoryTableViewController.h */,
+				AE2490CD1A9CE7B400A6D816 /* TestHistoryTableViewController.m */,
+				AE2490C91A9CD7B800A6D816 /* TestViewGoalViewController.h */,
+				AE2490CA1A9CD7B800A6D816 /* TestViewGoalViewController.m */,
 			);
 			name = TestingMode;
 			sourceTree = "<group>";
@@ -227,12 +254,8 @@
 		AEBF72D61A9B5F19001505F2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				AE72D4711A9BA6A1008570B0 /* 154_Settings.png */,
 				AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */,
-				AE72D46D1A9BA65B008570B0 /* 154_Settings@3x.png */,
-				AE72D46B1A9BA561008570B0 /* settings.png */,
 				AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */,
-				AEBF72D91A9B628E001505F2 /* Settings-icon.png */,
 				AEBF72D71A9B5F56001505F2 /* menu.png */,
 			);
 			name = Images;
@@ -319,17 +342,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE72D46C1A9BA561008570B0 /* settings.png in Resources */,
 				AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */,
-				AE72D46E1A9BA65B008570B0 /* 154_Settings@3x.png in Resources */,
 				AEBF72D81A9B5F56001505F2 /* menu.png in Resources */,
 				AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */,
 				AE72D46A1A9B9D37008570B0 /* walking-icon-hi.png in Resources */,
 				AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */,
-				AEBF72DA1A9B628E001505F2 /* Settings-icon.png in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
-				AE72D4721A9BA6A1008570B0 /* 154_Settings.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,15 +370,22 @@
 				AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */,
 				AEA0C39B1A8BBDFA00647E6E /* ViewGoalViewController.m in Sources */,
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
+				AE2490CB1A9CD7B800A6D816 /* TestViewGoalViewController.m in Sources */,
+				AE2490D41A9CEBCB00A6D816 /* ChangeTimeViewController.m in Sources */,
 				AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */,
 				AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */,
+				AE2490D11A9CEBB900A6D816 /* ScheduleViewController.m in Sources */,
+				AE2490C81A9CD7AA00A6D816 /* TestAddGoalViewController.m in Sources */,
+				AE2490DA1A9CF37700A6D816 /* Schedule.m in Sources */,
 				AE2490BE1A9CC6F800A6D816 /* SettingsTabBarViewController.m in Sources */,
 				AE49D6A01A97629800A2C63C /* GoalHistory.m in Sources */,
 				AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */,
 				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
 				AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */,
 				AE40A69E1A8946BB000DD45A /* main.m in Sources */,
+				AE2490C51A9CD78900A6D816 /* TestGoalListTableViewController.m in Sources */,
 				AE72D4681A9B9CE3008570B0 /* SettingsViewController.m in Sources */,
+				AE2490CE1A9CE7B400A6D816 /* TestHistoryTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
