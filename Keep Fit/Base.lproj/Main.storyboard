@@ -44,7 +44,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Goals" id="kPE-WU-Ofd">
-                        <barButtonItem key="leftBarButtonItem" title="Settings" id="7Fu-jY-djZ">
+                        <barButtonItem key="leftBarButtonItem" image="154_Settings.png" id="7Fu-jY-djZ">
                             <connections>
                                 <segue destination="wDh-MW-Lej" kind="push" id="RuB-p0-meG"/>
                             </connections>
@@ -214,7 +214,7 @@
             </objects>
             <point key="canvasLocation" x="1068" y="304"/>
         </scene>
-        <!--Item 2-->
+        <!--Settings-->
         <scene sceneID="wV0-34-Jt7">
             <objects>
                 <viewController id="dsW-LI-GBI" customClass="SettingsViewController" sceneMemberID="viewController">
@@ -235,13 +235,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="gef-zn-309"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="154_Settings.png" id="gef-zn-309"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yio-hG-Rs5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1068" y="1686"/>
         </scene>
-        <!--Item 1-->
+        <!--List Selection-->
         <scene sceneID="tiv-uG-N1b">
             <objects>
                 <viewController id="ffu-RY-gaJ" customClass="ListSelectionViewController" sceneMemberID="viewController">
@@ -395,7 +395,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="r2f-4Z-A3j"/>
+                    <tabBarItem key="tabBarItem" title="List Selection" image="menu.png" id="r2f-4Z-A3j"/>
                     <connections>
                         <outlet property="tableView" destination="alb-sh-PfC" id="3hR-f7-pVg"/>
                     </connections>
@@ -405,10 +405,10 @@
             </objects>
             <point key="canvasLocation" x="1068" y="1056"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Settings Tab Bar View Controller-->
         <scene sceneID="DVO-BG-7Zy">
             <objects>
-                <tabBarController id="wDh-MW-Lej" sceneMemberID="viewController">
+                <tabBarController id="wDh-MW-Lej" customClass="SettingsTabBarViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="FPs-gt-VWU"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="ydS-zp-sB6">
@@ -800,6 +800,10 @@
             <point key="canvasLocation" x="635.73333333333335" y="304.82666666666665"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="154_Settings.png" width="20" height="20"/>
+        <image name="menu.png" width="28" height="20"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

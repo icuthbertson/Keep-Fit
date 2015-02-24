@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */; };
+		AE2490BE1A9CC6F800A6D816 /* SettingsTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490BD1A9CC6F800A6D816 /* SettingsTabBarViewController.m */; };
 		AE40A69E1A8946BB000DD45A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A69D1A8946BB000DD45A /* main.m */; };
 		AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6A01A8946BB000DD45A /* AppDelegate.m */; };
 		AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE40A6A51A8946BB000DD45A /* Main.storyboard */; };
@@ -47,6 +48,8 @@
 /* Begin PBXFileReference section */
 		AE2490B91A9CBD5100A6D816 /* ListSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListSelectionViewController.h; sourceTree = "<group>"; };
 		AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListSelectionViewController.m; sourceTree = "<group>"; };
+		AE2490BC1A9CC6F800A6D816 /* SettingsTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabBarViewController.h; sourceTree = "<group>"; };
+		AE2490BD1A9CC6F800A6D816 /* SettingsTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabBarViewController.m; sourceTree = "<group>"; };
 		AE40A6981A8946BB000DD45A /* Keep Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Keep Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE40A69C1A8946BB000DD45A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE40A69D1A8946BB000DD45A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -106,6 +109,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE2490BF1A9CC7AD00A6D816 /* MainApp */ = {
+			isa = PBXGroup;
+			children = (
+				AE40A6C11A896755000DD45A /* AddGoalViewController.h */,
+				AE40A6C21A896755000DD45A /* AddGoalViewController.m */,
+				AE969A621A8BD1B80032B287 /* EditGoalViewController.h */,
+				AE969A631A8BD1B80032B287 /* EditGoalViewController.m */,
+				AE49D69E1A97629800A2C63C /* GoalHistory.h */,
+				AE49D69F1A97629800A2C63C /* GoalHistory.m */,
+				AE40A6C71A89680A000DD45A /* GoalListTableViewController.h */,
+				AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */,
+				AE49D69B1A975F2C00A2C63C /* HistoryTableViewController.h */,
+				AE49D69C1A975F2C00A2C63C /* HistoryTableViewController.m */,
+				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
+				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
+				AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */,
+				AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */,
+			);
+			name = MainApp;
+			sourceTree = "<group>";
+		};
+		AE2490C01A9CC7BE00A6D816 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				AEA0C38A1A8AB5BC00647E6E /* DBManager.h */,
+				AEA0C38B1A8AB5BC00647E6E /* DBManager.m */,
+				AEA0C3971A8ABD9100647E6E /* goalsDB.sql */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		AE2490C11A9CC7D900A6D816 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AE2490B91A9CBD5100A6D816 /* ListSelectionViewController.h */,
+				AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */,
+				AE2490BC1A9CC6F800A6D816 /* SettingsTabBarViewController.h */,
+				AE2490BD1A9CC6F800A6D816 /* SettingsTabBarViewController.m */,
+				AE72D4661A9B9CE3008570B0 /* SettingsViewController.h */,
+				AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		AE2490C21A9CCC0000A6D816 /* TestingMode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = TestingMode;
+			sourceTree = "<group>";
+		};
 		AE40A68F1A8946BB000DD45A = {
 			isa = PBXGroup;
 			children = (
@@ -129,29 +183,12 @@
 		AE40A69A1A8946BB000DD45A /* Keep Fit */ = {
 			isa = PBXGroup;
 			children = (
-				AE40A6C11A896755000DD45A /* AddGoalViewController.h */,
-				AE40A6C21A896755000DD45A /* AddGoalViewController.m */,
+				AE2490C01A9CC7BE00A6D816 /* Database */,
+				AE2490BF1A9CC7AD00A6D816 /* MainApp */,
+				AE2490C11A9CC7D900A6D816 /* Settings */,
+				AE2490C21A9CCC0000A6D816 /* TestingMode */,
 				AE40A69F1A8946BB000DD45A /* AppDelegate.h */,
 				AE40A6A01A8946BB000DD45A /* AppDelegate.m */,
-				AEA0C38A1A8AB5BC00647E6E /* DBManager.h */,
-				AEA0C38B1A8AB5BC00647E6E /* DBManager.m */,
-				AE969A621A8BD1B80032B287 /* EditGoalViewController.h */,
-				AE969A631A8BD1B80032B287 /* EditGoalViewController.m */,
-				AE49D69E1A97629800A2C63C /* GoalHistory.h */,
-				AE49D69F1A97629800A2C63C /* GoalHistory.m */,
-				AE40A6C71A89680A000DD45A /* GoalListTableViewController.h */,
-				AE40A6C81A89680A000DD45A /* GoalListTableViewController.m */,
-				AEA0C3971A8ABD9100647E6E /* goalsDB.sql */,
-				AE49D69B1A975F2C00A2C63C /* HistoryTableViewController.h */,
-				AE49D69C1A975F2C00A2C63C /* HistoryTableViewController.m */,
-				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
-				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
-				AE2490B91A9CBD5100A6D816 /* ListSelectionViewController.h */,
-				AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */,
-				AE72D4661A9B9CE3008570B0 /* SettingsViewController.h */,
-				AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */,
-				AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */,
-				AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */,
 				AE40A6A51A8946BB000DD45A /* Main.storyboard */,
 				AE40A6A81A8946BB000DD45A /* Images.xcassets */,
 				AE40A6AA1A8946BB000DD45A /* LaunchScreen.xib */,
@@ -316,6 +353,7 @@
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
 				AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */,
 				AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */,
+				AE2490BE1A9CC6F800A6D816 /* SettingsTabBarViewController.m in Sources */,
 				AE49D6A01A97629800A2C63C /* GoalHistory.m in Sources */,
 				AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */,
 				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
