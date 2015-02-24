@@ -1,5 +1,5 @@
 //
-//  MenuTableViewController.h
+//  SettingsViewController.h
 //  Keep Fit
 //
 //  Created by Iain Cuthbertson on 23/02/2015.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MenuTableViewController : UITableViewController
+@interface SettingsViewController : UIViewController
 
 @end

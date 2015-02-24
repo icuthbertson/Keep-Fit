@@ -11,7 +11,7 @@
 #import "DBManager.h"
 #import "ViewGoalViewController.h"
 #import "KeepFitGoal.h"
-#import "SWRevealViewController.h"
+#import "ListSelectionViewController.h"
 
 @interface GoalListTableViewController ()
 
@@ -27,14 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if ( revealViewController )
-    {
-        [self.sidebarButton setTarget: self.revealViewController];
-        [self.sidebarButton setAction: @selector( revealToggle: )];
-        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    }
     
     self.navigationItem.title = @"Goals";
     
@@ -100,7 +92,17 @@
 
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue {
     [self loadFromDB];
-    [self.tableView reloadData];
+}
+
+-(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue {
+    
+}
+
+-(IBAction)unwindFromListSelection:(UIStoryboardSegue *)segue {
+    ListSelectionViewController *source = [segue sourceViewController];
+    self.listType = source.listType;
+    NSLog(@"%d",self.listType);
+    [self loadFromDB];
 }
 
 #pragma mark - Database
@@ -114,7 +116,7 @@
     NSString *query = @"select * from goals";
     // Form the query.
     if (self.listType != 6) {
-        query = [NSString stringWithFormat:@"select * from goals where goalType='%d'",self.listType];
+        query = [NSString stringWithFormat:@"select * from goals where goalStatus='%d'",self.listType];
     }
     
     // Get the results.
