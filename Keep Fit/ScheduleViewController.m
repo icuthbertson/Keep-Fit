@@ -94,6 +94,13 @@
     else {
         self.schedule.numStairs = [self.stairsLabel.text intValue];
     }
+    if (((self.viewGoal.goalProgressSteps + [self.stepsLabel.text intValue]) >= self.viewGoal.goalAmountSteps) && ((self.viewGoal.goalProgressStairs + [self.stairsLabel.text intValue]) >= self.viewGoal.goalAmountStairs)) {
+        self.schedule.completed = YES;
+    }
+    else {
+        self.schedule.completed = NO;
+    }
+    
     self.schedule.date = self.scheduleDatePicker.date;
     self.schedule.endDate = self.scheduleEndDatePicker.date;
 }

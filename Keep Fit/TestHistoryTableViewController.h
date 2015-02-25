@@ -12,5 +12,6 @@
 @interface TestHistoryTableViewController : UITableViewController
 
 @property KeepFitGoal *viewHistoryGoal;
+@property NSDate *currentDate;
 
 @end

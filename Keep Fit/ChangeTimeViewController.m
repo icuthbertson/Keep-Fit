@@ -35,6 +35,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    self.changeDate = nil;
     if (sender != self.saveButton) return;
     
     self.changeDate = [[NSDate alloc] init];

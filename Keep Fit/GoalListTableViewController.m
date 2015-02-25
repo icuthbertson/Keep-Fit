@@ -402,6 +402,8 @@
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }*/
 
+#pragma mark - History
+
 -(int) getHistoryRowID:(int) goalID {
     NSString *query = [NSString stringWithFormat:@"select * from history where goalId='%d' and statusEndDate='%f'", goalID, 0.0];
     

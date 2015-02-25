@@ -11,6 +11,7 @@
 #import "ChangeTimeViewController.h"
 #import "ScheduleViewController.h"
 #import "DBManager.h"
+#import "GoalHistory.h"
 
 @interface TestViewGoalViewController ()
 
@@ -24,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *viewDateStart;
 @property (weak, nonatomic) IBOutlet UIButton *outletHistoryButton;
 @property (weak, nonatomic) IBOutlet UILabel *viewStatus;
+@property (weak, nonatomic) IBOutlet UIButton *scheduleButton;
+@property (weak, nonatomic) IBOutlet UIButton *timeButton;
 
 @end
 
@@ -43,26 +46,38 @@
         case Pending:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
+            self.scheduleButton.hidden = YES;
+            self.timeButton.hidden = NO;
             break;
         case Active:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
+            self.scheduleButton.hidden = NO;
+            self.timeButton.hidden = NO;
             break;
         case Overdue:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
+            self.scheduleButton.hidden = NO;
+            self.timeButton.hidden = NO;
             break;
         case Suspended:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
+            self.scheduleButton.hidden = YES;
+            self.timeButton.hidden = YES;
             break;
         case Abandoned:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Abandoned"];
+            self.scheduleButton.hidden = YES;
+            self.timeButton.hidden = YES;
             break;
         case Completed:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Completed"];
+            self.scheduleButton.hidden = YES;
+            self.timeButton.hidden = YES;
             break;
         default:
             break;
@@ -105,11 +120,108 @@
 }
 
 -(IBAction)unwindFromChangeTime:(UIStoryboardSegue *)segue {
+    ChangeTimeViewController *source = [segue sourceViewController];
+    if (source.changeDate != nil) {
+        NSDate *changeDate = source.changeDate;
+        NSDate *tempStartDate = [[NSDate alloc] init];
+        NSDate *tempEndDate = [[NSDate alloc] init];
+        int tempSteps = 0;
+        int tempStairs = 0;
+        double startDate = 0.0;
+        double endDate = 0.0;
     
+        if (self.viewGoal.goalStatus == Pending) {
+            if ([[self.viewGoal.goalStartDate earlierDate:changeDate]isEqualToDate: self.viewGoal.goalStartDate]) {
+                self.viewGoal.goalStatus = Active;
+            }
+        }
+        if (self.viewGoal.goalStatus == Active) {
+            if ([[self.viewGoal.goalCompletionDate earlierDate:changeDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
+                self.viewGoal.goalStatus = Overdue;
+            }
+        }
+    
+        //get history to go through
+        NSString *query = [NSString stringWithFormat:@"select * from testHistory where (goalID='%d' and ((statusStartDate > '%f') or (statusStartDate < '%f' and statusEndDate > '%f')))",self.viewGoal.goalID,[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970]];
+    
+        NSArray *historyResults;
+        historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+        
+        NSLog(@"history results: %@",historyResults);
+    
+        NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
+        NSInteger indexOfStatusStartDate = [self.dbManager.arrColumnNames indexOfObject:@"statusStartDate"];
+        NSInteger indexOfStatusEndDate = [self.dbManager.arrColumnNames indexOfObject:@"statusEndDate"];
+        NSInteger indexOfGoalProgressSteps = [self.dbManager.arrColumnNames indexOfObject:@"progressSteps"];
+        NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
+    
+        for (int i=0; i < [historyResults count]; i++) {
+            tempStartDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue]];
+            tempEndDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue]];
+            tempSteps = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
+            tempStairs = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
+            startDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue];
+            endDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue];
+        
+            //second half of history
+            if (([[self.currentDate earlierDate:tempEndDate]isEqualToDate:self.currentDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate])) {
+                NSLog(@"OLD MID - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+                self.viewGoal.goalProgressSteps += (tempSteps * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                self.viewGoal.goalProgressStairs += (tempStairs * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                NSLog(@"NEW MID - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+            }//first half
+            else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[changeDate earlierDate:tempStartDate]isEqualToDate:tempStartDate])) {
+                NSLog(@"OLD MID - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+                self.viewGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
+                self.viewGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
+                NSLog(@"NEW MID - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+            }//full history
+            else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
+                NSLog(@"OLD - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+                self.viewGoal.goalProgressSteps += tempSteps;
+                self.viewGoal.goalProgressStairs += tempStairs;
+                NSLog(@"NEW - Steps: %d Stairs: %d",self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs);
+            }
+            if ([[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue] == Completed) {
+                NSLog(@"COMPLETED");
+                self.viewGoal.goalStatus = Completed;
+            }
+        }
+    
+        //save goal
+        query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%ld', goalProgressStairs='%ld' where goalID=%ld", self.viewGoal.goalStatus, (long)self.viewGoal.goalProgressSteps, (long)self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+    
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    
+        //save new time
+        query = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[changeDate timeIntervalSince1970]];
+    
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+    
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    
+        self.currentDate = changeDate;
+
+        [self showDetails];
+    }
 }
 
 -(IBAction)unwindFromSchedule:(UIStoryboardSegue *)segue {
-    
+    ScheduleViewController *source = [segue sourceViewController];
+    [self storeGoalScheduleToDB:source.schedule];
 }
 
 
@@ -122,6 +234,7 @@
     if ([segue.identifier isEqualToString:@"showHistoryTest"]) {
         TestHistoryTableViewController *destViewController = segue.destinationViewController;
         destViewController.viewHistoryGoal = self.viewGoal;
+        destViewController.currentDate = self.currentDate;
     }
     else if ([segue.identifier isEqualToString:@"changeTime"]) {
         ChangeTimeViewController *destViewController = segue.destinationViewController;
@@ -132,6 +245,70 @@
         destViewController.currentTime = self.currentDate;
         destViewController.viewGoal = self.viewGoal;
     }
+}
+
+#pragma mark - History
+
+-(int) getHistoryRowID:(int) goalID {
+    NSString *query = [NSString stringWithFormat:@"select * from testHistory where goalId='%d' and statusEndDate='%f'", goalID, 0.0];
+    
+    NSArray *historyResults;
+    
+    historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSInteger indexOfHistoryID = [self.dbManager.arrColumnNames indexOfObject:@"historyID"];
+    
+    return [[[historyResults objectAtIndex:0] objectAtIndex:indexOfHistoryID] intValue];
+}
+
+-(void) storeGoalScheduleToDB:(Schedule*) schedule {
+    NSString *query = [NSString stringWithFormat:@"update testHistory set statusEndDate='%f' where historyID=%ld", [schedule.date timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    if (schedule.completed) {
+        query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, Completed, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    else {
+        query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    
 }
 
 @end

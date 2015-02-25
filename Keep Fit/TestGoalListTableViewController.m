@@ -92,9 +92,42 @@
     }
 }
 
+-(IBAction)unwindFromViewTest:(UIStoryboardSegue *)segue {
+    [self loadFromDB];
+}
+
 #pragma mark - Database
 
 -(void)loadFromDB {
+    //get current date
+    self.currentDate = [[NSDate alloc] init];
+    NSString *dateQuery = @"select * from testDate";
+    
+    NSArray *currentDateResults;
+    currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
+    
+    if (currentDateResults.count == 0) {
+        self.currentDate = [NSDate date];
+        
+        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.currentDate timeIntervalSince1970]];
+        // Execute the query.
+        [self.dbManager executeQuery:dateQuery];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    else {
+        NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
+        self.currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
+        NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
+        NSLog(@"Current Time From DB: %@",self.currentDate);
+    }
+    
+    //get goals
     if (self.keepFitGoals != nil) {
         self.keepFitGoals = nil;
     }
@@ -145,14 +178,14 @@
         //NSLog(@"%@", goal.goalCompletionDate);
         //NSLog(@"%@", [[NSDate date] earlierDate:goal.goalCompletionDate]);
         
-        if ((goal.goalStatus == Pending) && [[[NSDate date] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
+        if ((goal.goalStatus == Pending) && [[self.currentDate earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
             NSLog(@"active");
             
             goal.goalStatus = Active;
             
             [self storeGoalStatusChangeToDB:goal];
         }
-        if ((goal.goalStatus == Active) && [[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+        if ((goal.goalStatus == Active) && [[self.currentDate earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
             NSLog(@"overdue");
             
             goal.goalStatus = Overdue;
@@ -164,39 +197,6 @@
     }
     
     //NSLog(@"%@", self.arrDBResults);
-    //get current date
-    self.currentDate = [[NSDate alloc] init];
-    NSString *dateQuery = @"select * from testDate";
-    
-    NSArray *currentDateResults;
-    currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
-    
-    if (currentDateResults.count == 0) {
-        self.currentDate = [NSDate date];
-        
-        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.currentDate timeIntervalSince1970]];
-        // Execute the query.
-        [self.dbManager executeQuery:dateQuery];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
-    }
-    else {
-        NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
-        self.currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
-        NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
-        NSLog(@"Current Time From DB: %@",self.currentDate);
-    }
-    
-    
-    
-    
-    
-    
     
     // Reload the table view.
     [self.tableView reloadData];
@@ -276,76 +276,6 @@
     return cell;
 }
 
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger objectIndex = indexPath.row;
-    
-    KeepFitGoal *goal;
-    goal = [[KeepFitGoal alloc] init];
-    
-    goal = [self.keepFitGoals objectAtIndex:objectIndex];
-    
-    if (goal.goalStatus == Completed) {
-        return UITableViewCellEditingStyleNone;
-    }
-    return UITableViewCellEditingStyleDelete;
-    
-}
-
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the selected record.
-        NSLog(@"Abandon");
-        
-        //NSLog(@"index of goal: %ld", (long)indexOfGoalID);
-        //NSLog(@"index of goal: %ld", (long)indexPath.row);
-        NSInteger objectIndex = indexPath.row;
-        
-        KeepFitGoal *goal;
-        goal = [[KeepFitGoal alloc] init];
-        
-        goal = [self.keepFitGoals objectAtIndex:objectIndex];
-        
-        if (goal.goalStatus == Abandoned) {
-            if ([[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
-                goal.goalStatus = Overdue;
-            }
-            else {
-                goal.goalStatus = Pending;
-            }
-        }
-        else {
-            goal.goalStatus = Abandoned;
-        }
-        
-        //NSLog(@"ID from goal: %d", [goal goalID]);
-        
-        // Prepare the query.
-        //NSString *query = [NSString stringWithFormat:@"delete from goals where goalID=%ld", (long)[goal goalID]];
-        
-        [self storeGoalStatusChangeToDB:goal];
-        
-        // Reload the table view.
-        [self loadFromDB];
-    }
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger objectIndex = indexPath.row;
-    
-    KeepFitGoal *goal;
-    goal = [[KeepFitGoal alloc] init];
-    
-    goal = [self.keepFitGoals objectAtIndex:objectIndex];
-    
-    if (goal.goalStatus == Abandoned) {
-        return @"Re-instate";
-    }
-    return @"Abandon";
-}
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 60.0;
 }
@@ -375,6 +305,7 @@
     }
 }
 
+#pragma mark - History
 
 -(int) getHistoryRowID:(int) goalID {
     NSString *query = [NSString stringWithFormat:@"select * from testHistory where goalId='%d' and statusEndDate='%f'", goalID, 0.0];

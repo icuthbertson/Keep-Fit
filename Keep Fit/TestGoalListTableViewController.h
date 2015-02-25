@@ -11,5 +11,6 @@
 @interface TestGoalListTableViewController : UITableViewController
 
 -(IBAction)unwindToListTest:(UIStoryboardSegue *)segue;
+-(IBAction)unwindFromViewTest:(UIStoryboardSegue *)segue;
 
 @end

@@ -1082,9 +1082,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ehX-y8-RJm"/>
+                    <navigationItem key="navigationItem" id="ehX-y8-RJm">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="v2Y-qL-NYg">
+                            <connections>
+                                <segue destination="CVj-lo-x5O" kind="unwind" unwindAction="unwindFromViewTest:" id="hU5-Wp-lCH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="outletHistoryButton" destination="VKz-gy-MvA" id="oxK-78-YBv"/>
+                        <outlet property="scheduleButton" destination="xcm-DU-4IL" id="jrR-R0-l6c"/>
+                        <outlet property="timeButton" destination="mM7-GI-sZE" id="Icz-J4-DRz"/>
                         <outlet property="viewDateCompletion" destination="rso-R2-YfK" id="5Ls-fR-IxG"/>
                         <outlet property="viewDateCreated" destination="6Y1-YU-h5M" id="lTa-XL-LEB"/>
                         <outlet property="viewDateStart" destination="pPj-ez-YMA" id="ebG-rS-lTR"/>
@@ -1096,6 +1104,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UjT-bT-Oyg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="CVj-lo-x5O" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2001" y="872"/>
         </scene>
@@ -1274,7 +1283,7 @@
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListProtoHistoryTest" textLabel="wQE-UP-kZg" detailTextLabel="sZe-3M-4vX" style="IBUITableViewCellStyleSubtitle" id="jQx-QH-ali">
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jQx-QH-ali" id="4uh-gv-47T">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="jQx-QH-ali" id="4uh-gv-47T">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wQE-UP-kZg">

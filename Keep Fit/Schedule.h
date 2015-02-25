@@ -14,5 +14,6 @@
 @property NSInteger numStairs;
 @property NSDate *date;
 @property NSDate *endDate;
+@property BOOL completed;
 
 @end
