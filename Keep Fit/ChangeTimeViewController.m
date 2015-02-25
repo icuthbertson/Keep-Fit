@@ -19,6 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.changeTimeDatePicker setMinimumDate:self.currentTime];
+    [self.changeTimeDatePicker setDate:self.currentTime];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,6 +40,18 @@
     self.changeDate = [[NSDate alloc] init];
     self.changeDate = self.changeTimeDatePicker.date;
 }
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if (sender == self.saveButton)  {
+        if ([[self.changeTimeDatePicker.date earlierDate:self.currentTime]isEqualToDate: self.changeTimeDatePicker.date]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Change To Time" message:@"Time must be moved into the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            return NO;
+        }
+    }
+    return YES;
+}
+
 
 
 @end

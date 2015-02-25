@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Schedule.h"
+#import "KeepFitGoal.h"
 
 @interface ScheduleViewController : UIViewController
 
 @property Schedule *schedule;
+@property NSDate *currentTime;
+@property KeepFitGoal *viewGoal;
 
 @end

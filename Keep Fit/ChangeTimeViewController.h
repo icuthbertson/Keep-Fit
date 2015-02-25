@@ -11,5 +11,6 @@
 @interface ChangeTimeViewController : UIViewController
 
 @property NSDate *changeDate;
+@property NSDate *currentTime;
 
 @end

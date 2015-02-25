@@ -15,6 +15,7 @@
 @interface TestGoalListTableViewController ()
 
 @property NSMutableArray *keepFitGoals;
+@property NSDate *currentDate;
 @property (nonatomic, strong) DBManager *dbManager;
 
 @property (nonatomic, strong) NSArray *arrDBResults;
@@ -163,6 +164,39 @@
     }
     
     //NSLog(@"%@", self.arrDBResults);
+    //get current date
+    self.currentDate = [[NSDate alloc] init];
+    NSString *dateQuery = @"select * from testDate";
+    
+    NSArray *currentDateResults;
+    currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
+    
+    if (currentDateResults.count == 0) {
+        self.currentDate = [NSDate date];
+        
+        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.currentDate timeIntervalSince1970]];
+        // Execute the query.
+        [self.dbManager executeQuery:dateQuery];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    else {
+        NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
+        self.currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
+        NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
+        NSLog(@"Current Time From DB: %@",self.currentDate);
+    }
+    
+    
+    
+    
+    
+    
     
     // Reload the table view.
     [self.tableView reloadData];
@@ -325,6 +359,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         TestViewGoalViewController *destViewController = segue.destinationViewController;
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
+        destViewController.currentDate  =self.currentDate;
     }
     else if ([segue.identifier isEqualToString:@"addGoalTest"]) {
         UINavigationController *navigationController = segue.destinationViewController;
@@ -336,6 +371,7 @@
             [goalNamesForChecking addObject:goalNameForArray];
         }
         destAddController.listGoalNames = goalNamesForChecking;
+        destAddController.currentDate  =self.currentDate;
     }
 }
 

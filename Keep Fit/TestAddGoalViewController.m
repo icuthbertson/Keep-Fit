@@ -35,8 +35,8 @@
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
-    [self.dateStartPicker setMinimumDate:[NSDate date]];
-    [self.datePicker setMinimumDate:[NSDate date]];
+    [self.dateStartPicker setMinimumDate:self.currentDate];
+    [self.datePicker setMinimumDate:self.currentDate];
     self.stepsStepper.userInteractionEnabled = YES;
     self.stairsStepper.userInteractionEnabled = NO;
     self.numStepsLabel.text = @"0";
@@ -138,7 +138,7 @@
     NSLog(@"Goal Start Date: %@",self.goal.goalStartDate);
     self.goal.goalCompletionDate = self.datePicker.date;
     NSLog(@"Goal Completion Date: %@",self.goal.goalCompletionDate);
-    self.goal.goalCreationDate = [NSDate date];
+    self.goal.goalCreationDate = self.currentDate;
     NSLog(@"Goal Creation Date: %@",self.goal.goalCreationDate);
     self.goal.goalConversion = 0;
     NSLog(@"Goal Conversion: %d",self.goal.goalConversion);
@@ -156,7 +156,7 @@
             [alert show];
             return NO;
         }
-        if ([[self.datePicker.date earlierDate:[NSDate date]]isEqualToDate: self.datePicker.date]) {
+        if ([[self.datePicker.date earlierDate:self.currentDate]isEqualToDate: self.datePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -166,7 +166,7 @@
             [alert show];
             return NO;
         }
-        if ([[self.dateStartPicker.date earlierDate:[NSDate date]]isEqualToDate: self.dateStartPicker.date]) {
+        if ([[self.dateStartPicker.date earlierDate:self.currentDate]isEqualToDate: self.dateStartPicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;

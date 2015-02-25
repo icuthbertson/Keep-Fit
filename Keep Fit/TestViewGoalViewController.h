@@ -13,6 +13,7 @@
 
 @property KeepFitGoal *viewGoal;
 @property NSMutableArray *listGoalNames;
+@property NSDate *currentDate;
 
 -(IBAction)unwindFromChangeTime:(UIStoryboardSegue *)segue;
 -(IBAction)unwindFromSchedule:(UIStoryboardSegue *)segue;

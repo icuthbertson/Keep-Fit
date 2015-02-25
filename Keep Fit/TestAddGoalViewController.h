@@ -13,5 +13,6 @@
 
 @property KeepFitGoal *goal;
 @property NSMutableArray *listGoalNames;
+@property NSDate *currentDate;
 
 @end

@@ -13,5 +13,6 @@
 @property NSInteger numSteps;
 @property NSInteger numStairs;
 @property NSDate *date;
+@property NSDate *endDate;
 
 @end

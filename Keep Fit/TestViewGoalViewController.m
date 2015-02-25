@@ -8,6 +8,8 @@
 
 #import "TestViewGoalViewController.h"
 #import "TestHistoryTableViewController.h"
+#import "ChangeTimeViewController.h"
+#import "ScheduleViewController.h"
 #import "DBManager.h"
 
 @interface TestViewGoalViewController ()
@@ -120,6 +122,15 @@
     if ([segue.identifier isEqualToString:@"showHistoryTest"]) {
         TestHistoryTableViewController *destViewController = segue.destinationViewController;
         destViewController.viewHistoryGoal = self.viewGoal;
+    }
+    else if ([segue.identifier isEqualToString:@"changeTime"]) {
+        ChangeTimeViewController *destViewController = segue.destinationViewController;
+        destViewController.currentTime = self.currentDate;
+    }
+    else if ([segue.identifier isEqualToString:@"scheduleActivity"]) {
+        ScheduleViewController *destViewController = segue.destinationViewController;
+        destViewController.currentTime = self.currentDate;
+        destViewController.viewGoal = self.viewGoal;
     }
 }
 
