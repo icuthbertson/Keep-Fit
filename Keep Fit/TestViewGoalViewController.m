@@ -169,24 +169,28 @@
                 
                 //still in middle
                 if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate])) {
+                    NSLog(@"Middle");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                 }//second half of history
-                else if (([[self.currentDate earlierDate:tempEndDate]isEqualToDate:self.currentDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate])) {
+                else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate])) {
+                    NSLog(@"Second Half");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                 }//first half
-                else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[changeDate earlierDate:tempStartDate]isEqualToDate:tempStartDate])) {
+                else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate])) {
+                    NSLog(@"First Half");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                 }//full history
-                else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
+                else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
+                    NSLog(@"Full");
                     NSLog(@"OLD - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += tempSteps;
                     loopGoal.goalProgressStairs += tempStairs;
