@@ -289,7 +289,8 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         TestViewGoalViewController *destViewController = segue.destinationViewController;
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
-        destViewController.currentDate  =self.currentDate;
+        destViewController.currentDate = self.currentDate;
+        destViewController.keepFitGoals = self.keepFitGoals;
     }
     else if ([segue.identifier isEqualToString:@"addGoalTest"]) {
         UINavigationController *navigationController = segue.destinationViewController;
@@ -301,7 +302,7 @@
             [goalNamesForChecking addObject:goalNameForArray];
         }
         destAddController.listGoalNames = goalNamesForChecking;
-        destAddController.currentDate  =self.currentDate;
+        destAddController.currentDate = self.currentDate;
     }
 }
 
