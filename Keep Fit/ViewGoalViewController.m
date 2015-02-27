@@ -320,6 +320,7 @@
     else if ([segue.identifier isEqualToString:@"showHistory"]) {
         HistoryTableViewController *destViewController = segue.destinationViewController;
         destViewController.viewHistoryGoal = self.viewGoal;
+        destViewController.testing = self.testing;
     }
     else if ([segue.identifier isEqualToString:@"changeTime"]) {
         ChangeTimeViewController *destViewController = segue.destinationViewController;
@@ -623,7 +624,7 @@
 }
 
 -(void) storeGoalScheduleToDB:(Schedule*) schedule {
-    NSString *query = [NSString stringWithFormat:@"update testHistory set statusEndDate='%f' where historyID=%ld", [schedule.date timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    NSString *query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f' where historyID=%ld", self.testing.getHistoryDBName, [schedule.date timeIntervalSince1970], (long)[self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -634,7 +635,7 @@
         NSLog(@"Could not execute the query.");
     }
     
-    query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
+    query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -646,7 +647,7 @@
     }
     
     if (schedule.completed) {
-        query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, Completed, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
+        query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)self.viewGoal.goalID, Completed, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -658,7 +659,7 @@
         }
     }
     else {
-        query = [NSString stringWithFormat:@"insert into testHistory values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
+        query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [schedule.endDate timeIntervalSince1970], 0.0, 0, 0];
         // Execute the query.
         [self.dbManager executeQuery:query];
         

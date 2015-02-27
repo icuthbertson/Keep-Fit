@@ -50,7 +50,7 @@
     
     // Form the query.
     NSString *query;
-    query = [NSString stringWithFormat:@"select * from history where goalId='%ld'", (long)self.viewHistoryGoal.goalID];
+    query = [NSString stringWithFormat:@"select * from %@ where goalId='%ld'", [self.testing getHistoryDBName], (long)self.viewHistoryGoal.goalID];
     
     // Get the results.
     if (self.arrDBResults != nil) {
