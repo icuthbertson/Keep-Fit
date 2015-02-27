@@ -207,21 +207,49 @@
     switch (goal.goalStatus) {
         case Pending:
             statusText = [NSString stringWithFormat:@"Pending"];
+            //cell.textLabel.textColor = [UIColor blueColor];
+            //cell.detailTextLabel.textColor = [UIColor blueColor];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             break;
         case Active:
             statusText = [NSString stringWithFormat:@"Active"];
+            //cell.textLabel.textColor = [UIColor colorWithRed:((0) / 255.0) green:((204) / 255.0) blue:((0) / 255.0) alpha:1.0];
+            //cell.detailTextLabel.textColor = [UIColor colorWithRed:((0) / 255.0) green:((204) / 255.0) blue:((0) / 255.0) alpha:1.0];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             break;
         case Overdue:
             statusText = [NSString stringWithFormat:@"Overdue"];
+            //cell.textLabel.textColor = [UIColor redColor];
+            //cell.detailTextLabel.textColor = [UIColor redColor];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             break;
         case Suspended:
             statusText = [NSString stringWithFormat:@"Suspended"];
+            //cell.textLabel.textColor = [UIColor colorWithRed:((255) / 255.0) green:((150) / 255.0) blue:((0) / 255.0) alpha:1.0];
+            //cell.detailTextLabel.textColor = [UIColor colorWithRed:((255) / 255.0) green:((150) / 255.0) blue:((0) / 255.0) alpha:1.0];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             break;
         case Abandoned:
             statusText = [NSString stringWithFormat:@"Abandoned"];
+            //cell.textLabel.textColor = [UIColor redColor];
+            //cell.detailTextLabel.textColor = [UIColor redColor];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             break;
         case Completed:
             statusText = [NSString stringWithFormat:@"Completed"];
+            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             break;
         default:
             break;

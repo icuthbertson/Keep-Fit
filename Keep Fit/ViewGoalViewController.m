@@ -61,6 +61,7 @@
         case Pending:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
+            self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             break;
@@ -68,18 +69,21 @@
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
             [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
+            self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Overdue:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
+            self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Suspended:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
+            self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = NO;
@@ -88,6 +92,7 @@
         case Abandoned:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Abandoned"];
+            self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
@@ -95,6 +100,7 @@
         case Completed:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Completed"];
+            self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
@@ -220,6 +226,7 @@
         [self storeGoalStatusChangeToDB];
         self.isRecording = NO;
         self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
+        self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
         [self showAndEnableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
         self.outletActiveButton.hidden = YES;
@@ -233,18 +240,21 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now pending" message:@"This goal is now pending." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
+            self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
         }
         else if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
             self.viewGoal.goalStatus = Overdue;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now overdue" message:@"This goal is now overdue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
+            self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
         }
         else {
             self.viewGoal.goalStatus = Active;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Active" message:@"This goal is now Active." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
+            self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             
         }
         [self storeGoalStatusChangeToDB];
