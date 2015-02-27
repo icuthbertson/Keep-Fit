@@ -160,7 +160,7 @@
             [alert show];
             return NO;
         }
-        if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
+        if ([[self.editDateField.date earlierDate:[self.testing getTime]]isEqualToDate: self.editDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -170,7 +170,7 @@
             [alert show];
             return NO;
         }
-        if ([[self.editStartDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editStartDateField.date]) {
+        if ([[self.editStartDateField.date earlierDate:[self.testing getTime]]isEqualToDate: self.editStartDateField.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;

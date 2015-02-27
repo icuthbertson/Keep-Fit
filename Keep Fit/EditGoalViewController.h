@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
+#import "Testing.h"
 
 @interface EditGoalViewController : UIViewController
 
 @property KeepFitGoal *editGoal;
 @property BOOL wasEdit;
 @property NSMutableArray *listGoalNames;
+@property Testing *testing;
 
 @end

@@ -10,4 +10,6 @@
 
 @interface SettingsViewController : UIViewController
 
+@property BOOL testing;
+
 @end

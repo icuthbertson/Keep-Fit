@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
+#import "Testing.h"
 
 @interface ViewGoalViewController : UIViewController<UIAlertViewDelegate>
 
 @property KeepFitGoal *viewGoal;
 @property NSMutableArray *listGoalNames;
+@property Testing *testing;
+@property NSMutableArray *keepFitGoals;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue;
 
