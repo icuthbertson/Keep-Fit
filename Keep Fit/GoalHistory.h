@@ -11,12 +11,12 @@
 
 @interface GoalHistory : NSObject
 
-@property long historyID;
-@property long goalID;
-@property GoalStatus goalStatus;
-@property NSDate *startDate;
-@property NSDate *endDate;
-@property int progressSteps;
-@property int progressStairs;
+@property long historyID; // ID of the history row.
+@property long goalID; // ID of the goal the history row is for.
+@property GoalStatus goalStatus; // Goal Status.
+@property NSDate *startDate; // Date the status started.
+@property NSDate *endDate; // Date the status ended.
+@property int progressSteps; // Steps progress made during the status.
+@property int progressStairs; // Stairs progress made during the status.
 
 @end

@@ -12,10 +12,9 @@
 
 @interface HistoryTableViewController ()
 
-@property NSMutableArray *historyGoals;
-@property (nonatomic, strong) DBManager *dbManager;
-
-@property (nonatomic, strong) NSArray *arrDBResults;
+@property NSMutableArray *historyGoals; // Array to store the history objects.
+@property (nonatomic, strong) DBManager *dbManager; // Database manager object.
+@property (nonatomic, strong) NSArray *arrDBResults; // Array to store select query results for the DB.
 
 @end
 
@@ -24,16 +23,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+    // Set the navigation bar title.
     self.navigationItem.title = [NSString stringWithFormat:@"History of %@", self.viewHistoryGoal.goalName];
     
+    // Initialise the database manager.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
+    // Load history data from the database.
     [self loadFromDB];
 }
 
@@ -42,22 +38,25 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)loadFromDB {    
+// Method to load history data from the database.
+-(void)loadFromDB {
+    // Re-initalise the array for storing the history.
     if (self.historyGoals != nil) {
         self.historyGoals = nil;
     }
     self.historyGoals = [[NSMutableArray alloc] init];
     
-    // Form the query.
+    // Form the DB query.
     NSString *query;
     query = [NSString stringWithFormat:@"select * from %@ where goalId='%ld'", [self.testing getHistoryDBName], (long)self.viewHistoryGoal.goalID];
     
-    // Get the results.
+    // Re-initalise the array for storing the query results.
     if (self.arrDBResults != nil) {
         self.arrDBResults = nil;
     }
     self.arrDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
     
+    // Set up indexes for getting column results for the rows in the database.
     NSInteger indexOfHistoryID = [self.dbManager.arrColumnNames indexOfObject:@"historyID"];
     NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
     NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
@@ -67,9 +66,8 @@
     NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
     NSLog(@"arrDBResults: %@", self.arrDBResults);
     
+    // Set up the history object with data from the rows returned by the query.
     for (int i=0; i<[self.arrDBResults count]; i++) {
-        //NSLog(@"Goal Name %d: %@", i,[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]);
-        
         GoalHistory *history;
         history = [[GoalHistory alloc] init];
         history.historyID = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfHistoryID] intValue];
@@ -80,6 +78,7 @@
         history.progressSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
         history.progressStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
         
+        // Add object to the array of history objects.
         [self.historyGoals addObject:history];
     }
     
@@ -107,9 +106,12 @@
     
     // Configure the cell...
     GoalHistory *history = [self.historyGoals objectAtIndex:indexPath.row];
+    
+    // Set up cell text size format.
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
     
+    // Set up the text and detialed text for the cell depending on the status of the goal and if any progress was made.
     switch (history.goalStatus) {
         case Pending:
             cell.textLabel.text = @"Pending";
@@ -142,10 +144,12 @@
         default:
             break;
     }
+    // Set up the date formatter
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
     if ([[history.endDate earlierDate:history.startDate]isEqualToDate: history.endDate]) {
+        // If the end date is 1 Jan 1970, ie is the last history item for goal, don't display the end date.
         cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@", [formatter stringFromDate:history.startDate]];
     }
     else {
@@ -155,7 +159,8 @@
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return the height for the cell.
     return 60.0;
 }
 

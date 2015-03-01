@@ -31,18 +31,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // Set the minimum date of the date pickers to the current time
+    // or stored time from the Testing object.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
+    // Set the navigation bar title.
     self.navigationItem.title = [NSString stringWithFormat:@"Edit %@", self.editGoal.goalName];
     
+    // TapGestureRecognizer declaration for closing the keyboard if there is a tap off of it.
+    // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
-    
     [self.view addGestureRecognizer:tap];
     
+    // Set up the fields in the view with the values from the goal to be editted.
     self.editTitleField.text = self.editGoal.goalName;
     self.editTypeField.selectedSegmentIndex = self.editGoal.goalType;
     switch (self.editGoal.goalType) {
@@ -61,6 +66,7 @@
     self.stepsStepper.value = [self.numStepsLabel.text intValue];
     self.numStairsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
     self.stairsStepper.value = [self.numStairsLabel.text intValue];
+    // Set the date pickers to be active depending on the status of the goal.
     if (self.editGoal.goalStatus == Active) {
         self.editStartDateField.userInteractionEnabled = NO;
     }
@@ -77,26 +83,35 @@
     // Dispose of any resources that can be recreated.
 }
 
+// TapGestureRecognizer method for closing the keyboard if there is a tap off of it.
+// Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
 -(void)dismissKeyboard {
     [self.editTitleField resignFirstResponder];
 }
 
 #pragma mark - Segmented Control
 
+// Action from Type Selector to change the goal type between Steps, Stairs and Both.
 - (IBAction)typeSelecterAction:(id)sender {
+    // If selector at 0.
     if(self.editTypeField.selectedSegmentIndex == 0) {
+        // Set only the Steps stepper to enabled.
+        // Set Stairs stepper to 0.
         self.stepsStepper.userInteractionEnabled = YES;
         self.stairsStepper.userInteractionEnabled = NO;
         self.numStairsLabel.text = @"0";
         self.stairsStepper.value = 0;
     }
     else if (self.editTypeField.selectedSegmentIndex == 1) {
+        // Set only the Stairs stepper to enabled.
+        // Set Steps stepper to 0.
         self.stepsStepper.userInteractionEnabled = NO;
         self.stairsStepper.userInteractionEnabled = YES;
         self.numStepsLabel.text = @"0";
         self.stepsStepper.value = 0;
     }
     else {
+        // Set both the Steps and Stairs stepper to enabled.
         self.stepsStepper.userInteractionEnabled = YES;
         self.stairsStepper.userInteractionEnabled = YES;
     }
@@ -121,33 +136,43 @@
     NSLog(@"Steps: %d",[self.numStepsLabel.text intValue]);
     NSLog(@"Stairs: %d",[self.numStairsLabel.text intValue]);
     NSLog(@"Date: %@",self.editDateField.date);
+    // If the Cancel button was pressed (ie. not the save button)
+    // Just return.
     if (sender != self.saveButton) return;
+    
+    // Set wasEdit to NO initially.
     self.wasEdit = NO;
+    // If the goal name is different set to the new value.
     if (![self.editTitleField.text isEqualToString:self.editGoal.goalName]) {
         self.editGoal.goalName = self.editTitleField.text;
         NSLog(@"Name - Save: %@",self.editGoal.goalName);
         self.wasEdit = YES;
     }
+    // If the goal type is different set to the new value.
     if (self.editTypeField.selectedSegmentIndex != self.editGoal.goalType) {
         self.editGoal.goalType = self.editTypeField.selectedSegmentIndex;
         NSLog(@"Type - Save: %d",self.editGoal.goalType);
         self.wasEdit = YES;
     }
+    // If the steps amount is different set to the new value.
     if (self.editGoal.goalAmountSteps != [self.numStepsLabel.text intValue]) {
         self.editGoal.goalAmountSteps = [self.numStepsLabel.text intValue];
         NSLog(@"Steps - Save: %ld",(long)self.editGoal.goalAmountSteps);
         self.wasEdit = YES;
     }
+    // If the stairs amount is different set to the new value.
     if (self.editGoal.goalAmountStairs != [self.numStairsLabel.text intValue]) {
         self.editGoal.goalAmountStairs = [self.numStairsLabel.text intValue];
         NSLog(@"Stairs - Save: %ld",(long)self.editGoal.goalAmountStairs);
         self.wasEdit = YES;
     }
+    // If the start date is different set to the new value.
     if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
         self.editGoal.goalStartDate = self.editStartDateField.date;
         NSLog(@"Start Date - Save: %@",self.editGoal.goalStartDate);
         self.wasEdit = YES;
     }
+    // If the end date is different set to the new value.
     if (!([self.editGoal.goalCompletionDate isEqualToDate:self.editDateField.date])) {
         self.editGoal.goalCompletionDate = self.editDateField.date;
         NSLog(@"Completion Date - Save: %@",self.editGoal.goalCompletionDate);
@@ -155,19 +180,19 @@
     }
 }
 
+// This method is used to test the inputs and stop the prepareForSegue method from being called if No is returned.
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    //NSLog(@"Date Picker: %@",self.datePicker.date);
-    //NSLog(@"NSDate date: %@",[NSDate date]);
-    //NSLog(@"Earlier Date: %@",[self.datePicker.date earlierDate:[NSDate date]]);
-    //NSLog(@"%ld",(long)[self.amountPicker selectedRowInComponent:0]);
+    // Trim the white space from the string from the goal name TextField.
     NSString *trimmedString = [self.editTitleField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (sender == self.saveButton)  {
+        // If the Goal name has no loength (no entered) alert with message and return NO.
         if ((trimmedString.length == 0)) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Please enter a name for the goal." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
         if (self.editGoal.goalStatus == Pending || self.editGoal.goalStatus == Active) {
+            // If the end date/time is before the current date/time alert with message and return NO.
             if ([[self.editDateField.date earlierDate:[self.testing getTime]]isEqualToDate: self.editDateField.date]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
@@ -175,6 +200,7 @@
             }
         }
         if (self.editGoal.goalStatus == Pending || self.editGoal.goalStatus == Active) {
+            // If the end date/time is before the start date/time alert with message and return NO.
             if ([[self.editDateField.date earlierDate:self.editStartDateField.date]isEqualToDate: self.editDateField.date]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
@@ -182,12 +208,14 @@
             }
         }
         if (self.editGoal.goalStatus == Pending) {
+            // If the start date/time is before the current date/time alert with message and return NO.
             if ([[self.editStartDateField.date earlierDate:[self.testing getTime]]isEqualToDate: self.editStartDateField.date]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
                 return NO;
             }
         }
+        // If the goal name has been used before alert with message and return NO.
         int count = 0;
         for (int i=0; i<[self.listGoalNames count]; i++) {
             if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
@@ -200,6 +228,7 @@
             }
         }
         if(self.editTypeField.selectedSegmentIndex == 0) {
+            // If Steps goal and number of steps is 0 or less than any progress already made alert with message and return NO.
             if (self.editGoal.goalProgressSteps > [self.numStepsLabel.text intValue]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal Edit" message:@"Number of steps for the goal cannot be less than the curret progress." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
@@ -212,6 +241,7 @@
             }
         }
         if (self.editTypeField.selectedSegmentIndex == 1) {
+            // If Stairs goal and number of stairs is 0 or less than any progress already made alert with message and return NO.
             if (self.editGoal.goalProgressStairs > [self.numStairsLabel.text intValue]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal Edit" message:@"Number of stairs for the goal cannot be less than the curret progress." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
@@ -224,6 +254,7 @@
             }
         }
         if (self.editTypeField.selectedSegmentIndex == 2) {
+            // If Both goal and number of steps or stairs is 0 or less than any progress already made alert with message and return NO.
             if (self.editGoal.goalProgressSteps > [self.numStepsLabel.text intValue]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal Edit" message:@"Number of steps for the goal cannot be less than the curret progress." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];

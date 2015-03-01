@@ -12,11 +12,11 @@
 
 @interface ViewGoalViewController : UIViewController<UIAlertViewDelegate>
 
-@property KeepFitGoal *viewGoal;
-@property NSMutableArray *listGoalNames;
-@property Testing *testing;
-@property NSMutableArray *keepFitGoals;
+@property KeepFitGoal *viewGoal; // goal to be viewed.
+@property NSMutableArray *listGoalNames; // list of goal names.
+@property Testing *testing; // testing object.
+@property NSMutableArray *keepFitGoals; // array of goals.
 
--(IBAction)unwindToView:(UIStoryboardSegue *)segue;
+-(IBAction)unwindToView:(UIStoryboardSegue *)segue; // Returning from edit view.
 
 @end

@@ -11,11 +11,11 @@
 
 @interface GoalListTableViewController : UITableViewController
 
--(IBAction)unwindToList:(UIStoryboardSegue *)segue;
--(IBAction)unwindFromView:(UIStoryboardSegue *)segue;
--(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue;
--(IBAction)unwindFromListSelection:(UIStoryboardSegue *)segue;
+-(IBAction)unwindToList:(UIStoryboardSegue *)segue; // Segue returning from add view.
+-(IBAction)unwindFromView:(UIStoryboardSegue *)segue; // Segue returning from view goal view.
+-(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue; // Segue returning from settings view.
+-(IBAction)unwindFromListSelection:(UIStoryboardSegue *)segue; // Segue returning from list selection.
 
-@property NSInteger listType;
+@property NSInteger listType; // Hold integer to tell which goal type to list.
 
 @end
