@@ -4,6 +4,7 @@
 //
 //  Created by Iain Cuthbertson on 09/02/2015.
 //  Copyright (c) 2015 Iain Cuthbertson. All rights reserved.
+//  Base of class from https://developer.apple.com/library/ios/referencelibrary/GettingStarted/RoadMapiOS/index.html#//apple_ref/doc/uid/TP40011343-CH2-SW1
 //
 
 #import <UIKit/UIKit.h>
@@ -12,8 +13,8 @@
 
 @interface AddGoalViewController : UIViewController /*<UIPickerViewDataSource, UIPickerViewDelegate>*/
 
-@property KeepFitGoal *goal;
-@property NSMutableArray *listGoalNames;
-@property Testing *testing;
+@property KeepFitGoal *goal; // Goal object that'll to taken back by the GoalList.
+@property NSMutableArray *listGoalNames; // List of previous goal names to check against for duplicates.
+@property Testing *testing; // Testing object for getting the date and time from.
 
 @end

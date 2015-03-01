@@ -4,6 +4,7 @@
 //
 //  Created by Iain Cuthbertson on 10/2/15.
 //  Copyright (c) 2015 Iain Cuthbertson. All rights reserved.
+//  Based on tutorial from http://www.appcoda.com/sqlite-database-ios-app-tutorial/
 //
 
 #import <Foundation/Foundation.h>

@@ -4,11 +4,14 @@
 //
 //  Created by Iain Cuthbertson on 09/02/2015.
 //  Copyright (c) 2015 Iain Cuthbertson. All rights reserved.
+//  Base of class from https://developer.apple.com/library/ios/referencelibrary/GettingStarted/RoadMapiOS/index.html#//apple_ref/doc/uid/TP40011343-CH2-SW1
 //
 
 #import "AddGoalViewController.h"
 
 @interface AddGoalViewController ()
+
+// UI Outlet and Action declarations.
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -17,18 +20,11 @@
 - (IBAction)typeSelecterAction:(id)sender;
 - (IBAction)stepsStepperAction:(id)sender;
 - (IBAction)stairsStepperAction:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *numStepsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numStairsLabel;
 @property (weak, nonatomic) IBOutlet UIStepper *stepsStepper;
 @property (weak, nonatomic) IBOutlet UIStepper *stairsStepper;
-
-/*@property NSArray *pickerStepsArray;
-@property NSArray *pickerStairsArray;
-
-@property UIPickerView *stepsPicker;
-@property UIPickerView *stairsPicker;*/
 
 @end
 
@@ -36,37 +32,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // Set up the scroll view.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
+    // Set the minimum date of the date pickers to the current time
+    // or stored time from the Testing object.
     [self.dateStartPicker setMinimumDate:[self.testing getTime]];
     [self.datePicker setMinimumDate:[self.testing getTime]];
+    
+    // Enable default steppers enabled (steps enabled, stairs disabled)
     self.stepsStepper.userInteractionEnabled = YES;
     self.stairsStepper.userInteractionEnabled = NO;
     self.numStepsLabel.text = @"0";
     self.numStairsLabel.text = @"0";
     
+    // TapGestureRecognizer declaration for closing the keyboard if there is a tap off of it.
+    // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
-    
     [self.view addGestureRecognizer:tap];
-    
-    /*self.pickerStepsArray = @[@500, @1000, @1500, @2000, @2500, @3000, @3500, @4000, @4500, @5000, @5500, @6000, @6500, @7000, @7500, @8000, @8500, @9000, @9500, @10000];
-    self.pickerStairsArray = @[@5, @10, @15, @20, @25, @30, @35, @40, @45, @50, @55, @60, @65, @70, @75, @80, @85, @90, @95, @100];
-    
-    self.stepsPicker = [[UIPickerView alloc] init];
-    [self.stepsPicker setDataSource: self];
-    [self.stepsPicker setDelegate: self];
-    self.stepsPicker.showsSelectionIndicator = YES;
-    self.numStepsField.inputView = self.stepsPicker;
-    
-    self.stairsPicker = [[UIPickerView alloc] init];
-    [self.stairsPicker setDataSource: self];
-    [self.stairsPicker setDelegate: self];
-    self.stairsPicker.showsSelectionIndicator = YES;
-    self.numStairsField.inputView = self.stairsPicker;*/
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,59 +61,33 @@
     // Dispose of any resources that can be recreated.
 }
 
+// TapGestureRecognizer method for closing the keyboard if there is a tap off of it.
+// Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
 -(void)dismissKeyboard {
     [self.textField resignFirstResponder];
 }
-/*
-#pragma mark - PickerView
-
-//Steps
-// The number of columns of data
-- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-// The number of rows of data
-- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    if ([pickerView isEqual:self.stepsPicker]) return self.pickerStepsArray.count;
-    return self.pickerStairsArray.count;
-}
-
-// The data to return for the row and component (column) that's being passed in
-- (NSString*)stepsPicker:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    if ([pickerView isEqual:self.stepsPicker]) return [NSString stringWithFormat:@"%@", self.pickerStepsArray[row]];
-    return [NSString stringWithFormat:@"%@", self.pickerStairsArray[row]];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    if ([pickerView isEqual:self.stepsPicker]) {
-        self.numStepsField.text = [self.pickerStepsArray objectAtIndex:row];
-    }
-    else if ([pickerView isEqual:self.stairsPicker]) {
-        self.numStairsField.text = [self.pickerStairsArray objectAtIndex:row];
-    }
-}*/
 
 #pragma mark - Stepper Control
 
+// Action from Steps Stepper to change the value shown in the Steps label.
 - (IBAction)stepsStepperAction:(id)sender{
     self.numStepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
-
+// Action from Stairs Stepper to change the value shown in the Stairs label.
 - (IBAction)stairsStepperAction:(id)sender{
     self.numStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
 #pragma mark - Segmented Control
 
+// Action from Type Selector to change the goal type between Steps, Stairs and Both.
 - (IBAction)typeSelecterAction:(id)sender {
+    // If selector at 0.
     if(self.typeSelecter.selectedSegmentIndex == 0) {
         NSLog(@"Selecter 0");
+        // Set only the Steps stepper to enabled.
+        // Set Stairs stepper to 0.
         self.stepsStepper.userInteractionEnabled = YES;
         self.stairsStepper.userInteractionEnabled = NO;
         self.numStairsLabel.text = @"0";
@@ -134,6 +95,8 @@
     }
     else if (self.typeSelecter.selectedSegmentIndex == 1) {
         NSLog(@"Selecter 1");
+        // Set only the Stairs stepper to enabled.
+        // Set Steps stepper to 0.
         self.stepsStepper.userInteractionEnabled = NO;
         self.stairsStepper.userInteractionEnabled = YES;
         self.numStepsLabel.text = @"0";
@@ -141,6 +104,7 @@
     }
     else {
         NSLog(@"Selecter 2");
+        // Set both the Steps and Stairs stepper to enabled.
         self.stepsStepper.userInteractionEnabled = YES;
         self.stairsStepper.userInteractionEnabled = YES;
     }
@@ -150,74 +114,97 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // If the Cancel button was pressed (ie. not the save button)
+    // Just return.
     if (sender != self.saveButton) return;
     
+    // Initalise Goal to be passed back to the GoalList.
     self.goal = [[KeepFitGoal alloc] init];
+    // Trim the white space from the start and end of the goal title.
     NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.goal.goalName = trimmedString;
-    NSLog(@"Goal Name: %@",self.goal.goalName);
+    
+    // Set the status of the new goal to Pending.
     self.goal.goalStatus = Pending;
-    NSLog(@"Goal Status: %d",self.goal.goalStatus);
+    
+    // Test the Type Selector value.
     if(self.typeSelecter.selectedSegmentIndex == 0) {
+        // If the type selector is at 0.
+        // Set the goal type to Steps and pull the number of steps from the stepper.
+        // Set the number of stairs to zero.
         self.goal.goalType = Steps;
-        NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountSteps = [self.numStepsLabel.text intValue];
-        NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = 0;
-        NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
     }
     else if (self.typeSelecter.selectedSegmentIndex == 1) {
+        // If the type selector is at 1.
+        // Set the goal type to Stairs and pull the number of steps from the stepper.
+        // Set the number of steps to zero.
         self.goal.goalType = Stairs;
-        NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
-        NSLog(@"Goal Amount: %ld Stairs",(long)self.goal.goalAmountStairs);
         self.goal.goalAmountSteps = 0;
-        NSLog(@"Goal Amount: %ld Steps",(long)self.goal.goalAmountSteps);
     }
     else {
+        // If the type selector is at 2.
+        // Set the goal type to Both, pull the number of steps from the stepper
+        // and pull the number of stairs from the stepper.
         self.goal.goalType = Both;
-        NSLog(@"Goal Type: %d",self.goal.goalType);
         self.goal.goalAmountSteps = [self.numStepsLabel.text intValue];
-        NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
         self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
-        NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
+        
     }
+    // Set the progress towards the goals to 0.
     self.goal.goalProgressSteps = 0;
-    NSLog(@"Goal Progress Steps: %ld",(long)self.goal.goalProgressSteps);
     self.goal.goalProgressStairs = 0;
-    NSLog(@"Goal Progress Stairs: %ld",(long)self.goal.goalProgressSteps);
+    
+    // Set the start and end date of the goal to those from their respective date pickers.
     self.goal.goalStartDate = self.dateStartPicker.date;
-    NSLog(@"Goal Start Date: %@",self.goal.goalStartDate);
+    
     self.goal.goalCompletionDate = self.datePicker.date;
-    NSLog(@"Goal Completion Date: %@",self.goal.goalCompletionDate);
+    
+    // Set the creation date of the goal to the current date.
     self.goal.goalCreationDate = [self.testing getTime];
-    NSLog(@"Goal Creation Date: %@",self.goal.goalCreationDate);
+    
+    // Set the coversion type of the goal to that of the type selector.
     self.goal.goalConversion = 0;
+    
+    NSLog(@"Goal Name: %@",self.goal.goalName);
+    NSLog(@"Goal Status: %d",self.goal.goalStatus);
+    NSLog(@"Goal Type: %d",self.goal.goalType);
+    NSLog(@"Goal Amount Steps: %ld",(long)self.goal.goalAmountSteps);
+    NSLog(@"Goal Amount Stairs: %ld",(long)self.goal.goalAmountStairs);
+    NSLog(@"Goal Progress Steps: %ld",(long)self.goal.goalProgressSteps);
+    NSLog(@"Goal Progress Stairs: %ld",(long)self.goal.goalProgressSteps);
+    NSLog(@"Goal Start Date: %@",self.goal.goalStartDate);
+    NSLog(@"Goal Completion Date: %@",self.goal.goalCompletionDate);
+    NSLog(@"Goal Creation Date: %@",self.goal.goalCreationDate);
     NSLog(@"Goal Conversion: %d",self.goal.goalConversion);
 }
 
+// This method is used to test the inputs and stop the prepareForSegue method from being called if No is returned.
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    //NSLog(@"Date Picker: %@",self.datePicker.date);
-    //NSLog(@"NSDate date: %@",[NSDate date]);
-    //NSLog(@"Earlier Date: %@",[self.datePicker.date earlierDate:[NSDate date]]);
-    //NSLog(@"%ld",(long)[self.amountPicker selectedRowInComponent:0]);
+    // Trim the white space from the string from the goal name TextField.
     NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (sender == self.saveButton)  {
+        // If the Goal name has no loength (no entered) alert with message and return NO.
         if ((trimmedString.length == 0)) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Please enter a name for the goal." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
+        // If the end date/time is before the current date/time alert with message and return NO.
         if ([[self.datePicker.date earlierDate:[self.testing getTime]]isEqualToDate: self.datePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
+        // If the end date/time is before the start date/time alert with message and return NO.
         if ([[self.datePicker.date earlierDate:self.dateStartPicker.date]isEqualToDate: self.datePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
+        // If the start date/time is before the current date/time alert with message and return NO.
         if ([[self.dateStartPicker.date earlierDate:[self.testing getTime]]isEqualToDate: self.dateStartPicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
@@ -225,6 +212,7 @@
         }
         switch (self.typeSelecter.selectedSegmentIndex) {
             case 0: //steps
+                // If Steps goal and number of steps is 0 alert with message and return NO.
                 if ([self.numStepsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of steps cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
@@ -232,6 +220,7 @@
                 }
                 break;
             case 1: //stairs
+                // If Stairs goal and number of stairs is 0 alert with message and return NO.
                 if ([self.numStairsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of stairs cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
@@ -239,6 +228,7 @@
                 }
                 break;
             case 2: //both
+                // If Both goal and number of steps or stairs is 0 alert with message and return NO.
                 if ([self.numStepsLabel.text intValue] == 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Number of steps cannot be zero." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
@@ -253,14 +243,16 @@
             default:
                 break;
         }
+        // If the goal name has been used before alert with message and return NO.
         for (int i=0; i<[self.listGoalNames count]; i++) {
             if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
                 return NO;
             }
-            }
+        }
     }
+    // If all of the sanity checks were passed return YES and go back to the Goal List.
     return YES;
 }
 
