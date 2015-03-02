@@ -7,6 +7,7 @@
 //
 
 #import "SettingsViewController.h"
+#import "TestMenuViewController.h"
 #import "TestGoalListTableViewController.h"
 #import "DBManager.h"
 #import "TestSettings.h"
@@ -109,7 +110,7 @@
         self.settings.stepsTime = [self.stepsLabel.text intValue];
         self.settings.stairsTime = [self.stairsLabel.text intValue];
         [self updateSettings];
-        TestGoalListTableViewController *destViewController = segue.destinationViewController;
+        TestMenuViewController *destViewController = segue.destinationViewController;
         // Pass the goal to be veiewed.
         destViewController.settings = self.settings;
     }

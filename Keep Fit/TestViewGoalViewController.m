@@ -265,6 +265,7 @@
 -(IBAction)unwindFromSchedule:(UIStoryboardSegue *)segue {
     ScheduleViewController *source = [segue sourceViewController];
     [self storeGoalScheduleToDB:source.schedule];
+    [self storeGoalStatisticsToDB:source.schedule];
 }
 
 
@@ -545,6 +546,23 @@
             NSLog(@"Could not execute the query.");
         }
     }
+    
+}
+
+-(void) storeGoalStatisticsToDB:(Schedule*) schedule {
+    NSString *query;
+    
+    query = [NSString stringWithFormat:@"insert into testStatistics values(null, '%f', '%f', '%d', '%d')", [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
     
 }
 

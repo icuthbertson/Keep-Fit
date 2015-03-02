@@ -214,7 +214,7 @@
             </objects>
             <point key="canvasLocation" x="1068" y="304"/>
         </scene>
-        <!--Settings-->
+        <!--Testing-->
         <scene sceneID="wV0-34-Jt7">
             <objects>
                 <viewController id="dsW-LI-GBI" customClass="SettingsViewController" sceneMemberID="viewController">
@@ -225,11 +225,11 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rdl-e9-kMK">
                                 <rect key="frame" x="66" y="269" width="188" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Test Future">
+                                <state key="normal" title="Testing App">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Kb4-iU-hdB" kind="push" identifier="testingMode" id="vJu-ud-NSt"/>
+                                    <segue destination="knM-bD-T6m" kind="push" identifier="testingMode" id="47K-d3-QqH"/>
                                 </connections>
                             </button>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="100" id="LHm-EF-JAg">
@@ -277,7 +277,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="154_Settings.png" id="gef-zn-309"/>
+                    <tabBarItem key="tabBarItem" title="Testing" image="154_Settings.png" id="gef-zn-309"/>
                     <connections>
                         <outlet property="stairsLabel" destination="joK-Mg-ur5" id="nqP-4F-UgX"/>
                         <outlet property="stairsStepper" destination="IoD-Lk-lyg" id="1vK-MZ-bAz"/>
@@ -287,7 +287,141 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yio-hG-Rs5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="1686"/>
+            <point key="canvasLocation" x="718" y="1686"/>
+        </scene>
+        <!--Testing Menu-->
+        <scene sceneID="yAJ-MP-CTx">
+            <objects>
+                <viewController id="knM-bD-T6m" customClass="TestMenuViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2MH-AT-PIu">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jtg-Y6-50D">
+                                <rect key="frame" x="107" y="79" width="106" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Testing List">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Kb4-iU-hdB" kind="push" identifier="goalListTest" id="zj7-3j-4im"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RwD-eR-Wd8">
+                                <rect key="frame" x="104" y="117" width="113" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Statistics">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="kT5-NL-gu6" kind="push" identifier="statisticsTest" id="luC-tf-qGV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Testing Menu" id="RZ0-Zs-WcM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bCm-L5-dXo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1128" y="1686"/>
+        </scene>
+        <!--Testing Statistics-->
+        <scene sceneID="iPI-13-eOL">
+            <objects>
+                <viewController id="kT5-NL-gu6" customClass="TestStatisticsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="46X-9x-Ke3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Day" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2iS-zt-h9d">
+                                <rect key="frame" x="16" y="94" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Week" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0Dr-Il-TwW">
+                                <rect key="frame" x="16" y="123" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6mr-GY-A9r">
+                                <rect key="frame" x="16" y="152" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H29-23-vCV">
+                                <rect key="frame" x="16" y="181" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steps Estimated Average" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="myb-F0-KCj">
+                                <rect key="frame" x="16" y="65" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stairs Estimated Average" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7Bm-ml-HZq">
+                                <rect key="frame" x="16" y="224" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Day" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OZc-If-kNy">
+                                <rect key="frame" x="16" y="253" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Week" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="z3F-6G-txa">
+                                <rect key="frame" x="16" y="282" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UXB-Vd-NzW">
+                                <rect key="frame" x="16" y="311" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gKC-eh-x7g">
+                                <rect key="frame" x="16" y="340" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Testing Statistics" id="2hO-Fj-PGu"/>
+                    <connections>
+                        <outlet property="dayLabel" destination="2iS-zt-h9d" id="A8u-8E-813"/>
+                        <outlet property="dayStairsLabel" destination="OZc-If-kNy" id="7ma-pU-B21"/>
+                        <outlet property="monthLabel" destination="6mr-GY-A9r" id="sam-37-AH0"/>
+                        <outlet property="monthStairsLabel" destination="UXB-Vd-NzW" id="rB8-lq-gk6"/>
+                        <outlet property="weekLabel" destination="0Dr-Il-TwW" id="xDn-cd-pTR"/>
+                        <outlet property="weekStairsLabel" destination="z3F-6G-txa" id="sJe-3P-TPn"/>
+                        <outlet property="yearLabel" destination="H29-23-vCV" id="U2S-OL-vOC"/>
+                        <outlet property="yearStairsLabel" destination="gKC-eh-x7g" id="19l-s5-DTk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FBa-oc-prz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1128" y="2362"/>
         </scene>
         <!--List Selection-->
         <scene sceneID="tiv-uG-N1b">
@@ -451,7 +585,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ewb-qR-ExS" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="lOX-Cy-Asu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="1056"/>
+            <point key="canvasLocation" x="718" y="1020"/>
         </scene>
         <!--Settings Tab Bar View Controller-->
         <scene sceneID="DVO-BG-7Zy">
@@ -471,7 +605,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l4X-Bi-a9x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="496" y="1422"/>
+            <point key="canvasLocation" x="200" y="1342"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XeW-Tr-iM7">
