@@ -322,7 +322,7 @@
     NSLog(@"performing background thread");
     
     if (((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps)) {
-        timerStep = [NSTimer timerWithTimeInterval:self.stepsTime
+        timerStep = [NSTimer timerWithTimeInterval:self.settings.stepsTime
                                             target:self
                                           selector:@selector(takeStep)
                                           userInfo:nil
@@ -330,7 +330,7 @@
         [[NSRunLoop mainRunLoop] addTimer:timerStep forMode:NSRunLoopCommonModes];
     }
     if (((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs)) {
-        timerStair = [NSTimer timerWithTimeInterval:self.stairsTime
+        timerStair = [NSTimer timerWithTimeInterval:self.settings.stairsTime
                                              target:self
                                            selector:@selector(takeStair)
                                            userInfo:nil

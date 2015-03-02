@@ -133,7 +133,7 @@
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
     // Form the goal select query.
-    NSString *query = [NSString stringWithFormat:@"select * from goal"];
+    NSString *query = [NSString stringWithFormat:@"select * from goals"];
     if (self.listType != 6) { // If all the goals are not wanted to be shown.
         query = [NSString stringWithFormat:@"select * from goals where goalStatus='%d'", self.listType];
     }

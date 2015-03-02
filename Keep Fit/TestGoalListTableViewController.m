@@ -291,8 +291,7 @@
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
         destViewController.currentDate = self.currentDate;
         destViewController.keepFitGoals = self.keepFitGoals;
-        destViewController.stepsTime = self.stepsTime;
-        destViewController.stairsTime = self.stairsTime;
+        destViewController.settings = self.settings;
     }
     else if ([segue.identifier isEqualToString:@"addGoalTest"]) {
         UINavigationController *navigationController = segue.destinationViewController;

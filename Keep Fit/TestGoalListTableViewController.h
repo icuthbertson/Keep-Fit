@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TestSettings.h"
 
 @interface TestGoalListTableViewController : UITableViewController
 
 -(IBAction)unwindToListTest:(UIStoryboardSegue *)segue;
 -(IBAction)unwindFromViewTest:(UIStoryboardSegue *)segue;
 
-@property NSInteger stepsTime;
-@property NSInteger stairsTime;
+@property TestSettings *settings;
 
 @end
