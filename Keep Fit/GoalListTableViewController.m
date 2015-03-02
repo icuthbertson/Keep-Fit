@@ -392,19 +392,7 @@
 }
 
 // Set the title of the button under the cells.
-// Abandon if not already abandoned and Re-instate if already abandoned
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSInteger objectIndex = indexPath.row;
-    
-    KeepFitGoal *goal;
-    goal = [[KeepFitGoal alloc] init];
-    // Get goal for the cell.
-    goal = [self.keepFitGoals objectAtIndex:objectIndex];
-    
-    if (goal.goalStatus == Abandoned) {
-        return @"Re-instate";
-    }
     return @"Abandon";
 }
 
