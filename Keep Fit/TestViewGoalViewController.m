@@ -161,84 +161,87 @@
                 }
             }
             
-            // get history for the goal from the current date to the end date.
-            NSString *query = [NSString stringWithFormat:@"select * from testHistory where (goalID='%d' and ((statusStartDate > '%f') or (statusStartDate < '%f' and statusEndDate > '%f')))",loopGoal.goalID,[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970]];
-            
-            NSArray *historyResults;
-            historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
-            
-            NSLog(@"history results: %@",historyResults);
-            
-            // Get indexes of columns for the history db.
-            NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
-            NSInteger indexOfStatusStartDate = [self.dbManager.arrColumnNames indexOfObject:@"statusStartDate"];
-            NSInteger indexOfStatusEndDate = [self.dbManager.arrColumnNames indexOfObject:@"statusEndDate"];
-            NSInteger indexOfGoalProgressSteps = [self.dbManager.arrColumnNames indexOfObject:@"progressSteps"];
-            NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
-            
-            // Loop through the history results.
-            for (int i=0; i < [historyResults count]; i++) {
-                // Get the dates from the history.
-                tempStartDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue]];
-                tempEndDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue]];
-                tempSteps = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
-                tempStairs = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
-                startDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue];
-                endDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue];
+            if (loopGoal.goalStatus != Completed) {
+                // get history for the goal from the current date to the end date.
+                NSString *query = [NSString stringWithFormat:@"select * from testHistory where (goalID='%d' and ((statusStartDate > '%f') or (statusStartDate < '%f' and statusEndDate > '%f')))",loopGoal.goalID,[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970],[self.currentDate timeIntervalSince1970]];
                 
-                // still in middle of scheduled progress.
-                if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate])) {
-                    NSLog(@"Middle");
-                    NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                    loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                    loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                    NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }// second half of scheduled progress.
-                else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate])) {
-                    NSLog(@"Second Half");
-                    NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                    loopGoal.goalProgressSteps += (tempSteps * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                    loopGoal.goalProgressStairs += (tempStairs * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                    NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }// first half of scheduled progress.
-                else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate])) {
-                    NSLog(@"First Half");
-                    NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                    loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
-                    loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
-                    NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }// full scheduled progress.
-                else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
-                    NSLog(@"Full");
-                    NSLog(@"OLD - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                    loopGoal.goalProgressSteps += tempSteps;
-                    loopGoal.goalProgressStairs += tempStairs;
-                    NSLog(@"NEW - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                NSArray *historyResults;
+                historyResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+                
+                NSLog(@"history results: %@",historyResults);
+                
+                // Get indexes of columns for the history db.
+                NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
+                NSInteger indexOfStatusStartDate = [self.dbManager.arrColumnNames indexOfObject:@"statusStartDate"];
+                NSInteger indexOfStatusEndDate = [self.dbManager.arrColumnNames indexOfObject:@"statusEndDate"];
+                NSInteger indexOfGoalProgressSteps = [self.dbManager.arrColumnNames indexOfObject:@"progressSteps"];
+                NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
+                
+                // Loop through the history results.
+                for (int i=0; i < [historyResults count]; i++) {
+                    // Get the dates from the history.
+                    tempStartDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue]];
+                    tempEndDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue]];
+                    tempSteps = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
+                    tempStairs = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
+                    startDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue];
+                    endDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue];
+                    
+                    // still in middle of scheduled progress.
+                    if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate])) {
+                        NSLog(@"Middle");
+                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                        loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                    }// second half of scheduled progress.
+                    else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate])) {
+                        NSLog(@"Second Half");
+                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        loopGoal.goalProgressSteps += (tempSteps * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                        loopGoal.goalProgressStairs += (tempStairs * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
+                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                    }// first half of scheduled progress.
+                    else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate])) {
+                        NSLog(@"First Half");
+                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
+                        loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
+                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                    }// full scheduled progress.
+                    else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
+                        NSLog(@"Full");
+                        NSLog(@"OLD - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        loopGoal.goalProgressSteps += tempSteps;
+                        loopGoal.goalProgressStairs += tempStairs;
+                        NSLog(@"NEW - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                    }
+                    // Update status if goal is now completed.
+                    if ([[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue] == Completed) {
+                        NSLog(@"COMPLETED");
+                        loopGoal.goalStatus = Completed;
+                    }
                 }
-                // Update status if goal is now completed.
-                if ([[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue] == Completed) {
-                    NSLog(@"COMPLETED");
-                    loopGoal.goalStatus = Completed;
+                
+                // Update goal in DB.
+                query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%ld', goalProgressStairs='%ld' where goalID=%ld", loopGoal.goalStatus, (long)loopGoal.goalProgressSteps, (long)loopGoal.goalProgressStairs, (long)loopGoal.goalID];
+                // Execute the query.
+                [self.dbManager executeQuery:query];
+                
+                if (self.dbManager.affectedRows != 0) {
+                    NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
                 }
-            }
-            
-            // Update goal in DB.
-            query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%ld', goalProgressStairs='%ld' where goalID=%ld", loopGoal.goalStatus, (long)loopGoal.goalProgressSteps, (long)loopGoal.goalProgressStairs, (long)loopGoal.goalID];
-            // Execute the query.
-            [self.dbManager executeQuery:query];
-            
-            if (self.dbManager.affectedRows != 0) {
-                NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-            }
-            else {
-                NSLog(@"Could not execute the query.");
+                else {
+                    NSLog(@"Could not execute the query.");
+                }
+                
             }
             
             // Update the persisted time in the database.
-            query = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[changeDate timeIntervalSince1970]];
+            NSString *dateQuery = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[changeDate timeIntervalSince1970]];
             
             // Execute the query.
-            [self.dbManager executeQuery:query];
+            [self.dbManager executeQuery:dateQuery];
             
             if (self.dbManager.affectedRows != 0) {
                 NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);

@@ -109,7 +109,7 @@
     if (currentDateResults.count == 0) {
         self.currentDate = [NSDate date];
         
-        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.currentDate timeIntervalSince1970]];
+        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [[NSDate date] timeIntervalSince1970]];
         // Execute the query.
         [self.dbManager executeQuery:dateQuery];
         
