@@ -12,7 +12,6 @@
 		AE2490D11A9CEBB900A6D816 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D01A9CEBB900A6D816 /* ScheduleViewController.m */; };
 		AE2490D41A9CEBCB00A6D816 /* ChangeTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */; };
 		AE2490DA1A9CF37700A6D816 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D91A9CF37700A6D816 /* Schedule.m */; };
-		AE2490DD1AA09FC300A6D816 /* Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490DC1AA09FC300A6D816 /* Testing.m */; };
 		AE2490E61AA4C12C00A6D816 /* TestAddGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490DF1AA4C12C00A6D816 /* TestAddGoalViewController.m */; };
 		AE2490E71AA4C12C00A6D816 /* TestGoalListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490E11AA4C12C00A6D816 /* TestGoalListTableViewController.m */; };
 		AE2490E81AA4C12C00A6D816 /* TestHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490E31AA4C12C00A6D816 /* TestHistoryTableViewController.m */; };
@@ -60,8 +59,6 @@
 		AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeTimeViewController.m; sourceTree = "<group>"; };
 		AE2490D81A9CF37700A6D816 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Schedule.h; sourceTree = "<group>"; };
 		AE2490D91A9CF37700A6D816 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Schedule.m; sourceTree = "<group>"; };
-		AE2490DB1AA09FC300A6D816 /* Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Testing.h; sourceTree = "<group>"; };
-		AE2490DC1AA09FC300A6D816 /* Testing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Testing.m; sourceTree = "<group>"; };
 		AE2490DE1AA4C12C00A6D816 /* TestAddGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAddGoalViewController.h; sourceTree = "<group>"; };
 		AE2490DF1AA4C12C00A6D816 /* TestAddGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAddGoalViewController.m; sourceTree = "<group>"; };
 		AE2490E01AA4C12C00A6D816 /* TestGoalListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGoalListTableViewController.h; sourceTree = "<group>"; };
@@ -178,8 +175,6 @@
 				AE2490D91A9CF37700A6D816 /* Schedule.m */,
 				AE2490CF1A9CEBB900A6D816 /* ScheduleViewController.h */,
 				AE2490D01A9CEBB900A6D816 /* ScheduleViewController.m */,
-				AE2490DB1AA09FC300A6D816 /* Testing.h */,
-				AE2490DC1AA09FC300A6D816 /* Testing.m */,
 				AE2490DE1AA4C12C00A6D816 /* TestAddGoalViewController.h */,
 				AE2490DF1AA4C12C00A6D816 /* TestAddGoalViewController.m */,
 				AE2490E01AA4C12C00A6D816 /* TestGoalListTableViewController.h */,
@@ -377,7 +372,6 @@
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
 				AE2490E81AA4C12C00A6D816 /* TestHistoryTableViewController.m in Sources */,
 				AE2490D41A9CEBCB00A6D816 /* ChangeTimeViewController.m in Sources */,
-				AE2490DD1AA09FC300A6D816 /* Testing.m in Sources */,
 				AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */,
 				AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */,
 				AE2490D11A9CEBB900A6D816 /* ScheduleViewController.m in Sources */,
