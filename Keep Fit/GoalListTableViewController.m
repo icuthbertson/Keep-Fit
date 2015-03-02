@@ -13,7 +13,6 @@
 #import "ViewGoalViewController.h"
 #import "KeepFitGoal.h"
 #import "ListSelectionViewController.h"
-#import "Testing.h"
 #import "SettingsViewController.h"
 #import "SettingsTabBarViewController.h"
 
@@ -21,7 +20,6 @@
 
 @property NSMutableArray *keepFitGoals; // List of keep fit goals.
 @property (nonatomic, strong) DBManager *dbManager; // database manager object.
-@property Testing *testing; // testing object.
 
 @property (nonatomic, strong) NSArray *arrDBResults; // array to hold db select query results.
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton; // Outlet for select button.
@@ -47,10 +45,6 @@
     // Default list to all.
     self.listType = 6;
     
-    // Initialise testing object.
-    self.testing = [[Testing alloc] init];
-    [self.testing setTesting:NO];
-    
     // load goals from db.
     [self loadFromDB];
 }
@@ -71,7 +65,7 @@
     if (goal != nil) {
         // Set up query to insert the goal data into the database.
         NSString *query;
-        query = [NSString stringWithFormat:@"insert into %@ values(null, '%@', '%d', '%d', '%ld', '%ld', '%ld', '%ld', '%f', '%f', '%f', '%d')", self.testing.getGoalDBName, goal.goalName, goal.goalStatus, goal.goalType, (long)goal.goalAmountSteps, (long)goal.goalProgressSteps, (long)goal.goalAmountStairs, (long)goal.goalProgressStairs, [goal.goalStartDate timeIntervalSince1970], [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970], goal.goalConversion];
+        query = [NSString stringWithFormat:@"insert into goals values(null, '%@', '%d', '%d', '%ld', '%ld', '%ld', '%ld', '%f', '%f', '%f', '%d')", goal.goalName, goal.goalStatus, goal.goalType, (long)goal.goalAmountSteps, (long)goal.goalProgressSteps, (long)goal.goalAmountStairs, (long)goal.goalProgressStairs, [goal.goalStartDate timeIntervalSince1970], [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970], goal.goalConversion];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -90,7 +84,7 @@
         for (int i=0; i<[self.keepFitGoals count]; i++) {
             history = [self.keepFitGoals objectAtIndex:i];
             if ([goal.goalName isEqualToString:history.goalName]) {
-                query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)history.goalID, history.goalStatus, [history.goalCreationDate timeIntervalSince1970], 0.0, 0, 0];
+                query = [NSString stringWithFormat:@"insert into history values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)history.goalID, history.goalStatus, [history.goalCreationDate timeIntervalSince1970], 0.0, 0, 0];
                 // Execute the query.
                 [self.dbManager executeQuery:query];
                 
@@ -109,18 +103,12 @@
 
 // Returning from view goal view.
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue {
-    // Update testing object from the goal view.
-    ViewGoalViewController *source = [segue sourceViewController];
-    self.testing = source.testing;
     // Reload db data incase of changes.
     [self loadFromDB];
 }
 
 // Returning from settings view.
 -(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue {
-    // Update testing value.
-    SettingsViewController *source = [segue sourceViewController];
-    [self.testing setTesting:source.testing];
     [self loadFromDB];
 }
 
@@ -138,32 +126,6 @@
 
 // Load goals from DB.
 -(void)loadFromDB {
-    // get current date
-    NSString *dateQuery = [NSString stringWithFormat:@"select * from testDate"];
-    
-    NSArray *currentDateResults;
-    currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
-    // If there is not a persisted date saved, save the current date.
-    if (currentDateResults.count == 0) {
-        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.testing.getTime timeIntervalSince1970]];
-        // Execute the query.
-        [self.dbManager executeQuery:dateQuery];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
-    }
-    else {
-        // else set the persisted date in the testing object.
-        NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
-        [self.testing setTime:[NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]]];
-        NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
-        NSLog(@"Current Time From DB: %@",self.testing.getTime);
-    }
-    
     // Re-initialise goal array.
     if (self.keepFitGoals != nil) {
         self.keepFitGoals = nil;
@@ -171,9 +133,9 @@
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
     // Form the goal select query.
-    NSString *query = [NSString stringWithFormat:@"select * from %@", self.testing.getGoalDBName];
+    NSString *query = [NSString stringWithFormat:@"select * from goal"];
     if (self.listType != 6) { // If all the goals are not wanted to be shown.
-        query = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'", self.testing.getGoalDBName, self.listType];
+        query = [NSString stringWithFormat:@"select * from goals where goalStatus='%d'", self.listType];
     }
     
     // Re-initialise the query results array.
@@ -217,7 +179,7 @@
         goal.conversionTable = [[NSArray alloc]initWithObjects:@1.0,@2.5,@0.762,@0.000473485,@0.000762,nil];
         
         // check for if the start or end date has passed and update the status.
-        if ((goal.goalStatus == Pending) && [[[self.testing getTime] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
+        if ((goal.goalStatus == Pending) && [[[NSDate date] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
             NSLog(@"active");
             
             goal.goalStatus = Active;
@@ -225,7 +187,7 @@
             // Update history for the goal.
             [self storeGoalStatusChangeToDB:goal];
         }
-        if ((goal.goalStatus == Active) && [[[self.testing getTime] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+        if ((goal.goalStatus == Active) && [[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
             NSLog(@"overdue");
             
             goal.goalStatus = Overdue;
@@ -372,7 +334,7 @@
         goal = [self.keepFitGoals objectAtIndex:objectIndex];
         
         if (goal.goalStatus == Abandoned) { // Re-instate goal.
-            if ([[[self.testing getTime] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
+            if ([[[NSDate date] earlierDate:goal.goalCompletionDate]isEqualToDate: goal.goalCompletionDate]) {
                 goal.goalStatus = Overdue;
             }
             else {
@@ -446,8 +408,6 @@
         ViewGoalViewController *destViewController = segue.destinationViewController;
         // Pass the goal to be veiewed.
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
-        // Pass the testing object.
-        destViewController.testing = self.testing;
         // Pass the list of goals.
         destViewController.keepFitGoals = self.keepFitGoals;
     }
@@ -464,15 +424,11 @@
         }
         // Pass the list of goal names.
         destAddController.listGoalNames = goalNamesForChecking;
-        // Pass the testing object.
-        destAddController.testing = self.testing;
     }
     else if ([segue.identifier isEqualToString:@"showSettings"]) {
         // If going to the settings view.
-        SettingsTabBarViewController *tabBarController = segue.destinationViewController;
-        SettingsViewController *destViewController = [[tabBarController viewControllers]objectAtIndex:1];
-        // pass the testing bool from the testing object to the testing mode view.
-        destViewController.testing = [self.testing getTesting];
+        //SettingsTabBarViewController *tabBarController = segue.destinationViewController;
+        //SettingsViewController *destViewController = [[tabBarController viewControllers]objectAtIndex:1];
     }
 }
 
@@ -490,7 +446,7 @@
 
 // Get the row id of the last history entry for a goal. (check for the date being 0.0 1 Jan 1970)
 -(int) getHistoryRowID:(int) goalID {
-    NSString *query = [NSString stringWithFormat:@"select * from %@ where goalId='%d' and statusEndDate='%f'", self.testing.getHistoryDBName, goalID, 0.0];
+    NSString *query = [NSString stringWithFormat:@"select * from history where goalId='%d' and statusEndDate='%f'", goalID, 0.0];
     
     NSArray *historyResults;
     
@@ -504,7 +460,7 @@
 // store status change to db.
 -(void) storeGoalStatusChangeToDB:(KeepFitGoal*) goal {
     // Update status in goals db
-    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d' where goalID=%ld", self.testing.getGoalDBName, goal.goalStatus,(long)goal.goalID];
+    NSString *query = [NSString stringWithFormat:@"update goals set goalStatus='%d' where goalID=%ld", goal.goalStatus,(long)goal.goalID];
     
     // Execute the query.
     [self.dbManager executeQuery:query];
@@ -517,7 +473,7 @@
     }
     
     // Add the new date to the last history entry for the goal.
-    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f' where historyID=%ld",  self.testing.getHistoryDBName, [[self.testing getTime] timeIntervalSince1970], (long)[self getHistoryRowID:goal.goalID]];
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f' where historyID=%ld", [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:goal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -529,7 +485,7 @@
     }
     
     // Add new row for the history of the goal.
-    query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)goal.goalID, goal.goalStatus, [[self.testing getTime] timeIntervalSince1970], 0.0, 0, 0];
+    query = [NSString stringWithFormat:@"insert into history values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", (long)goal.goalID, goal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

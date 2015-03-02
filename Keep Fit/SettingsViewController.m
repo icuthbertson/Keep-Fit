@@ -7,8 +7,16 @@
 //
 
 #import "SettingsViewController.h"
+#import "TestGoalListTableViewController.h"
 
 @interface SettingsViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *stepsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsLabel;
+@property (weak, nonatomic) IBOutlet UIStepper *stepsStepper;
+@property (weak, nonatomic) IBOutlet UIStepper *stairsStepper;
+- (IBAction)stepsAction:(id)sender;
+- (IBAction)stairsAction:(id)sender;
 
 @end
 
@@ -17,6 +25,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.stepsLabel.text = @"1";
+    self.stairsLabel.text = @"1";
+    self.stepsStepper.value = 1.0;
+    self.stairsStepper.value = 1.0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,13 +43,21 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if (self.testing) {
-        self.testing = NO;
-    }
-    else {
-        self.testing = YES;
+    if ([segue.identifier isEqualToString:@"testingMode"]) {
+        TestGoalListTableViewController *destViewController = segue.destinationViewController;
+        // Pass the goal to be veiewed.
+        destViewController.stepsTime = [self.stepsLabel.text intValue];
+        destViewController.stairsTime = [self.stairsLabel.text intValue];
     }
 }
 
+
+- (IBAction)stepsAction:(id)sender {
+    self.stepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
+- (IBAction)stairsAction:(id)sender {
+    self.stairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
 
 @end

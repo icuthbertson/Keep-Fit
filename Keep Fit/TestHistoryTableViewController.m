@@ -1,35 +1,39 @@
 //
-//  HistoryTableViewController.m
+//  TestHistoryTableViewController.m
 //  Keep Fit
 //
-//  Created by Iain Cuthbertson on 20/02/2015.
+//  Created by Iain Cuthbertson on 24/02/2015.
 //  Copyright (c) 2015 Iain Cuthbertson. All rights reserved.
 //
 
-#import "HistoryTableViewController.h"
+#import "TestHistoryTableViewController.h"
 #import "DBManager.h"
 #import "GoalHistory.h"
 
-@interface HistoryTableViewController ()
+@interface TestHistoryTableViewController ()
 
-@property NSMutableArray *historyGoals; // Array to store the history objects.
-@property (nonatomic, strong) DBManager *dbManager; // Database manager object.
-@property (nonatomic, strong) NSArray *arrDBResults; // Array to store select query results for the DB.
+@property NSMutableArray *historyGoals;
+@property (nonatomic, strong) DBManager *dbManager;
+
+@property (nonatomic, strong) NSArray *arrDBResults;
 
 @end
 
-@implementation HistoryTableViewController
+@implementation TestHistoryTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Set the navigation bar title.
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
     self.navigationItem.title = [NSString stringWithFormat:@"History of %@", self.viewHistoryGoal.goalName];
     
-    // Initialise the database manager.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
-    // Load history data from the database.
     [self loadFromDB];
 }
 
@@ -38,25 +42,22 @@
     // Dispose of any resources that can be recreated.
 }
 
-// Method to load history data from the database.
 -(void)loadFromDB {
-    // Re-initalise the array for storing the history.
     if (self.historyGoals != nil) {
         self.historyGoals = nil;
     }
     self.historyGoals = [[NSMutableArray alloc] init];
     
-    // Form the DB query.
+    // Form the query.
     NSString *query;
-    query = [NSString stringWithFormat:@"select * from history where goalId='%ld'", (long)self.viewHistoryGoal.goalID];
+    query = [NSString stringWithFormat:@"select * from testHistory where goalId='%ld'", (long)self.viewHistoryGoal.goalID];
     
-    // Re-initalise the array for storing the query results.
+    // Get the results.
     if (self.arrDBResults != nil) {
         self.arrDBResults = nil;
     }
     self.arrDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
     
-    // Set up indexes for getting column results for the rows in the database.
     NSInteger indexOfHistoryID = [self.dbManager.arrColumnNames indexOfObject:@"historyID"];
     NSInteger indexOfGoalID = [self.dbManager.arrColumnNames indexOfObject:@"goalID"];
     NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
@@ -66,8 +67,9 @@
     NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
     NSLog(@"arrDBResults: %@", self.arrDBResults);
     
-    // Set up the history object with data from the rows returned by the query.
     for (int i=0; i<[self.arrDBResults count]; i++) {
+        //NSLog(@"Goal Name %d: %@", i,[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]);
+        
         GoalHistory *history;
         history = [[GoalHistory alloc] init];
         history.historyID = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfHistoryID] intValue];
@@ -78,7 +80,6 @@
         history.progressSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
         history.progressStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
         
-        // Add object to the array of history objects.
         [self.historyGoals addObject:history];
     }
     
@@ -102,16 +103,13 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ListProtoHistory" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ListProtoHistoryTest" forIndexPath:indexPath];
     
     // Configure the cell...
     GoalHistory *history = [self.historyGoals objectAtIndex:indexPath.row];
-    
-    // Set up cell text size format.
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
     
-    // Set up the text and detialed text for the cell depending on the status of the goal and if any progress was made.
     switch (history.goalStatus) {
         case Pending:
             cell.textLabel.text = @"Pending";
@@ -144,12 +142,10 @@
         default:
             break;
     }
-    // Set up the date formatter
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
     
     if ([[history.endDate earlierDate:history.startDate]isEqualToDate: history.endDate]) {
-        // If the end date is 1 Jan 1970, ie is the last history item for goal, don't display the end date.
         cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@", [formatter stringFromDate:history.startDate]];
     }
     else {
@@ -159,53 +155,52 @@
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return the height for the cell.
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 60.0;
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

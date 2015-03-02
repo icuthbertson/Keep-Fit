@@ -229,16 +229,63 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="23q-3a-0cl" kind="unwind" unwindAction="unwindFromSettings:" id="JUm-Hr-y24"/>
+                                    <segue destination="Kb4-iU-hdB" kind="push" identifier="testingMode" id="vJu-ud-NSt"/>
                                 </connections>
                             </button>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="100" id="LHm-EF-JAg">
+                                <rect key="frame" x="210" y="116" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="stepsAction:" destination="dsW-LI-GBI" eventType="valueChanged" id="eza-pm-YEA"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ExK-i0-oAk">
+                                <rect key="frame" x="16" y="120" width="186" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="joK-Mg-ur5">
+                                <rect key="frame" x="16" y="184" width="186" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Time For Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aBj-n9-Jef">
+                                <rect key="frame" x="16" y="91" width="186" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Time For Stairs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2kd-t4-9nN">
+                                <rect key="frame" x="16" y="155" width="186" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="100" id="IoD-Lk-lyg">
+                                <rect key="frame" x="210" y="180" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="stairsAction:" destination="dsW-LI-GBI" eventType="valueChanged" id="dxi-Y4-wa8"/>
+                                </connections>
+                            </stepper>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="154_Settings.png" id="gef-zn-309"/>
+                    <connections>
+                        <outlet property="stairsLabel" destination="joK-Mg-ur5" id="nqP-4F-UgX"/>
+                        <outlet property="stairsStepper" destination="IoD-Lk-lyg" id="1vK-MZ-bAz"/>
+                        <outlet property="stepsLabel" destination="ExK-i0-oAk" id="hyB-z2-3oQ"/>
+                        <outlet property="stepsStepper" destination="LHm-EF-JAg" id="kVc-O6-kvS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yio-hG-Rs5" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="23q-3a-0cl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1068" y="1686"/>
         </scene>
@@ -485,10 +532,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ig3-9D-it8">
-                                <rect key="frame" x="16" y="336" width="135" height="30"/>
+                                <rect key="frame" x="93" y="425" width="135" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Set Active">
+                                <state key="normal" title="Record">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -497,7 +544,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="B5f-He-k1R">
-                                <rect key="frame" x="169" y="336" width="135" height="30"/>
+                                <rect key="frame" x="93" y="463" width="135" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Suspend">
@@ -509,7 +556,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GLX-P1-fV4">
-                                <rect key="frame" x="16" y="442" width="288" height="30"/>
+                                <rect key="frame" x="16" y="501" width="288" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="View Goal History">
@@ -541,30 +588,48 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4Dk-hi-vXT">
-                                <rect key="frame" x="16" y="374" width="135" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TB2-nc-olr">
+                                <rect key="frame" x="87" y="324" width="115" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Schedule">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="zPi-7V-PKn" kind="push" identifier="scheduleActivity" id="fGn-f5-a6x"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5gS-8j-595">
-                                <rect key="frame" x="169" y="374" width="135" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="iCc-4c-Lzw">
+                                <rect key="frame" x="210" y="320" width="94" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Change Time">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
                                 <connections>
-                                    <segue destination="ynZ-5v-MVM" kind="push" identifier="changeTime" id="Jng-1r-3Ex"/>
+                                    <action selector="stepperAction:" destination="u7R-gc-2Mv" eventType="valueChanged" id="HQ7-5S-dF5"/>
                                 </connections>
-                            </button>
+                            </stepper>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" id="nlj-vo-QjP">
+                                <rect key="frame" x="210" y="357" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="stepperStairsAction:" destination="u7R-gc-2Mv" eventType="valueChanged" id="E9P-0o-Pzv"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vhN-hk-QGy">
+                                <rect key="frame" x="87" y="361" width="115" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steps +" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eaL-Ij-uHC">
+                                <rect key="frame" x="16" y="324" width="63" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stairs +" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Tk-XA-s0h">
+                                <rect key="frame" x="16" y="361" width="63" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -581,11 +646,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addStairsStepper" destination="nlj-vo-QjP" id="z8B-Un-Ofz"/>
+                        <outlet property="addStepper" destination="iCc-4c-Lzw" id="U8M-it-VOV"/>
                         <outlet property="outletActiveButton" destination="ig3-9D-it8" id="EvU-nQ-c1F"/>
                         <outlet property="outletHistoryButton" destination="GLX-P1-fV4" id="m40-35-U3E"/>
                         <outlet property="outletSuspendButton" destination="B5f-He-k1R" id="krS-xv-6NY"/>
-                        <outlet property="scheduleButton" destination="4Dk-hi-vXT" id="2yr-2H-mRw"/>
-                        <outlet property="timeButton" destination="5gS-8j-595" id="YDQ-EY-q5b"/>
+                        <outlet property="stepperLabel" destination="TB2-nc-olr" id="x9a-4z-Gv1"/>
+                        <outlet property="stepperStairsLabel" destination="vhN-hk-QGy" id="RDG-Pj-1u8"/>
                         <outlet property="viewDateCompletion" destination="Hcs-1S-JDQ" id="CWy-do-0o8"/>
                         <outlet property="viewDateCreated" destination="C6R-Zv-Tlz" id="PPH-DJ-rh9"/>
                         <outlet property="viewDateStart" destination="AAX-om-wTs" id="wKo-xW-uzk"/>
@@ -794,7 +861,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CGO-wx-c3O" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Opy-hE-SPC" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="-640"/>
+            <point key="canvasLocation" x="1068" y="-1212"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b5u-ay-RJb">
@@ -814,82 +881,418 @@
             </objects>
             <point key="canvasLocation" x="635.73333333333335" y="304.82666666666665"/>
         </scene>
-        <!--Schedule View Controller-->
-        <scene sceneID="yh5-eO-fNg">
+        <!--Testing Goals-->
+        <scene sceneID="ZFW-gS-1ji">
             <objects>
-                <viewController id="zPi-7V-PKn" customClass="ScheduleViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="PaH-Io-ifu">
+                <tableViewController id="Kb4-iU-hdB" customClass="TestGoalListTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="XHj-gc-0XW">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="protoCellTesting" textLabel="h8l-FS-fzT" detailTextLabel="Axb-ut-HU4" style="IBUITableViewCellStyleSubtitle" id="jZr-7w-LjR">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jZr-7w-LjR" id="jFt-Zl-3kL">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h8l-FS-fzT">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Axb-ut-HU4">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="1wt-EX-HpM" kind="push" identifier="showViewGoalTest" id="r64-ZH-nJw"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Kb4-iU-hdB" id="Jep-Cv-46E"/>
+                            <outlet property="delegate" destination="Kb4-iU-hdB" id="8IB-sS-Rdc"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Testing Goals" id="Drr-Dn-c0n">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="kag-uI-3gj">
+                            <connections>
+                                <segue destination="lk1-Qr-REP" kind="modal" identifier="addGoalTest" id="RLo-Vu-QsE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BO6-zx-wOa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1517" y="1686"/>
+        </scene>
+        <!--Add Test Goal-->
+        <scene sceneID="SKQ-l0-1qj">
+            <objects>
+                <viewController id="ONT-3a-oXQ" customClass="TestAddGoalViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sGH-oh-wSg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="hSB-SX-GXr">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Goal Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rma-2K-E3c">
+                                        <rect key="frame" x="16" y="20" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HC8-8l-kcd">
+                                        <rect key="frame" x="16" y="96" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="im8-TI-8uR">
+                                        <rect key="frame" x="16" y="168" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Stairs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tZr-sZ-yHx">
+                                        <rect key="frame" x="16" y="235" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Date &amp; Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4J2-7u-H5h">
+                                        <rect key="frame" x="16" y="309" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Completion Date &amp; Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uhx-FL-Cpc">
+                                        <rect key="frame" x="16" y="508" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="dUb-hH-vuJ">
+                                        <rect key="frame" x="16" y="117" width="296" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Steps"/>
+                                            <segment title="Stairs"/>
+                                            <segment title="Both"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="typeSelecterAction:" destination="ONT-3a-oXQ" eventType="valueChanged" id="Avi-LQ-Eq7"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Goal Title" minimumFontSize="17" id="oO8-7x-ZBJ">
+                                        <rect key="frame" x="16" y="49" width="296" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                    </textField>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="4gX-L3-IQp">
+                                        <rect key="frame" x="0.0" y="338" width="320" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="446243824.91136199">
+                                            <!--2015-02-21 20:37:04 +0000-->
+                                        </date>
+                                    </datePicker>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="hTC-46-LAw">
+                                        <rect key="frame" x="0.0" y="537" width="320" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="446243838.427432">
+                                            <!--2015-02-21 20:37:18 +0000-->
+                                        </date>
+                                    </datePicker>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eg8-rb-Fls">
+                                        <rect key="frame" x="16" y="197" width="186" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" stepValue="10" id="OOJ-mv-LXT">
+                                        <rect key="frame" x="218" y="193" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="stepsStepperAction:" destination="ONT-3a-oXQ" eventType="valueChanged" id="Sye-kE-2tZ"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5xL-n4-JUB">
+                                        <rect key="frame" x="16" y="264" width="186" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" stepValue="10" id="RfG-Fa-c98">
+                                        <rect key="frame" x="218" y="260" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="stairsStepperAction:" destination="ONT-3a-oXQ" eventType="valueChanged" id="nIq-Jz-dDo"/>
+                                        </connections>
+                                    </stepper>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Test Goal" id="1rC-TJ-soj">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="j2k-kX-R3y">
+                            <connections>
+                                <segue destination="V6I-kd-IJZ" kind="unwind" unwindAction="unwindToListTest:" id="MDc-f3-OTY"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="nyx-71-Gqi">
+                            <connections>
+                                <segue destination="V6I-kd-IJZ" kind="unwind" unwindAction="unwindToListTest:" id="TFR-kx-LYK"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="800"/>
+                    <connections>
+                        <outlet property="datePicker" destination="hTC-46-LAw" id="VhX-QX-OzE"/>
+                        <outlet property="dateStartPicker" destination="4gX-L3-IQp" id="Yr6-4H-fAc"/>
+                        <outlet property="numStairsLabel" destination="tZr-sZ-yHx" id="5Jm-6x-rOT"/>
+                        <outlet property="numStepsLabel" destination="im8-TI-8uR" id="VHg-lw-nSw"/>
+                        <outlet property="saveButton" destination="nyx-71-Gqi" id="brc-CO-2o4"/>
+                        <outlet property="scrollView" destination="hSB-SX-GXr" id="vzf-Zu-9CF"/>
+                        <outlet property="stairsStepper" destination="RfG-Fa-c98" id="hvV-QD-IW0"/>
+                        <outlet property="stepsStepper" destination="OOJ-mv-LXT" id="J0D-at-Fol"/>
+                        <outlet property="textField" destination="oO8-7x-ZBJ" id="FPE-Wp-Fwq"/>
+                        <outlet property="typeSelecter" destination="dUb-hH-vuJ" id="ULy-iM-ohd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RnF-9V-S6S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="V6I-kd-IJZ" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2499" y="1686"/>
+        </scene>
+        <!--Test View Goal View Controller-->
+        <scene sceneID="pdS-KL-jpR">
+            <objects>
+                <viewController id="1wt-EX-HpM" customClass="TestViewGoalViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="l7I-om-erC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Rui-Y0-7My">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xw1-4Z-4dj">
+                                <rect key="frame" x="16" y="133" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hvM-gA-V6w">
+                                <rect key="frame" x="16" y="104" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ybc-8g-CYi">
+                                <rect key="frame" x="16" y="254" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Created" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iox-95-OHt">
+                                <rect key="frame" x="16" y="162" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="99u-49-VfQ">
+                                <rect key="frame" x="16" y="75" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="abI-XO-9fV">
+                                <rect key="frame" x="16" y="442" width="288" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="View Goal History">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="7Gx-Sx-qdi" kind="push" identifier="showHistoryTest" id="fEu-Bg-j7a"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Completion Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NBv-KC-8sc">
+                                <rect key="frame" x="16" y="220" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x2G-qo-0My">
+                                <rect key="frame" x="16" y="191" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="n5A-R0-DHF">
+                                <rect key="frame" x="16" y="283" width="288" height="2"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bcc-Eh-vai">
+                                <rect key="frame" x="16" y="336" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Schedule">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="zcV-og-7uX" kind="push" identifier="scheduleActivity" id="RBQ-KV-62M"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gfB-x2-YN3">
+                                <rect key="frame" x="169" y="336" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Change Time">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="tqF-id-qlI" kind="push" identifier="changeTime" id="km3-Kw-Sdi"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5la-Av-WMJ">
+                                <rect key="frame" x="16" y="374" width="135" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Record">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="setActiveButton:" destination="1wt-EX-HpM" eventType="touchUpInside" id="G80-hh-B0y"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="II9-aZ-J3j">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="lWE-zA-Jtu">
+                            <connections>
+                                <segue destination="hnN-1s-XrO" kind="unwind" unwindAction="unwindFromViewTest:" id="Arx-8B-KZZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="outletActiveButton" destination="5la-Av-WMJ" id="dfb-YU-da6"/>
+                        <outlet property="outletHistoryButton" destination="abI-XO-9fV" id="u37-jT-YOp"/>
+                        <outlet property="scheduleButton" destination="bcc-Eh-vai" id="FLh-kA-Cb3"/>
+                        <outlet property="timeButton" destination="gfB-x2-YN3" id="L6d-1Z-fjD"/>
+                        <outlet property="viewDateCompletion" destination="NBv-KC-8sc" id="Gth-VT-TTe"/>
+                        <outlet property="viewDateCreated" destination="Iox-95-OHt" id="mHM-EI-d5e"/>
+                        <outlet property="viewDateStart" destination="x2G-qo-0My" id="gSX-I7-uoT"/>
+                        <outlet property="viewProgress" destination="ybc-8g-CYi" id="0U1-Tu-Sgg"/>
+                        <outlet property="viewProgressBar" destination="n5A-R0-DHF" id="Hp5-mb-JNX"/>
+                        <outlet property="viewStatus" destination="hvM-gA-V6w" id="ur5-EK-dQ8"/>
+                        <outlet property="viewTitle" destination="99u-49-VfQ" id="UlU-fs-qli"/>
+                        <outlet property="viewType" destination="Xw1-4Z-4dj" id="yq1-YV-0pQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sHU-oT-62q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="hnN-1s-XrO" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2001" y="872"/>
+        </scene>
+        <!--Schedule View Controller-->
+        <scene sceneID="W0y-o0-NPv">
+            <objects>
+                <viewController id="zcV-og-7uX" customClass="ScheduleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N0Y-N8-2jr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="hJP-b4-rbG">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xod-eG-gHs">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oat-5x-k5w">
                                         <rect key="frame" x="8" y="148" width="304" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="Sqi-Y2-f4Q">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="xkd-Dn-3PJ">
                                         <rect key="frame" x="218" y="111" width="94" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="stairsStepperAction:" destination="zPi-7V-PKn" eventType="valueChanged" id="bDf-X4-33Y"/>
+                                            <action selector="stairsStepperAction:" destination="zcV-og-7uX" eventType="valueChanged" id="Vid-jO-i4W"/>
                                         </connections>
                                     </stepper>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8I3-8N-H7z">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ldv-Oh-ijK">
                                         <rect key="frame" x="8" y="115" width="186" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Stairs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="spb-gU-9lP">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Stairs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7wr-Io-1qD">
                                         <rect key="frame" x="8" y="86" width="296" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Uu-Ig-aQP">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0dW-fL-JrE">
                                         <rect key="frame" x="8" y="49" width="186" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PV6-lP-mrL">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SWp-By-GiI">
                                         <rect key="frame" x="8" y="20" width="296" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="a0O-vj-OI8">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="2zn-k3-vot">
                                         <rect key="frame" x="218" y="49" width="94" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="stepsStepperAction:" destination="zPi-7V-PKn" eventType="valueChanged" id="nvz-Lj-YHK"/>
+                                            <action selector="stepsStepperAction:" destination="zcV-og-7uX" eventType="valueChanged" id="N6X-oW-k03"/>
                                         </connections>
                                     </stepper>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule end" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="APP-bB-dzM">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule end" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rrs-Q1-ppD">
                                         <rect key="frame" x="8" y="347" width="304" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="nKx-Rh-mgd">
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="jdG-gh-SHu">
                                         <rect key="frame" x="0.0" y="376" width="320" height="162"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <date key="date" timeIntervalSinceReferenceDate="446551144.76893997">
                                             <!--2015-02-25 09:59:04 +0000-->
                                         </date>
                                     </datePicker>
-                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="Jpc-M9-YLE">
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="6J4-1D-j7n">
                                         <rect key="frame" x="0.0" y="177" width="320" height="162"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <date key="date" timeIntervalSinceReferenceDate="446492436.50703102">
@@ -901,52 +1304,52 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="CXf-rf-6GQ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="UOj-7V-Jml">
+                    <navigationItem key="navigationItem" id="0eN-TO-aRk">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Iod-QW-B8x">
                             <connections>
-                                <segue destination="TvK-Ac-jnQ" kind="unwind" unwindAction="unwindFromSchedule:" id="uIv-Pc-yfv"/>
+                                <segue destination="h1c-rE-cw9" kind="unwind" unwindAction="unwindFromSchedule:" id="CSt-ad-4JR"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="426-bv-tfy">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Qqk-vk-Mxn">
                             <connections>
-                                <segue destination="TvK-Ac-jnQ" kind="unwind" unwindAction="unwindFromSchedule:" id="Ham-TZ-jkD"/>
+                                <segue destination="h1c-rE-cw9" kind="unwind" unwindAction="unwindFromSchedule:" id="KFb-Sk-jRC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
-                        <outlet property="saveButton" destination="426-bv-tfy" id="U9t-3H-g9M"/>
-                        <outlet property="scheduleDatePicker" destination="Jpc-M9-YLE" id="hDK-Vh-2ys"/>
-                        <outlet property="scheduleEndDatePicker" destination="nKx-Rh-mgd" id="J90-R5-q3G"/>
-                        <outlet property="scrollView" destination="Rui-Y0-7My" id="nEx-tb-1Xc"/>
-                        <outlet property="stairsLabel" destination="8I3-8N-H7z" id="hhu-b4-re7"/>
-                        <outlet property="stairsStepper" destination="Sqi-Y2-f4Q" id="IMh-ub-e8n"/>
-                        <outlet property="stepsLabel" destination="5Uu-Ig-aQP" id="9zu-TQ-wG0"/>
-                        <outlet property="stepsStepper" destination="a0O-vj-OI8" id="pL7-7J-EjQ"/>
+                        <outlet property="saveButton" destination="Qqk-vk-Mxn" id="mga-hk-hF0"/>
+                        <outlet property="scheduleDatePicker" destination="6J4-1D-j7n" id="kla-gX-SBm"/>
+                        <outlet property="scheduleEndDatePicker" destination="jdG-gh-SHu" id="LP3-eC-UWy"/>
+                        <outlet property="scrollView" destination="hJP-b4-rbG" id="hHt-hJ-Ing"/>
+                        <outlet property="stairsLabel" destination="Ldv-Oh-ijK" id="avo-0u-RKj"/>
+                        <outlet property="stairsStepper" destination="xkd-Dn-3PJ" id="aht-eV-3An"/>
+                        <outlet property="stepsLabel" destination="0dW-fL-JrE" id="C4I-Hv-7MV"/>
+                        <outlet property="stepsStepper" destination="2zn-k3-vot" id="edy-KC-uKl"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="c5T-zA-hQL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="TvK-Ac-jnQ" userLabel="Exit" sceneMemberID="exit"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ISp-7a-hsi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="h1c-rE-cw9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="-2040"/>
+            <point key="canvasLocation" x="2499" y="206"/>
         </scene>
         <!--Change Time-->
-        <scene sceneID="k9b-YG-OXq">
+        <scene sceneID="H6X-kR-iPv">
             <objects>
-                <viewController id="ynZ-5v-MVM" customClass="ChangeTimeViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8r2-rn-szs">
+                <viewController id="tqF-id-qlI" customClass="ChangeTimeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vWV-HX-Ht7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="sKl-Hc-vQm">
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="0Jd-P2-iMy">
                                 <rect key="frame" x="0.0" y="203" width="320" height="162"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="446492055.63529801">
                                     <!--2015-02-24 17:34:15 +0000-->
                                 </date>
                             </datePicker>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Date/Time to change to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YQ3-UZ-GEX">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Date/Time to change to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="agI-zy-lUy">
                                 <rect key="frame" x="16" y="174" width="288" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -956,27 +1359,86 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Change Time" id="jOa-gB-jfC">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="El1-hG-TxV">
+                    <navigationItem key="navigationItem" title="Change Time" id="j5P-Cq-Kzn">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="KuF-tz-obN">
                             <connections>
-                                <segue destination="wV7-R9-pte" kind="unwind" unwindAction="unwindFromChangeTime:" id="aiQ-ak-Jop"/>
+                                <segue destination="ujo-K5-m0v" kind="unwind" unwindAction="unwindFromChangeTime:" id="B5P-xF-Uhu"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Loi-tT-iGz">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="NTU-cY-Um6">
                             <connections>
-                                <segue destination="wV7-R9-pte" kind="unwind" unwindAction="unwindFromChangeTime:" id="lZs-8C-iDb"/>
+                                <segue destination="ujo-K5-m0v" kind="unwind" unwindAction="unwindFromChangeTime:" id="JuP-dz-ZSq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="changeTimeDatePicker" destination="sKl-Hc-vQm" id="bDr-Xu-GEF"/>
-                        <outlet property="saveButton" destination="Loi-tT-iGz" id="kWb-va-De7"/>
+                        <outlet property="changeTimeDatePicker" destination="0Jd-P2-iMy" id="hpw-l1-erT"/>
+                        <outlet property="saveButton" destination="NTU-cY-Um6" id="AD7-u9-BEr"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DH5-qn-ma0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="wV7-R9-pte" userLabel="Exit" sceneMemberID="exit"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wp6-3b-xPz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ujo-K5-m0v" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="-1408"/>
+            <point key="canvasLocation" x="2499" y="872"/>
+        </scene>
+        <!--Test History Table View Controller-->
+        <scene sceneID="PmC-Gw-6lo">
+            <objects>
+                <tableViewController id="7Gx-Sx-qdi" customClass="TestHistoryTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="aNf-DM-gwQ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListProtoHistoryTest" textLabel="sG9-Pz-diM" detailTextLabel="Gu0-1d-3jg" style="IBUITableViewCellStyleSubtitle" id="cg5-ud-hTX">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="cg5-ud-hTX" id="srt-hK-xkf">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sG9-Pz-diM">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Gu0-1d-3jg">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7Gx-Sx-qdi" id="g1T-XC-QI5"/>
+                            <outlet property="delegate" destination="7Gx-Sx-qdi" id="YUZ-i0-aYX"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="y1Z-BC-yPr"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MeH-rp-Y7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2499" y="-462"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="xMy-h6-rmV">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lk1-Qr-REP" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Yt2-L3-1OZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ONT-3a-oXQ" kind="relationship" relationship="rootViewController" id="66U-L8-zju"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3OQ-JB-x6T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2001" y="1686"/>
         </scene>
     </scenes>
     <resources>
