@@ -17,31 +17,31 @@
 
 
 @interface ViewGoalViewController () {
-    NSThread *BackgroundThread;
-    NSTimer *timerStep;
-    NSTimer *timerStair;
+    NSThread *BackgroundThread; // Background thread used for holding the steps and stairs timers.
+    NSTimer *timerStep; // Timer for steps.
+    NSTimer *timerStair; // Timer for stairs.
 }
 
-@property (nonatomic, strong) DBManager *dbManager;
-@property (weak, nonatomic) IBOutlet UILabel *viewTitle;
-@property (weak, nonatomic) IBOutlet UILabel *viewType;
-@property (weak, nonatomic) IBOutlet UILabel *viewDateCreated;
-@property (weak, nonatomic) IBOutlet UILabel *viewDateCompletion;
-@property (weak, nonatomic) IBOutlet UIProgressView *viewProgressBar;
-@property (weak, nonatomic) IBOutlet UILabel *viewProgress;
-- (IBAction)setActiveButton:(id)sender;
-- (IBAction)suspendButton:(id)sender;
-@property (weak, nonatomic) IBOutlet UIButton *outletActiveButton;
-@property (weak, nonatomic) IBOutlet UIButton *outletSuspendButton;
-@property (weak, nonatomic) IBOutlet UILabel *viewDateStart;
-@property (weak, nonatomic) IBOutlet UIButton *outletHistoryButton;
-@property (weak, nonatomic) IBOutlet UILabel *viewStatus;
-@property (weak, nonatomic) IBOutlet UIButton *scheduleButton;
-@property (weak, nonatomic) IBOutlet UIButton *timeButton;
+@property (nonatomic, strong) DBManager *dbManager; // Database manager object.
+@property (weak, nonatomic) IBOutlet UILabel *viewTitle; // Goal title label.
+@property (weak, nonatomic) IBOutlet UILabel *viewType; // Goal type label.
+@property (weak, nonatomic) IBOutlet UILabel *viewDateCreated; // Goal created date label.
+@property (weak, nonatomic) IBOutlet UILabel *viewDateCompletion; // Goal completion data label.
+@property (weak, nonatomic) IBOutlet UIProgressView *viewProgressBar; // Progress bar outlet.
+@property (weak, nonatomic) IBOutlet UILabel *viewProgress; // Progress label.
+- (IBAction)setActiveButton:(id)sender; // Active button action.
+- (IBAction)suspendButton:(id)sender; // Suspended button action.
+@property (weak, nonatomic) IBOutlet UIButton *outletActiveButton; // Active button outlet.
+@property (weak, nonatomic) IBOutlet UIButton *outletSuspendButton; // Suspend button outlet.
+@property (weak, nonatomic) IBOutlet UILabel *viewDateStart; // Goal start date label.
+@property (weak, nonatomic) IBOutlet UIButton *outletHistoryButton; // History view button outlet.
+@property (weak, nonatomic) IBOutlet UILabel *viewStatus; // Goal status label.
+@property (weak, nonatomic) IBOutlet UIButton *scheduleButton; // Schedule button outlet.
+@property (weak, nonatomic) IBOutlet UIButton *timeButton; // Change date/time button outlet.
 
-@property int progressSteps;
-@property int progressStairs;
-@property BOOL isRecording;
+@property int progressSteps; // Holds current progress of steps in background thread.
+@property int progressStairs; // Holds current progress of stairs in background thread.
+@property BOOL isRecording; // Holds bool to check if goal is currently recording.
 
 @end
 
@@ -54,23 +54,30 @@
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
+    // Goal initially not recording.
     self.isRecording = NO;
     
+    // Set up the labels and other outlet with data of goal to be viewed.
     [self showDetails];
 }
 
+// Method to set up outlets of view to show data of the goal.
 -(void)showDetails {
+    // Set the title of the navigation bar.
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
+    
+    // Set the title label to the goal name.
+    self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
+    
+    // Depending on the status of the goal set the status label and background accordingly.
     switch (self.viewGoal.goalStatus) {
         case Pending:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
             self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             break;
         case Active:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
             [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
             self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
@@ -78,14 +85,12 @@
             self.outletSuspendButton.hidden = NO;
             break;
         case Overdue:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
             self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Suspended:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
             self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
@@ -94,7 +99,6 @@
             [self hideAndDisableRightNavigationItem];
             break;
         case Abandoned:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Abandoned"];
             self.view.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
@@ -102,7 +106,6 @@
             [self hideAndDisableRightNavigationItem];
             break;
         case Completed:
-            self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Completed"];
             self.view.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
@@ -113,6 +116,7 @@
             break;
     }
     
+    // Depending on the type of the goal set the goal type label, the progress label and the progress bar accordingly.
     switch (self.viewGoal.goalType) {
         case Steps:
             self.viewType.text = [NSString stringWithFormat:@"Goal Type: Steps"];
@@ -132,20 +136,22 @@
         default:
             break;
     }
+    
+    // Set up the date formatter to the required format.
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    //uncomment to get the time only
-    //[formatter setDateFormat:@"hh:mm a"];
-    //[formatter setDateFormat:@"MMM dd, YYYY"];
     [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
     
+    // Set the date labels to their values in the required format.
     self.viewDateCreated.text = [NSString stringWithFormat:@"Date Created: %@",[formatter stringFromDate:self.viewGoal.goalCreationDate]];
     self.viewDateStart.text = [NSString stringWithFormat:@"Start Date: %@",[formatter stringFromDate:self.viewGoal.goalStartDate]];
     self.viewDateCompletion.text = [NSString stringWithFormat:@"Completion Date: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    
+    // If the goal is in testing mode, hide the active and suspend buttons
     if ([self.testing getTesting]) {
         self.outletActiveButton.hidden = YES;
         self.outletSuspendButton.hidden = YES;
     }
-    else {
+    else { // If the goal is not in testing mode, hide the schedule and change time button.
         self.scheduleButton.hidden = YES;
         self.timeButton.hidden = YES;
     }
@@ -158,12 +164,16 @@
 
 #pragma mark - Segue
 
+// Returning from edit goal view.
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue {
     EditGoalViewController *source = [segue sourceViewController];
     
+    // If the goal was editted.
     if (source.wasEdit) {
         self.viewGoal = source.editGoal;
+        // If the goal from the edit view isn't nil.
         if (self.viewGoal != nil) {
+            // update the row in the goals table with the editted goal.
             NSString *query;
             query = [NSString stringWithFormat:@"update %@ set goalName='%@', goalType='%d', goalAmountSteps='%ld', goalAmountStairs='%ld', goalStartDate='%f', goalDate='%f', goalConversion='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalName, self.viewGoal.goalType, (long)self.viewGoal.goalAmountSteps, (long)self.viewGoal.goalAmountStairs, [self.viewGoal.goalStartDate timeIntervalSince1970], [self.viewGoal.goalCompletionDate timeIntervalSince1970], self.viewGoal.goalConversion, (long)self.viewGoal.goalID];
             // Execute the query.
@@ -177,13 +187,16 @@
             }
         }
     }
-    
+    // Reload the view.
     [self showDetails];
 }
 
+// Returning from the chagne time view.
 -(IBAction)unwindFromChangeTime:(UIStoryboardSegue *)segue {
     ChangeTimeViewController *source = [segue sourceViewController];
+    // If the NSDate object from the change time view isn't nil.
     if (source.changeDate != nil) {
+        // Initialise vairables for method.
         NSDate *changeDate = source.changeDate;
         NSDate *tempStartDate = [[NSDate alloc] init];
         NSDate *tempEndDate = [[NSDate alloc] init];
@@ -193,21 +206,24 @@
         double endDate = 0.0;
         KeepFitGoal *loopGoal = [[KeepFitGoal alloc] init];
         
+        // Loop through all of the goals.
         for (int i=0; i<[self.keepFitGoals count]; i++) {
             loopGoal = [self.keepFitGoals objectAtIndex:i];
             
+            // Test if the goal has become Active and set if so.
             if (loopGoal.goalStatus == Pending) {
                 if ([[loopGoal.goalStartDate earlierDate:changeDate]isEqualToDate: loopGoal.goalStartDate]) {
                     loopGoal.goalStatus = Active;
                 }
             }
+            // Test if the goal has become Overdue and set if so.
             if (loopGoal.goalStatus == Active) {
                 if ([[loopGoal.goalCompletionDate earlierDate:changeDate]isEqualToDate: loopGoal.goalCompletionDate]) {
                     loopGoal.goalStatus = Overdue;
                 }
             }
             
-            //get history to go through
+            // get history for the goal from the current date to the end date.
             NSString *query = [NSString stringWithFormat:@"select * from testHistory where (goalID='%d' and ((statusStartDate > '%f') or (statusStartDate < '%f' and statusEndDate > '%f')))",loopGoal.goalID,[[self.testing getTime] timeIntervalSince1970],[[self.testing getTime] timeIntervalSince1970],[[self.testing getTime] timeIntervalSince1970]];
             
             NSArray *historyResults;
@@ -215,13 +231,16 @@
             
             NSLog(@"history results: %@",historyResults);
             
+            // Get indexes of columns for the history db.
             NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
             NSInteger indexOfStatusStartDate = [self.dbManager.arrColumnNames indexOfObject:@"statusStartDate"];
             NSInteger indexOfStatusEndDate = [self.dbManager.arrColumnNames indexOfObject:@"statusEndDate"];
             NSInteger indexOfGoalProgressSteps = [self.dbManager.arrColumnNames indexOfObject:@"progressSteps"];
             NSInteger indexOfGoalProgressStairs = [self.dbManager.arrColumnNames indexOfObject:@"progressStairs"];
             
+            // Loop through the history results.
             for (int i=0; i < [historyResults count]; i++) {
+                // Get the dates from the history.
                 tempStartDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue]];
                 tempEndDate = [NSDate dateWithTimeIntervalSince1970:[[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue]];
                 tempSteps = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
@@ -229,28 +248,28 @@
                 startDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue];
                 endDate = [[[historyResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue];
                 
-                //still in middle
+                // still in middle of scheduled progress.
                 if (([[[self.testing getTime] earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate])) {
                     NSLog(@"Middle");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970] - [[self.testing getTime] timeIntervalSince1970])/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970] - [[self.testing getTime] timeIntervalSince1970])/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }//second half of history
+                }// second half of scheduled progress.
                 else if (([[[self.testing getTime] earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate])) {
                     NSLog(@"Second Half");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * ((endDate - [[self.testing getTime] timeIntervalSince1970])/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * ((endDate - [[self.testing getTime] timeIntervalSince1970])/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }//first half
+                }// first half of scheduled progress.
                 else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[[self.testing getTime] earlierDate:tempStartDate]isEqualToDate:[self.testing getTime]])) {
                     NSLog(@"First Half");
                     NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
                     loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
                     NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
-                }//full history
+                }// full scheduled progress.
                 else if (([[[self.testing getTime] earlierDate:tempStartDate]isEqualToDate:[self.testing getTime]]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
                     NSLog(@"Full");
                     NSLog(@"OLD - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
@@ -258,13 +277,14 @@
                     loopGoal.goalProgressStairs += tempStairs;
                     NSLog(@"NEW - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                 }
+                // Update status if goal is now completed.
                 if ([[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue] == Completed) {
                     NSLog(@"COMPLETED");
                     loopGoal.goalStatus = Completed;
                 }
             }
             
-            //save goal
+            // Update goal in DB.
             query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%ld', goalProgressStairs='%ld' where goalID=%ld", loopGoal.goalStatus, (long)loopGoal.goalProgressSteps, (long)loopGoal.goalProgressStairs, (long)loopGoal.goalID];
             // Execute the query.
             [self.dbManager executeQuery:query];
@@ -276,7 +296,7 @@
                 NSLog(@"Could not execute the query.");
             }
             
-            //save new time
+            // Update the persisted time in the database.
             query = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[changeDate timeIntervalSince1970]];
             
             // Execute the query.
@@ -295,13 +315,17 @@
             
             
         }
+        // Set the new time in the testing object.
         [self.testing setTime:changeDate];
+        // Update the view.
         [self showDetails];
     }
 }
 
+// Returning from schedule view.
 -(IBAction)unwindFromSchedule:(UIStoryboardSegue *)segue {
     ScheduleViewController *source = [segue sourceViewController];
+    // Store new schedule to the history database.
     [self storeGoalScheduleToDB:source.schedule];
 }
 
@@ -309,8 +333,6 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"showEditGoal"]) {
         EditGoalViewController *destViewController = segue.destinationViewController;
         destViewController.editGoal = self.viewGoal;

@@ -67,6 +67,7 @@
     self.numStairsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
     self.stairsStepper.value = [self.numStairsLabel.text intValue];
     // Set the date pickers to be active depending on the status of the goal.
+    self.editTitleField.userInteractionEnabled = NO;
     if (self.editGoal.goalStatus == Active) {
         self.editStartDateField.userInteractionEnabled = NO;
     }

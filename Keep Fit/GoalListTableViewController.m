@@ -351,7 +351,7 @@
     goal = [self.keepFitGoals objectAtIndex:objectIndex];
     
     // allow sliding for any goal that is not completed.
-    if (goal.goalStatus == Completed) {
+    if (goal.goalStatus == Completed || goal.goalStatus == Abandoned) {
         return UITableViewCellEditingStyleNone;
     }
     return UITableViewCellEditingStyleDelete;
