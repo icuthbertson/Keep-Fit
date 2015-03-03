@@ -100,6 +100,8 @@
             self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
         }
     }
+    
+    NSLog(@"%@",statResults);
 }
 
 -(void)SetUpView {

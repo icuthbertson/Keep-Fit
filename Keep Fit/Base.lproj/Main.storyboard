@@ -1735,7 +1735,7 @@
                     <navigationItem key="navigationItem" id="6Y4-JQ-noC">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="h6T-yn-Ofr">
                             <connections>
-                                <segue destination="cAo-TD-bvA" kind="unwind" unwindAction="unwindFromSchedule:" id="9yP-Dj-DHn"/>
+                                <segue destination="cAo-TD-bvA" kind="unwind" unwindAction="unwindFromScheduleActivityTest:" id="r6S-yM-uLp"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Hyz-ug-1jL">
@@ -1790,7 +1790,7 @@
                     <navigationItem key="navigationItem" title="Change Time" id="Oza-1c-dQn">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="71j-NA-Tpg">
                             <connections>
-                                <segue destination="p3V-XH-SLG" kind="unwind" unwindAction="unwindFromChangeTime:" id="tnP-fb-M7G"/>
+                                <segue destination="p3V-XH-SLG" kind="unwind" unwindAction="unwindFromChangeTimeActivityTest:" id="J1f-zb-rKk"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="adT-si-LSi">

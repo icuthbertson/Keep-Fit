@@ -70,12 +70,18 @@
 
 -(IBAction)unwindFromScheduleActivityTest:(UIStoryboardSegue *)segue {
     ScheduleViewController *source = [segue sourceViewController];
+    
+    if (source.schedule == nil) return;
+    
     [self storeGoalStatisticsToDB:source.schedule];
 }
 
 -(IBAction)unwindFromChangeTimeActivityTest:(UIStoryboardSegue *)segue {
     ChangeTimeViewController *source = [segue sourceViewController];
     // Update the persisted time in the database.
+    
+    if (source.changeDate == nil) return;
+    
     NSString *dateQuery = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[source.changeDate timeIntervalSince1970]];
     
     // Execute the query.
