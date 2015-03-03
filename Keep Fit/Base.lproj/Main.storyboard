@@ -317,6 +317,26 @@
                                     <segue destination="kT5-NL-gu6" kind="push" identifier="statisticsTest" id="luC-tf-qGV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oGl-gf-TLA">
+                                <rect key="frame" x="114" y="193" width="93" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Change Time">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="D6B-pu-zfZ" kind="push" identifier="changeTimeActivity" id="S1b-bl-mkB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nlg-Fp-U1F">
+                                <rect key="frame" x="85" y="155" width="151" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Schedule Activity">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="0KG-eW-H0s" kind="push" identifier="scheduleActivity" id="1zw-Wu-Ove"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -404,6 +424,16 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="J1i-kI-bAZ">
+                                <rect key="frame" x="69" y="404" width="182" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Show Activity History">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="ktM-qt-ip4" kind="push" identifier="activityHistory" id="hZw-Qx-euS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -421,7 +451,48 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FBa-oc-prz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1128" y="2362"/>
+            <point key="canvasLocation" x="718" y="2408"/>
+        </scene>
+        <!--Activity History-->
+        <scene sceneID="9nO-is-Jdd">
+            <objects>
+                <tableViewController id="ktM-qt-ip4" customClass="ActivityHistoryTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="05z-cP-aTa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="activityHistory" textLabel="17H-km-ueR" detailTextLabel="wXz-9C-kXT" style="IBUITableViewCellStyleSubtitle" id="qdM-XX-Mtv">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qdM-XX-Mtv" id="tlt-MK-LsS">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="17H-km-ueR">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wXz-9C-kXT">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ktM-qt-ip4" id="Zin-rh-iW2"/>
+                            <outlet property="delegate" destination="ktM-qt-ip4" id="9xy-2W-TjR"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Activity History" id="XHI-Bt-R1a"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vhJ-Nb-hr2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="718" y="3096"/>
         </scene>
         <!--List Selection-->
         <scene sceneID="tiv-uG-N1b">
@@ -1311,7 +1382,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5la-Av-WMJ">
-                                <rect key="frame" x="16" y="374" width="135" height="30"/>
+                                <rect key="frame" x="93" y="392" width="135" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Record">
@@ -1466,7 +1537,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ISp-7a-hsi" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="h1c-rE-cw9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2499" y="206"/>
+            <point key="canvasLocation" x="2499" y="196"/>
         </scene>
         <!--Change Time-->
         <scene sceneID="H6X-kR-iPv">
@@ -1573,6 +1644,170 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3OQ-JB-x6T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2001" y="1686"/>
+        </scene>
+        <!--Schedule View Controller-->
+        <scene sceneID="Y2g-V3-KIQ">
+            <objects>
+                <viewController id="0KG-eW-H0s" customClass="ScheduleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HKh-Bv-YWZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="557-3q-BOc">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="m8G-8s-ecF">
+                                        <rect key="frame" x="8" y="148" width="304" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="iJI-30-Mh2">
+                                        <rect key="frame" x="218" y="111" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="stairsStepperAction:" destination="0KG-eW-H0s" eventType="valueChanged" id="e7X-2i-WIP"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xe0-3h-LI5">
+                                        <rect key="frame" x="8" y="115" width="186" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Stairs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YdO-s2-Hi8">
+                                        <rect key="frame" x="8" y="86" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Wy7-ry-AVX">
+                                        <rect key="frame" x="8" y="49" width="186" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IIN-5p-81l">
+                                        <rect key="frame" x="8" y="20" width="296" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="10000" id="a1x-rw-JcP">
+                                        <rect key="frame" x="218" y="49" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="stepsStepperAction:" destination="0KG-eW-H0s" eventType="valueChanged" id="KdR-wu-AEh"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date/Time to schedule end" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zAp-Hu-2ud">
+                                        <rect key="frame" x="8" y="347" width="304" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="dlY-Og-aVZ">
+                                        <rect key="frame" x="0.0" y="376" width="320" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="446551144.76893997">
+                                            <!--2015-02-25 09:59:04 +0000-->
+                                        </date>
+                                    </datePicker>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="x77-dX-Bgo">
+                                        <rect key="frame" x="0.0" y="177" width="320" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="446492436.50703102">
+                                            <!--2015-02-24 17:40:36 +0000-->
+                                        </date>
+                                    </datePicker>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6Y4-JQ-noC">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="h6T-yn-Ofr">
+                            <connections>
+                                <segue destination="cAo-TD-bvA" kind="unwind" unwindAction="unwindFromSchedule:" id="9yP-Dj-DHn"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Hyz-ug-1jL">
+                            <connections>
+                                <segue destination="cAo-TD-bvA" kind="unwind" unwindAction="unwindFromScheduleActivityTest:" id="dEC-Vz-EXl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="568"/>
+                    <connections>
+                        <outlet property="saveButton" destination="Hyz-ug-1jL" id="dFe-FT-2wb"/>
+                        <outlet property="scheduleDatePicker" destination="x77-dX-Bgo" id="4zE-HB-WiK"/>
+                        <outlet property="scheduleEndDatePicker" destination="dlY-Og-aVZ" id="CnU-f3-aKi"/>
+                        <outlet property="scrollView" destination="557-3q-BOc" id="kTE-cg-yMn"/>
+                        <outlet property="stairsLabel" destination="xe0-3h-LI5" id="XIB-8E-Zxb"/>
+                        <outlet property="stairsStepper" destination="iJI-30-Mh2" id="ihn-ix-UFv"/>
+                        <outlet property="stepsLabel" destination="Wy7-ry-AVX" id="qO4-BJ-wCv"/>
+                        <outlet property="stepsStepper" destination="a1x-rw-JcP" id="Cvh-Zf-wYs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="moJ-fi-GIL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="cAo-TD-bvA" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1517" y="2408"/>
+        </scene>
+        <!--Change Time-->
+        <scene sceneID="7fK-6D-UvH">
+            <objects>
+                <viewController id="D6B-pu-zfZ" customClass="ChangeTimeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UAU-wz-SA8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="i4t-P2-6J3">
+                                <rect key="frame" x="0.0" y="203" width="320" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <date key="date" timeIntervalSinceReferenceDate="446492055.63529801">
+                                    <!--2015-02-24 17:34:15 +0000-->
+                                </date>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Date/Time to change to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0z9-Nk-bm1">
+                                <rect key="frame" x="16" y="174" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Change Time" id="Oza-1c-dQn">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="71j-NA-Tpg">
+                            <connections>
+                                <segue destination="p3V-XH-SLG" kind="unwind" unwindAction="unwindFromChangeTime:" id="tnP-fb-M7G"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="adT-si-LSi">
+                            <connections>
+                                <segue destination="p3V-XH-SLG" kind="unwind" unwindAction="unwindFromChangeTimeActivityTest:" id="AIp-W5-sI5"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="changeTimeDatePicker" destination="i4t-P2-6J3" id="j7q-sP-NGZ"/>
+                        <outlet property="saveButton" destination="adT-si-LSi" id="Bxd-bH-Tip"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uHL-ch-ooO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="p3V-XH-SLG" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1128" y="2408"/>
         </scene>
     </scenes>
     <resources>

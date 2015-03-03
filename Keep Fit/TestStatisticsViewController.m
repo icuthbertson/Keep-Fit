@@ -8,6 +8,7 @@
 
 #import "TestStatisticsViewController.h"
 #import "DBManager.h"
+#import "ActivityHistoryTableViewController.h"
 
 @interface TestStatisticsViewController ()
 
@@ -25,6 +26,7 @@
 @property NSInteger totalStairs;
 @property double startDate;
 @property double endDate;
+@property NSDate *currentDate;
 
 @end
 
@@ -47,14 +49,14 @@
 }
 
 -(void)loadFromDB {
-    NSDate *currentDate = [[NSDate alloc] init];
+    self.currentDate = [[NSDate alloc] init];
     NSString *dateQuery = @"select * from testDate";
     
     NSArray *currentDateResults;
     currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
     
     if (currentDateResults.count == 0) {
-        currentDate = [NSDate date];
+        self.currentDate = [NSDate date];
         
         dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [[NSDate date] timeIntervalSince1970]];
         // Execute the query.
@@ -69,9 +71,9 @@
     }
     else {
         NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
-        currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
+        self.currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
         NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
-        NSLog(@"Current Time From DB: %@",currentDate);
+        NSLog(@"Current Time From DB: %@",self.currentDate);
         
     }
     
@@ -80,7 +82,7 @@
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    NSString *query = [NSString stringWithFormat:@"select * from testStatistics where endTime < '%f'",[currentDate timeIntervalSince1970]];
+    NSString *query = [NSString stringWithFormat:@"select * from testStatistics where endTime < '%f'",[self.currentDate timeIntervalSince1970]];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
@@ -91,7 +93,7 @@
         NSInteger indexOfStairs = [self.dbManager.arrColumnNames indexOfObject:@"stairs"];
         
         self.startDate = [[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate] doubleValue];
-        self.endDate = [currentDate timeIntervalSince1970];
+        self.endDate = [self.currentDate timeIntervalSince1970];
         
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
@@ -131,14 +133,18 @@
     self.yearStairsLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"activityHistory"]) {
+        ActivityHistoryTableViewController *destViewController = segue.destinationViewController;
+        destViewController.currentDate = self.currentDate;
+    }
 }
-*/
+
 
 @end

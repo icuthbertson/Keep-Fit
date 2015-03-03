@@ -99,6 +99,38 @@
 #pragma mark - Database
 
 -(void)loadFromDB {
+    self.settings = [[TestSettings alloc] init];
+    NSString *query = @"select * from testSettings";
+    
+    NSArray *currentSettingsResults;
+    currentSettingsResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSLog(@"%@",currentSettingsResults);
+    
+    if (currentSettingsResults.count == 0) {
+        self.settings.stepsTime = 1;
+        self.settings.stairsTime = 1;
+        
+        query = [NSString stringWithFormat:@"insert into testSettings values(%d,%d)", self.settings.stepsTime, self.settings.stairsTime];
+        // Execute the query.
+        [self.dbManager executeQuery:query];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+    }
+    else {
+        NSInteger indexOfStepsTime = [self.dbManager.arrColumnNames indexOfObject:@"stepsTime"];
+        NSInteger indexOfStairsTime = [self.dbManager.arrColumnNames indexOfObject:@"stairsTime"];
+        self.settings.stepsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStepsTime] intValue];
+        self.settings.stairsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStairsTime] intValue];
+        NSLog(@"Steps Time: %d",self.settings.stepsTime);
+        NSLog(@"Stairs Time: %d",self.settings.stairsTime);
+    }
+    
     //get current date
     self.currentDate = [[NSDate alloc] init];
     NSString *dateQuery = @"select * from testDate";
@@ -134,7 +166,7 @@
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
     // Form the query.
-     NSString *query = @"select * from testGoals";
+    query = @"select * from testGoals";
     
     // Get the results.
     if (self.arrDBResults != nil) {

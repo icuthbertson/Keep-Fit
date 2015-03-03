@@ -13,4 +13,7 @@
 
 @property TestSettings *settings;
 
+-(IBAction)unwindFromScheduleActivityTest:(UIStoryboardSegue *)segue;
+-(IBAction)unwindFromChangeTimeActivityTest:(UIStoryboardSegue *)segue;
+
 @end

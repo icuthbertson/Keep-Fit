@@ -58,36 +58,42 @@
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
             self.scheduleButton.hidden = YES;
             self.timeButton.hidden = NO;
+            self.outletActiveButton.hidden = YES;
             break;
         case Active:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
             self.scheduleButton.hidden = NO;
             self.timeButton.hidden = NO;
+            self.outletActiveButton.hidden = NO;
             break;
         case Overdue:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
             self.scheduleButton.hidden = NO;
             self.timeButton.hidden = NO;
+            self.outletActiveButton.hidden = NO;
             break;
         case Suspended:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
             self.scheduleButton.hidden = YES;
             self.timeButton.hidden = YES;
+            self.outletActiveButton.hidden = YES;
             break;
         case Abandoned:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Abandoned"];
             self.scheduleButton.hidden = YES;
             self.timeButton.hidden = YES;
+            self.outletActiveButton.hidden = YES;
             break;
         case Completed:
             self.viewTitle.text = [NSString stringWithFormat:@"Goal Name: %@", self.viewGoal.goalName];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Completed"];
             self.scheduleButton.hidden = YES;
             self.timeButton.hidden = YES;
+            self.outletActiveButton.hidden = YES;
             break;
         default:
             break;
@@ -121,6 +127,9 @@
     self.viewDateCreated.text = [NSString stringWithFormat:@"Date Created: %@",[formatter stringFromDate:self.viewGoal.goalCreationDate]];
     self.viewDateStart.text = [NSString stringWithFormat:@"Start Date: %@",[formatter stringFromDate:self.viewGoal.goalStartDate]];
     self.viewDateCompletion.text = [NSString stringWithFormat:@"Completion Date: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    
+    self.scheduleButton.hidden = YES;
+    self.timeButton.hidden = YES;
 }
 
 
@@ -288,6 +297,7 @@
         ScheduleViewController *destViewController = segue.destinationViewController;
         destViewController.currentTime = self.currentDate;
         destViewController.viewGoal = self.viewGoal;
+        destViewController.scheduleGoal = YES;
     }
 }
 
@@ -326,7 +336,7 @@
     NSLog(@"performing background thread");
     
     if (((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps)) {
-        timerStep = [NSTimer timerWithTimeInterval:self.settings.stepsTime
+        timerStep = [NSTimer timerWithTimeInterval:(double)self.settings.stepsTime
                                             target:self
                                           selector:@selector(takeStep)
                                           userInfo:nil
@@ -334,7 +344,7 @@
         [[NSRunLoop mainRunLoop] addTimer:timerStep forMode:NSRunLoopCommonModes];
     }
     if (((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs)) {
-        timerStair = [NSTimer timerWithTimeInterval:self.settings.stairsTime
+        timerStair = [NSTimer timerWithTimeInterval:(double)self.settings.stairsTime
                                              target:self
                                            selector:@selector(takeStair)
                                            userInfo:nil
@@ -562,8 +572,6 @@
     else {
         NSLog(@"Could not execute the query.");
     }
-    
-    
 }
 
 #pragma mark - Buttons
@@ -581,6 +589,8 @@
         self.outletHistoryButton.hidden = YES;
         self.scheduleButton.hidden = YES;
         self.timeButton.hidden = YES;
+        NSLog(@"Steps Time: %d",self.settings.stepsTime);
+        NSLog(@"Stairs Time: %d",self.settings.stairsTime);
         [self startBackgroundThread];
     } /**********************************set pending*****************************************/
     else {
@@ -592,8 +602,8 @@
         [self showAndEnableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
         self.outletHistoryButton.hidden = NO;
-        self.scheduleButton.hidden = NO;
-        self.timeButton.hidden = NO;
+        //self.scheduleButton.hidden = NO;
+        //self.timeButton.hidden = NO;
         [self cancelBackgroundThread];
     }
 }

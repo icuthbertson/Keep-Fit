@@ -15,5 +15,6 @@
 @property Schedule *schedule;
 @property NSDate *currentTime;
 @property KeepFitGoal *viewGoal;
+@property BOOL scheduleGoal;
 
 @end

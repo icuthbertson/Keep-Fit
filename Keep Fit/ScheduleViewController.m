@@ -30,22 +30,24 @@
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 568)];
     
-    switch (self.viewGoal.goalType) {
-        case 0:
-            self.stepsStepper.userInteractionEnabled = YES;
-            self.stairsStepper.userInteractionEnabled = NO;
-            break;
-        case 1:
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = YES;
-            break;
-        case 2:
-            self.stepsStepper.userInteractionEnabled = YES;
-            self.stairsStepper.userInteractionEnabled = YES;
-            
-            break;
-        default:
-            break;
+    if (self.scheduleGoal == YES) {
+        switch (self.viewGoal.goalType) {
+            case 0:
+                self.stepsStepper.userInteractionEnabled = YES;
+                self.stairsStepper.userInteractionEnabled = NO;
+                break;
+            case 1:
+                self.stepsStepper.userInteractionEnabled = NO;
+                self.stairsStepper.userInteractionEnabled = YES;
+                break;
+            case 2:
+                self.stepsStepper.userInteractionEnabled = YES;
+                self.stairsStepper.userInteractionEnabled = YES;
+                
+                break;
+            default:
+                break;
+        }
     }
     self.stepsLabel.text = @"0";
     self.stairsLabel.text = @"0";
@@ -82,22 +84,29 @@
     if (sender != self.saveButton) return;
     
     self.schedule = [[Schedule alloc] init];
-    if ((self.viewGoal.goalProgressSteps + [self.stepsLabel.text intValue]) >= self.viewGoal.goalAmountSteps) {
-        self.schedule.numSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
+    if (self.scheduleGoal == YES) {
+        if ((self.viewGoal.goalProgressSteps + [self.stepsLabel.text intValue]) >= self.viewGoal.goalAmountSteps) {
+            self.schedule.numSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
+        }
+        else {
+            self.schedule.numSteps = [self.stepsLabel.text intValue];
+        }
+        if ((self.viewGoal.goalProgressStairs + [self.stairsLabel.text intValue]) >= self.viewGoal.goalAmountStairs) {
+            self.schedule.numStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
+        }
+        else {
+            self.schedule.numStairs = [self.stairsLabel.text intValue];
+        }
+        if (((self.viewGoal.goalProgressSteps + [self.stepsLabel.text intValue]) >= self.viewGoal.goalAmountSteps) && ((self.viewGoal.goalProgressStairs + [self.stairsLabel.text intValue]) >= self.viewGoal.goalAmountStairs)) {
+            self.schedule.completed = YES;
+        }
+        else {
+            self.schedule.completed = NO;
+        }
     }
     else {
         self.schedule.numSteps = [self.stepsLabel.text intValue];
-    }
-    if ((self.viewGoal.goalProgressStairs + [self.stairsLabel.text intValue]) >= self.viewGoal.goalAmountStairs) {
-        self.schedule.numStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
-    }
-    else {
         self.schedule.numStairs = [self.stairsLabel.text intValue];
-    }
-    if (((self.viewGoal.goalProgressSteps + [self.stepsLabel.text intValue]) >= self.viewGoal.goalAmountSteps) && ((self.viewGoal.goalProgressStairs + [self.stairsLabel.text intValue]) >= self.viewGoal.goalAmountStairs)) {
-        self.schedule.completed = YES;
-    }
-    else {
         self.schedule.completed = NO;
     }
     
