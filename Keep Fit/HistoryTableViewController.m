@@ -40,6 +40,7 @@
 
 // Method to load history data from the database.
 -(void)loadFromDB {
+    NSLog(@"LOAD FROM DB");
     // Re-initalise the array for storing the history.
     if (self.historyGoals != nil) {
         self.historyGoals = nil;

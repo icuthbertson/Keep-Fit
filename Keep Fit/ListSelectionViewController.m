@@ -12,6 +12,7 @@
 
 @property NSArray *menuItems;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 
 @end
 
@@ -20,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.menuItems = @[@"protoList", @"All", @"Pending", @"Active", @"Overdue", @"Suspended", @"Abandoned", @"Completed"];
+    self.menuItems = @[@"PAandO", @"All", @"Pending", @"Active", @"Overdue", @"Suspended", @"Abandoned", @"Completed"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -97,7 +98,16 @@
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     NSInteger row = indexPath.row;
     
+    if (sender == self.cancelButton) {
+        self.listType = 8; //default for cancel.
+        return;
+    }
+    
     switch (row) {
+        case 0: //Pending, Active, Overdue
+            NSLog(@"Pending, Active, Overdue");
+            self.listType = 7;
+            break;
         case 1: //All
             NSLog(@"Selection All");
             self.listType = 6;
@@ -131,34 +141,6 @@
             self.listType = 6;
             break;
     }
-    /*if ([segue.identifier isEqualToString:@"All"]) {
-        NSLog(@"Selection All");
-        self.listType = 6;
-    }
-    else if ([segue.identifier isEqualToString:@"Pending"]) {
-        NSLog(@"Selection Pending");
-        self.listType = 0;
-    }
-    else if ([segue.identifier isEqualToString:@"Active"]) {
-        NSLog(@"Selection Active");
-        self.listType = 1;
-    }
-    else if ([segue.identifier isEqualToString:@"Overdue"]) {
-        NSLog(@"Selection Overdue");
-        self.listType = 2;
-    }
-    else if ([segue.identifier isEqualToString:@"Suspended"]) {
-        NSLog(@"Selection Suspended");
-        self.listType = 3;
-    }
-    else if ([segue.identifier isEqualToString:@"Abandoned"]) {
-        NSLog(@"Selection Abandoned");
-        self.listType = 4;
-    }
-    else if ([segue.identifier isEqualToString:@"Completed"]) {
-        NSLog(@"Selection Completed");
-        self.listType = 5;
-    }*/
 }
 
 

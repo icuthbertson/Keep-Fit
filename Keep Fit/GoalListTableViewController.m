@@ -116,6 +116,9 @@
 -(IBAction)unwindFromListSelection:(UIStoryboardSegue *)segue {
     // Update list type.
     ListSelectionViewController *source = [segue sourceViewController];
+    
+    if (source.listType == 8) return; //Cancel button was pressed.
+    
     self.listType = source.listType;
     NSLog(@"%d",self.listType);
     // Reload db data incase of changes.
@@ -132,10 +135,14 @@
     }
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
+    NSLog(@"List Type: %d",self.listType);
     // Form the goal select query.
     NSString *query = [NSString stringWithFormat:@"select * from goals"];
-    if (self.listType != 6) { // If all the goals are not wanted to be shown.
+    if (self.listType != 6 && self.listType != 7) { // If all the goals are not wanted to be shown.
         query = [NSString stringWithFormat:@"select * from goals where goalStatus='%d'", self.listType];
+    }
+    else if (self.listType == 7) {
+        query = [NSString stringWithFormat:@"select * from goals where goalStatus=0 or goalStatus=1 or goalStatus=2"];
     }
     
     // Re-initialise the query results array.
@@ -410,6 +417,7 @@
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
         // Pass the list of goals.
         destViewController.keepFitGoals = self.keepFitGoals;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
     else if ([segue.identifier isEqualToString:@"addGoal"]) {
         // If going to the add view.
@@ -432,15 +440,12 @@
     }
 }
 
-/*
+
 #pragma mark - Table view delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    KeepFitGoal *tappedItem = [self.keepFitGoals objectAtIndex:indexPath.row];
-    tappedItem.completed = !tappedItem.completed;
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}*/
+    [self performSegueWithIdentifier: @"showViewGoal" sender: self];
+}
 
 #pragma mark - History
 

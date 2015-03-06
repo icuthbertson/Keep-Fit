@@ -206,8 +206,8 @@
             if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
-            [self updateView];
             [self storeGoalStatusChangeToDB];
+            [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
         }
@@ -219,8 +219,8 @@
             if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
-            [self updateView];
             [self storeGoalStatusChangeToDB];
+            [self updateView];
             self.stepperStairsLabel.text = @"0";
             self.addStairsStepper.value = 0.0;
         }
@@ -237,8 +237,8 @@
             if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
-            [self updateView];
             [self storeGoalStatusChangeToDB];
+            [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
             self.stepperStairsLabel.text = @"0";

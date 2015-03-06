@@ -21,6 +21,9 @@
 		AE2490F41AA51F4E00A6D816 /* TestStatisticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490F31AA51F4E00A6D816 /* TestStatisticsViewController.m */; };
 		AE2490F71AA51FE600A6D816 /* TestMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490F61AA51FE600A6D816 /* TestMenuViewController.m */; };
 		AE2490FA1AA5E6A300A6D816 /* ActivityHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490F91AA5E6A300A6D816 /* ActivityHistoryTableViewController.m */; };
+		AE2490FC1AA908AC00A6D816 /* bar-chart.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FB1AA908AC00A6D816 /* bar-chart.png */; };
+		AE2490FE1AA908C400A6D816 /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FD1AA908C400A6D816 /* home.png */; };
+		AE2491041AA90B7100A6D816 /* spanner.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2491031AA90B7100A6D816 /* spanner.png */; };
 		AE40A69E1A8946BB000DD45A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A69D1A8946BB000DD45A /* main.m */; };
 		AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6A01A8946BB000DD45A /* AppDelegate.m */; };
 		AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE40A6A51A8946BB000DD45A /* Main.storyboard */; };
@@ -81,6 +84,9 @@
 		AE2490F61AA51FE600A6D816 /* TestMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestMenuViewController.m; sourceTree = "<group>"; };
 		AE2490F81AA5E6A300A6D816 /* ActivityHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityHistoryTableViewController.h; sourceTree = "<group>"; };
 		AE2490F91AA5E6A300A6D816 /* ActivityHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityHistoryTableViewController.m; sourceTree = "<group>"; };
+		AE2490FB1AA908AC00A6D816 /* bar-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar-chart.png"; sourceTree = "<group>"; };
+		AE2490FD1AA908C400A6D816 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		AE2491031AA90B7100A6D816 /* spanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spanner.png; sourceTree = "<group>"; };
 		AE40A6981A8946BB000DD45A /* Keep Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Keep Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE40A69C1A8946BB000DD45A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE40A69D1A8946BB000DD45A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -277,6 +283,9 @@
 		AEBF72D61A9B5F19001505F2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AE2491031AA90B7100A6D816 /* spanner.png */,
+				AE2490FD1AA908C400A6D816 /* home.png */,
+				AE2490FB1AA908AC00A6D816 /* bar-chart.png */,
 				AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */,
 				AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */,
 				AEBF72D71A9B5F56001505F2 /* menu.png */,
@@ -366,10 +375,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */,
+				AE2491041AA90B7100A6D816 /* spanner.png in Resources */,
 				AEBF72D81A9B5F56001505F2 /* menu.png in Resources */,
 				AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */,
+				AE2490FC1AA908AC00A6D816 /* bar-chart.png in Resources */,
 				AE72D46A1A9B9D37008570B0 /* walking-icon-hi.png in Resources */,
 				AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */,
+				AE2490FE1AA908C400A6D816 /* home.png in Resources */,
 				AE2490EE1AA4F10600A6D816 /* Default-568h@2x.png in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
