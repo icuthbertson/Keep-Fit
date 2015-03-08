@@ -59,6 +59,10 @@
     [self setUpView];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self setUpView];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
