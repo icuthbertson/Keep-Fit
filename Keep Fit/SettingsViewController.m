@@ -26,8 +26,9 @@
 @property (nonatomic, strong) DBManager *dbManager; // database manager object.
 - (IBAction)stepsAction:(id)sender;
 - (IBAction)stairsAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UIView *settingsView;
 @property (weak, nonatomic) IBOutlet UIView *scheduleView;
+@property (weak, nonatomic) IBOutlet UIView *generalView;
+@property (weak, nonatomic) IBOutlet UIView *testingView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UISwitch *testingSwitch;
 - (IBAction)testingSwtichAction:(id)sender;
@@ -49,11 +50,14 @@
     
     // Set up the scroll view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 568)];
+    [self.scrollView setContentSize:CGSizeMake(320, 700)];
     [self.scrollView setBackgroundColor:[UIColor lightGrayColor]];
     
-    self.settingsView.layer.cornerRadius = 5;
-    self.settingsView.layer.masksToBounds = YES;
+    self.generalView.layer.cornerRadius = 5;
+    self.generalView.layer.masksToBounds = YES;
+    
+    self.testingView.layer.cornerRadius = 5;
+    self.testingView.layer.masksToBounds = YES;
     
     self.scheduleView.layer.cornerRadius = 5;
     self.scheduleView.layer.masksToBounds = YES;

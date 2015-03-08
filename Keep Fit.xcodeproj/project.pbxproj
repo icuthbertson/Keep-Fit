@@ -40,6 +40,7 @@
 		AE72D4681A9B9CE3008570B0 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */; };
 		AE72D46A1A9B9D37008570B0 /* walking-icon-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */; };
 		AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */; };
+		AE8631BB1AACED300089D10C /* StatisticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8631BA1AACED300089D10C /* StatisticsViewController.m */; };
 		AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE969A631A8BD1B80032B287 /* EditGoalViewController.m */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
@@ -118,6 +119,8 @@
 		AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		AE72D4691A9B9D37008570B0 /* walking-icon-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walking-icon-hi.png"; sourceTree = "<group>"; };
 		AE72D46F1A9BA671008570B0 /* 154_Settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "154_Settings@2x.png"; sourceTree = "<group>"; };
+		AE8631B91AACED300089D10C /* StatisticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsViewController.h; sourceTree = "<group>"; };
+		AE8631BA1AACED300089D10C /* StatisticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsViewController.m; sourceTree = "<group>"; };
 		AE969A621A8BD1B80032B287 /* EditGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditGoalViewController.h; sourceTree = "<group>"; };
 		AE969A631A8BD1B80032B287 /* EditGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditGoalViewController.m; sourceTree = "<group>"; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
@@ -165,6 +168,8 @@
 				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
 				AE2491081AABBE9A00A6D816 /* MainTabBarViewController.h */,
 				AE2491091AABBE9A00A6D816 /* MainTabBarViewController.m */,
+				AE8631B91AACED300089D10C /* StatisticsViewController.h */,
+				AE8631BA1AACED300089D10C /* StatisticsViewController.m */,
 				AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */,
 				AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */,
 			);
@@ -415,6 +420,7 @@
 				AE49D69D1A975F2C00A2C63C /* HistoryTableViewController.m in Sources */,
 				AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */,
 				AEA0C39B1A8BBDFA00647E6E /* ViewGoalViewController.m in Sources */,
+				AE8631BB1AACED300089D10C /* StatisticsViewController.m in Sources */,
 				AE2490EC1AA4EBAE00A6D816 /* TestSettings.m in Sources */,
 				AE40A6C31A896755000DD45A /* AddGoalViewController.m in Sources */,
 				AE2490E81AA4C12C00A6D816 /* TestHistoryTableViewController.m in Sources */,
