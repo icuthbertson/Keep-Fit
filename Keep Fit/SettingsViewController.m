@@ -11,6 +11,8 @@
 #import "TestGoalListTableViewController.h"
 #import "DBManager.h"
 #import "TestSettings.h"
+#import "MainTabBarViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface SettingsViewController ()
 
@@ -21,6 +23,13 @@
 @property (nonatomic, strong) DBManager *dbManager; // database manager object.
 - (IBAction)stepsAction:(id)sender;
 - (IBAction)stairsAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIView *settingsView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UISwitch *testingSwitch;
+- (IBAction)testingSwtichAction:(id)sender;
+- (IBAction)saveTestingSettings:(id)sender;
+
+@property MainTabBarViewController *mainTabBarController;
 
 @property TestSettings *settings;
 
@@ -32,9 +41,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    // Set up the scroll view.
+    [self.scrollView setScrollEnabled:YES];
+    [self.scrollView setContentSize:CGSizeMake(320, 568)];
+    [self.scrollView setBackgroundColor:[UIColor lightGrayColor]];
+    
+    self.settingsView.layer.cornerRadius = 5;
+    self.settingsView.layer.masksToBounds = YES;
     
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
+    
+    
+    self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
     
     [self loadFromDB];
     [self setUpView];
@@ -50,6 +69,8 @@
     self.stairsLabel.text = [NSString stringWithFormat:@"%d",self.settings.stairsTime];
     self.stepsStepper.value = self.settings.stepsTime;
     self.stairsStepper.value = self.settings.stairsTime;
+    
+    [self.testingSwitch setOn:[self.mainTabBarController.testing getTesting]];
 }
 
 -(void)loadFromDB {
@@ -123,6 +144,17 @@
 
 - (IBAction)stairsAction:(id)sender {
     self.stairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
+- (IBAction)testingSwtichAction:(id)sender {
+}
+
+- (IBAction)saveTestingSettings:(id)sender {
+    self.settings.stepsTime = [self.stepsLabel.text intValue];
+    self.settings.stairsTime = [self.stairsLabel.text intValue];
+    [self updateSettings];
+    
+    [self.mainTabBarController.testing setTesting:[self.testingSwitch isOn]];
 }
 
 @end

@@ -13,6 +13,7 @@
 
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue; // Segue returning from add view.
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue; // Segue returning from view goal view.
+-(IBAction)unwindFromViewTest:(UIStoryboardSegue *)segue; // Segue returning from view goal view.
 -(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue; // Segue returning from settings view.
 -(IBAction)unwindFromListSelection:(UIStoryboardSegue *)segue; // Segue returning from list selection.
 

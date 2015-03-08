@@ -24,6 +24,8 @@
 		AE2490FC1AA908AC00A6D816 /* bar-chart.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FB1AA908AC00A6D816 /* bar-chart.png */; };
 		AE2490FE1AA908C400A6D816 /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FD1AA908C400A6D816 /* home.png */; };
 		AE2491041AA90B7100A6D816 /* spanner.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2491031AA90B7100A6D816 /* spanner.png */; };
+		AE2491071AA9EC8200A6D816 /* Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2491061AA9EC8200A6D816 /* Testing.m */; };
+		AE24910A1AABBE9A00A6D816 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2491091AABBE9A00A6D816 /* MainTabBarViewController.m */; };
 		AE40A69E1A8946BB000DD45A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A69D1A8946BB000DD45A /* main.m */; };
 		AE40A6A11A8946BB000DD45A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE40A6A01A8946BB000DD45A /* AppDelegate.m */; };
 		AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE40A6A51A8946BB000DD45A /* Main.storyboard */; };
@@ -87,6 +89,10 @@
 		AE2490FB1AA908AC00A6D816 /* bar-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar-chart.png"; sourceTree = "<group>"; };
 		AE2490FD1AA908C400A6D816 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
 		AE2491031AA90B7100A6D816 /* spanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spanner.png; sourceTree = "<group>"; };
+		AE2491051AA9EC8200A6D816 /* Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Testing.h; sourceTree = "<group>"; };
+		AE2491061AA9EC8200A6D816 /* Testing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Testing.m; sourceTree = "<group>"; };
+		AE2491081AABBE9A00A6D816 /* MainTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarViewController.h; sourceTree = "<group>"; };
+		AE2491091AABBE9A00A6D816 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
 		AE40A6981A8946BB000DD45A /* Keep Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Keep Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE40A69C1A8946BB000DD45A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE40A69D1A8946BB000DD45A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -157,6 +163,8 @@
 				AE49D69C1A975F2C00A2C63C /* HistoryTableViewController.m */,
 				AE40A6CA1A89697D000DD45A /* KeepFitGoal.h */,
 				AE40A6CB1A89697D000DD45A /* KeepFitGoal.m */,
+				AE2491081AABBE9A00A6D816 /* MainTabBarViewController.h */,
+				AE2491091AABBE9A00A6D816 /* MainTabBarViewController.m */,
 				AEA0C3991A8BBDFA00647E6E /* ViewGoalViewController.h */,
 				AEA0C39A1A8BBDFA00647E6E /* ViewGoalViewController.m */,
 			);
@@ -189,6 +197,8 @@
 		AE2490C21A9CCC0000A6D816 /* TestingMode */ = {
 			isa = PBXGroup;
 			children = (
+				AE2491051AA9EC8200A6D816 /* Testing.h */,
+				AE2491061AA9EC8200A6D816 /* Testing.m */,
 				AE2490D21A9CEBCB00A6D816 /* ChangeTimeViewController.h */,
 				AE2490D31A9CEBCB00A6D816 /* ChangeTimeViewController.m */,
 				AE2490D81A9CF37700A6D816 /* Schedule.h */,
@@ -412,6 +422,7 @@
 				AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */,
 				AE2490BB1A9CBD5100A6D816 /* ListSelectionViewController.m in Sources */,
 				AE2490D11A9CEBB900A6D816 /* ScheduleViewController.m in Sources */,
+				AE2491071AA9EC8200A6D816 /* Testing.m in Sources */,
 				AE2490DA1A9CF37700A6D816 /* Schedule.m in Sources */,
 				AE2490E71AA4C12C00A6D816 /* TestGoalListTableViewController.m in Sources */,
 				AE2490BE1A9CC6F800A6D816 /* SettingsTabBarViewController.m in Sources */,
@@ -420,6 +431,7 @@
 				AE40A6CC1A89697D000DD45A /* KeepFitGoal.m in Sources */,
 				AE2490F41AA51F4E00A6D816 /* TestStatisticsViewController.m in Sources */,
 				AE2490E91AA4C12C00A6D816 /* TestViewGoalViewController.m in Sources */,
+				AE24910A1AABBE9A00A6D816 /* MainTabBarViewController.m in Sources */,
 				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
 				AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */,
 				AE2490E61AA4C12C00A6D816 /* TestAddGoalViewController.m in Sources */,

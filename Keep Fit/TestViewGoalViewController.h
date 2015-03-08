@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 #import "TestSettings.h"
+#import "Testing.h"
 
 @interface TestViewGoalViewController : UIViewController
 
@@ -17,6 +18,8 @@
 @property NSDate *currentDate;
 @property NSMutableArray *keepFitGoals;
 @property TestSettings *settings;
+
+@property Testing *testing;
 
 -(IBAction)unwindFromChangeTime:(UIStoryboardSegue *)segue;
 -(IBAction)unwindFromSchedule:(UIStoryboardSegue *)segue;
