@@ -7,8 +7,6 @@
 //
 
 #import "SettingsViewController.h"
-#import "TestMenuViewController.h"
-#import "TestGoalListTableViewController.h"
 #import "DBManager.h"
 #import "TestSettings.h"
 #import "MainTabBarViewController.h"

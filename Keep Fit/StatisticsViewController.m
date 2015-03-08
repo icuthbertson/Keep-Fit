@@ -153,6 +153,7 @@
     if ([segue.identifier isEqualToString:@"activityHistory"]) {
         ActivityHistoryTableViewController *destViewController = segue.destinationViewController;
         destViewController.currentDate = self.currentDate;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
 }
 

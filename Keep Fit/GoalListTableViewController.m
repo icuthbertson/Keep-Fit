@@ -14,7 +14,6 @@
 #import "KeepFitGoal.h"
 #import "ListSelectionViewController.h"
 #import "SettingsViewController.h"
-#import "SettingsTabBarViewController.h"
 #import "Testing.h"
 #import "MainTabBarViewController.h"
 #import "TestViewGoalViewController.h"
