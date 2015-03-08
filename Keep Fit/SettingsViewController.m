@@ -12,6 +12,9 @@
 #import "DBManager.h"
 #import "TestSettings.h"
 #import "MainTabBarViewController.h"
+#import "ScheduleViewController.h"
+#import "Schedule.h"
+#import "ChangeTimeViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface SettingsViewController ()
@@ -24,6 +27,7 @@
 - (IBAction)stepsAction:(id)sender;
 - (IBAction)stairsAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UIView *settingsView;
+@property (weak, nonatomic) IBOutlet UIView *scheduleView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UISwitch *testingSwitch;
 - (IBAction)testingSwtichAction:(id)sender;
@@ -41,6 +45,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
+    
     // Set up the scroll view.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 568)];
@@ -49,11 +55,12 @@
     self.settingsView.layer.cornerRadius = 5;
     self.settingsView.layer.masksToBounds = YES;
     
+    self.scheduleView.layer.cornerRadius = 5;
+    self.scheduleView.layer.masksToBounds = YES;
+    [self.scheduleView setFrame:CGRectMake(self.scheduleView.frame.origin.x, self.scheduleView.frame.origin.y, self.scheduleView.frame.size.width, 0.0)];
+    
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
-    
-    
-    self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
     
     [self loadFromDB];
     [self setUpView];
@@ -75,6 +82,17 @@
     self.stairsStepper.value = self.settings.stairsTime;
     
     [self.testingSwitch setOn:[self.mainTabBarController.testing getTesting]];
+    
+    if ([self.mainTabBarController.testing getTesting]) {
+        [UIView animateWithDuration:.1f animations:^{
+            [self.scheduleView setFrame:CGRectMake(self.scheduleView.frame.origin.x, self.scheduleView.frame.origin.y, self.scheduleView.frame.size.width, 125.0)];
+        }];
+    }
+    else {
+        [UIView animateWithDuration:.1f animations:^{
+            [self.scheduleView setFrame:CGRectMake(self.scheduleView.frame.origin.x, self.scheduleView.frame.origin.y, self.scheduleView.frame.size.width, 0.0)];
+        }];
+    }
 }
 
 -(void)loadFromDB {
@@ -125,19 +143,49 @@
     }
 }
 
+-(IBAction)unwindFromScheduleActivityTest:(UIStoryboardSegue *)segue {
+    ScheduleViewController *source = [segue sourceViewController];
+    
+    if (source.schedule == nil) return;
+    
+    [self storeGoalStatisticsToDB:source.schedule];
+}
+
+-(IBAction)unwindFromChangeTimeActivityTest:(UIStoryboardSegue *)segue {
+    ChangeTimeViewController *source = [segue sourceViewController];
+    // Update the persisted time in the database.
+    
+    if (source.changeDate == nil) return;
+    
+    NSString *dateQuery = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[source.changeDate timeIntervalSince1970]];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:dateQuery];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"testingMode"]) {
-        self.settings.stepsTime = [self.stepsLabel.text intValue];
-        self.settings.stairsTime = [self.stairsLabel.text intValue];
-        [self updateSettings];
-        TestMenuViewController *destViewController = segue.destinationViewController;
-        // Pass the goal to be veiewed.
-        destViewController.settings = self.settings;
+    if ([segue.identifier isEqualToString:@"changeTimeActivity"]) {
+        ChangeTimeViewController *destViewController = segue.destinationViewController;
+        destViewController.currentTime = [self.mainTabBarController.testing getTime];
+        destViewController.hidesBottomBarWhenPushed = YES;
+    }
+    else if ([segue.identifier isEqualToString:@"scheduleActivity"]) {
+        ScheduleViewController *destViewController = segue.destinationViewController;
+        destViewController.currentTime = [self.mainTabBarController.testing getTime];
+        destViewController.scheduleGoal = NO;
+        destViewController.hidesBottomBarWhenPushed = YES;
     }
 }
 
@@ -151,14 +199,29 @@
 }
 
 - (IBAction)testingSwtichAction:(id)sender {
+    [self.mainTabBarController.testing setTesting:[self.testingSwitch isOn]];
+    [self setUpView];
 }
 
 - (IBAction)saveTestingSettings:(id)sender {
     self.settings.stepsTime = [self.stepsLabel.text intValue];
     self.settings.stairsTime = [self.stairsLabel.text intValue];
     [self updateSettings];
+}
+
+-(void) storeGoalStatisticsToDB:(Schedule*) schedule {
+    NSString *query;
     
-    [self.mainTabBarController.testing setTesting:[self.testingSwitch isOn]];
+    query = [NSString stringWithFormat:@"insert into testStatistics values(null, '%f', '%f', '%d', '%d')", [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
 }
 
 @end
