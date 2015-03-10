@@ -210,6 +210,7 @@
             [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
+            self.progressSteps = 0;
         }
     }
     else if (self.viewGoal.goalType == Stairs) {
@@ -223,6 +224,7 @@
             [self updateView];
             self.stepperStairsLabel.text = @"0";
             self.addStairsStepper.value = 0.0;
+            self.progressStairs = 0;
         }
     }
     else if (self.viewGoal.goalType == Both) {
@@ -243,6 +245,8 @@
             self.addStepper.value = 0.0;
             self.stepperStairsLabel.text = @"0";
             self.addStairsStepper.value = 0.0;
+            self.progressSteps = 0;
+            self.progressStairs = 0;
         }
     }
 }
@@ -407,7 +411,7 @@
     }
     
     NSLog(@"%d - %d",self.progressSteps, self.progressStairs);
-    query = [NSString stringWithFormat:@"update histroy set statusEndDate='%f', progressSteps='%d', progressStairs='%d' where historyID=%ld", [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    query = [NSString stringWithFormat:@"update history set statusEndDate='%f', progressSteps='%d', progressStairs='%d' where historyID=%ld", [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
