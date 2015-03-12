@@ -27,6 +27,13 @@
     return @"history";
 }
 
+-(NSString *)getStatisticsDBName {
+    if (testing) {
+        return @"testStatistics";
+    }
+    return @"statistics";
+}
+
 -(NSDate *)getTime {
     if (testing) {
         return currentTime;

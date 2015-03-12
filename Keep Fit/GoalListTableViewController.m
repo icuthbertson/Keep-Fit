@@ -126,15 +126,6 @@
     [self loadFromDB];
 }
 
-// Returning from view goal view.
--(IBAction)unwindFromViewTest:(UIStoryboardSegue *)segue {
-    // Update testing object from the goal view.
-    TestViewGoalViewController *source = [segue sourceViewController];
-    self.mainTabBarController.testing = source.testing;
-    // Reload db data incase of changes.
-    [self loadFromDB];
-}
-
 // Returning from settings view.
 -(IBAction)unwindFromSettings:(UIStoryboardSegue *)segue {
     // Update testing value.
@@ -427,18 +418,6 @@
     return 60.0;
 }
 
-#pragma mark - Table view delegate
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.mainTabBarController.testing getTesting] == NO) {
-        [self performSegueWithIdentifier: @"showViewGoal" sender: self];
-    }
-    else {
-        [self performSegueWithIdentifier: @"showViewGoalTest" sender: self];
-    }
-    
-}
-
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -482,17 +461,6 @@
     if ([segue.identifier isEqualToString:@"showViewGoal"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         ViewGoalViewController *destViewController = segue.destinationViewController;
-        // Pass the goal to be veiewed.
-        destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
-        // Pass the list of goals.
-        destViewController.keepFitGoals = self.keepFitGoals;
-        // Pass the testing object.
-        destViewController.testing = self.mainTabBarController.testing;
-        destViewController.hidesBottomBarWhenPushed = YES;
-    }
-    else if ([segue.identifier isEqualToString:@"showViewGoalTest"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        TestViewGoalViewController *destViewController = segue.destinationViewController;
         // Pass the goal to be veiewed.
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
         // Pass the list of goals.

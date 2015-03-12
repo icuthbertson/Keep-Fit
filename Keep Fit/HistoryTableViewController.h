@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 
+#import "Testing.h"
+
 @interface HistoryTableViewController : UITableViewController
 
 @property KeepFitGoal *viewHistoryGoal; // Goal to show the history for.
+
+@property Testing *testing;
 
 @end
