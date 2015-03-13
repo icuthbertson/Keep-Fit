@@ -66,7 +66,7 @@
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    NSString *query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.mainTabBarController.testing.getMainpageStatsDBName, [self.mainTabBarController.testing.getTime timeIntervalSince1970]];
+    NSString *query = [NSString stringWithFormat:@"select * from %@", self.mainTabBarController.testing.getMainpageStatsDBName/*, [self.mainTabBarController.testing.getTime timeIntervalSince1970]*/];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];

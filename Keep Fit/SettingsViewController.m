@@ -214,6 +214,11 @@
 -(void) storeGoalStatisticsToDB:(Schedule*) schedule {
     NSString *query;
     
+    NSLog(@"Schedule Start Date: %@",schedule.date);
+    NSLog(@"Schedule End Date: %@",schedule.endDate);
+    NSLog(@"Schedule Steps: %d",schedule.numSteps);
+    NSLog(@"Schedule Stairs: %d",schedule.numStairs);
+    
     query = [NSString stringWithFormat:@"insert into activities values(null, '%f', '%f', '%d', '%d')", [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];

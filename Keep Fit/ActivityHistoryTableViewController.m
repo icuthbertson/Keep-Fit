@@ -41,7 +41,7 @@
 -(void)loadFromDB {
     self.activityHistory = [[NSMutableArray alloc] init];
     
-    NSString *query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.testing.getMainpageStatsDBName, [self.testing.getTime timeIntervalSince1970]];
+    NSString *query = [NSString stringWithFormat:@"select * from %@", self.testing.getMainpageStatsDBName/*, [self.testing.getTime timeIntervalSince1970]*/];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
