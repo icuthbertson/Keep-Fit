@@ -28,7 +28,6 @@
 @property NSInteger totalStairs;
 @property double startDate;
 @property double endDate;
-@property NSDate *currentDate;
 
 @property MainTabBarViewController *mainTabBarController;
 
@@ -62,40 +61,12 @@
 }
 
 -(void)loadFromDB {
-    self.currentDate = [[NSDate alloc] init];
-    NSString *dateQuery = @"select * from testDate";
-    
-    NSArray *currentDateResults;
-    currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
-    
-    if (currentDateResults.count == 0) {
-        self.currentDate = [NSDate date];
-        
-        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [[NSDate date] timeIntervalSince1970]];
-        // Execute the query.
-        [self.dbManager executeQuery:dateQuery];
-        
-        if (self.dbManager.affectedRows != 0) {
-            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        }
-        else {
-            NSLog(@"Could not execute the query.");
-        }
-    }
-    else {
-        NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
-        self.currentDate = [NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]];
-        NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
-        NSLog(@"Current Time From DB: %@",self.currentDate);
-        
-    }
-    
     self.totalSteps = 0;
     self.totalStairs = 0;
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    NSString *query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.mainTabBarController.testing.getMainpageStatsDBName, [self.currentDate timeIntervalSince1970]];
+    NSString *query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.mainTabBarController.testing.getMainpageStatsDBName, [self.mainTabBarController.testing.getTime timeIntervalSince1970]];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
@@ -106,7 +77,7 @@
         NSInteger indexOfStairs = [self.dbManager.arrColumnNames indexOfObject:@"stairs"];
         
         self.startDate = [[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate] doubleValue];
-        self.endDate = [self.currentDate timeIntervalSince1970];
+        self.endDate = [self.mainTabBarController.testing.getTime timeIntervalSince1970];
         
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
@@ -157,7 +128,7 @@
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"activityHistory"]) {
         ActivityHistoryTableViewController *destViewController = segue.destinationViewController;
-        destViewController.currentDate = self.currentDate;
+        destViewController.testing = self.mainTabBarController.testing;
         destViewController.hidesBottomBarWhenPushed = YES;
     }
 }

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Testing.h"
 
 @interface ActivityHistoryTableViewController : UITableViewController
 
-@property NSDate *currentDate;
+@property Testing *testing;
 
 @end

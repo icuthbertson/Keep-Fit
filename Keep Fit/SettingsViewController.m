@@ -185,7 +185,7 @@
     }
     else if ([segue.identifier isEqualToString:@"scheduleActivity"]) {
         ScheduleViewController *destViewController = segue.destinationViewController;
-        destViewController.currentTime = [self.mainTabBarController.testing getTime];
+        destViewController.testing = self.mainTabBarController.testing;
         destViewController.scheduleGoal = NO;
         destViewController.hidesBottomBarWhenPushed = YES;
     }
@@ -229,6 +229,7 @@
     
     // Execute the query.
     [self.dbManager executeQuery:dateQuery];
+    [self.mainTabBarController.testing setTime:schedule.endDate];
     
     if (self.dbManager.affectedRows != 0) {
         NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);

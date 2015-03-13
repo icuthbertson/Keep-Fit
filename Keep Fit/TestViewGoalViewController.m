@@ -295,7 +295,7 @@
     }
     else if ([segue.identifier isEqualToString:@"scheduleActivity"]) {
         ScheduleViewController *destViewController = segue.destinationViewController;
-        destViewController.currentTime = self.currentDate;
+        //destViewController.currentTime = self.currentDate;
         destViewController.viewGoal = self.viewGoal;
         destViewController.scheduleGoal = YES;
     }

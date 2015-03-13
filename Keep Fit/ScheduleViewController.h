@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Schedule.h"
 #import "KeepFitGoal.h"
+#import "Testing.h"
 
 @interface ScheduleViewController : UIViewController
 
 @property Schedule *schedule;
-@property NSDate *currentTime;
+@property Testing *testing;
 @property KeepFitGoal *viewGoal;
 @property BOOL scheduleGoal;
 

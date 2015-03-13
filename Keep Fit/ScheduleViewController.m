@@ -52,10 +52,10 @@
     self.stepsLabel.text = @"0";
     self.stairsLabel.text = @"0";
     
-    [self.scheduleDatePicker setMinimumDate:self.currentTime];
-    [self.scheduleDatePicker setDate:self.currentTime];
-    [self.scheduleEndDatePicker setMinimumDate:self.currentTime];
-    [self.scheduleEndDatePicker setDate:self.currentTime];
+    [self.scheduleDatePicker setMinimumDate:self.testing.getTime];
+    [self.scheduleDatePicker setDate:self.testing.getTime];
+    [self.scheduleEndDatePicker setMinimumDate:self.testing.getTime];
+    [self.scheduleEndDatePicker setDate:self.testing.getTime];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,7 +116,7 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (sender == self.saveButton)  {
-        if ([[self.scheduleEndDatePicker.date earlierDate:self.currentTime]isEqualToDate: self.scheduleEndDatePicker.date]) {
+        if ([[self.scheduleEndDatePicker.date earlierDate:self.testing.getTime]isEqualToDate: self.scheduleEndDatePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Schedule" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -126,7 +126,7 @@
             [alert show];
             return NO;
         }
-        if ([[self.scheduleDatePicker.date earlierDate:self.currentTime]isEqualToDate: self.scheduleDatePicker.date]) {
+        if ([[self.scheduleDatePicker.date earlierDate:self.testing.getTime]isEqualToDate: self.scheduleDatePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Schedule" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
