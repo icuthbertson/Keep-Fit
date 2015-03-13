@@ -34,6 +34,13 @@
     return @"statistics";
 }
 
+-(NSString *)getMainpageStatsDBName {
+    if (testing) {
+        return @"activities";
+    }
+    return @"statistics";
+}
+
 -(NSDate *)getTime {
     if (testing) {
         return currentTime;

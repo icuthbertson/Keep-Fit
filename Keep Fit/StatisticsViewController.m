@@ -48,7 +48,12 @@
     self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
     
     [self loadFromDB];
-    [self SetUpView];
+    [self setUpView];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self loadFromDB];
+    [self setUpView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,7 +95,7 @@
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    NSString *query = [NSString stringWithFormat:@"select * from testStatistics where endTime < '%f'",[self.currentDate timeIntervalSince1970]];
+    NSString *query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.mainTabBarController.testing.getMainpageStatsDBName, [self.currentDate timeIntervalSince1970]];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
@@ -112,7 +117,7 @@
     NSLog(@"%@",statResults);
 }
 
--(void)SetUpView {
+-(void)setUpView {
     double day = 86400.0;
     double week = 604800.0;
     double month = 2630000.0;

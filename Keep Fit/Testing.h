@@ -13,6 +13,7 @@
 -(NSString *)getGoalDBName;
 -(NSString *)getHistoryDBName;
 -(NSString *)getStatisticsDBName;
+-(NSString *)getMainpageStatsDBName;
 -(NSDate *)getTime;
 -(void)setTime:(NSDate *) changeDate;
 -(BOOL)getTesting;

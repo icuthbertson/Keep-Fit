@@ -214,9 +214,21 @@
 -(void) storeGoalStatisticsToDB:(Schedule*) schedule {
     NSString *query;
     
-    query = [NSString stringWithFormat:@"insert into testStatistics values(null, '%f', '%f', '%d', '%d')", [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
+    query = [NSString stringWithFormat:@"insert into activities values(null, '%f', '%f', '%d', '%d')", [schedule.date timeIntervalSince1970], [schedule.endDate timeIntervalSince1970], schedule.numSteps, schedule.numStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    NSString *dateQuery = [NSString stringWithFormat:@"update testDate set currentTime='%f'",[schedule.endDate timeIntervalSince1970]];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:dateQuery];
     
     if (self.dbManager.affectedRows != 0) {
         NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);

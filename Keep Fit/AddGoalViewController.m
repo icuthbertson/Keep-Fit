@@ -39,8 +39,8 @@
     
     // Set the minimum date of the date pickers to the current time
     // or stored time from the Testing object.
-    [self.dateStartPicker setMinimumDate:[self.testing getTime]];
-    [self.datePicker setMinimumDate:[self.testing getTime]];
+    [self.dateStartPicker setMinimumDate:[NSDate date]];
+    [self.datePicker setMinimumDate:[NSDate date]];
     
     // Enable default steppers enabled (steps enabled, stairs disabled)
     self.stepsStepper.userInteractionEnabled = YES;
@@ -163,7 +163,7 @@
     self.goal.goalCompletionDate = self.datePicker.date;
     
     // Set the creation date of the goal to the current date.
-    self.goal.goalCreationDate = [self.testing getTime];
+    self.goal.goalCreationDate = [NSDate date];
     
     // Set the coversion type of the goal to that of the type selector.
     self.goal.goalConversion = 0;
@@ -193,7 +193,7 @@
             return NO;
         }
         // If the end date/time is before the current date/time alert with message and return NO.
-        if ([[self.datePicker.date earlierDate:[self.testing getTime]]isEqualToDate: self.datePicker.date]) {
+        if ([[self.datePicker.date earlierDate:[NSDate date]]isEqualToDate: self.datePicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
@@ -205,7 +205,7 @@
             return NO;
         }
         // If the start date/time is before the current date/time alert with message and return NO.
-        if ([[self.dateStartPicker.date earlierDate:[self.testing getTime]]isEqualToDate: self.dateStartPicker.date]) {
+        if ([[self.dateStartPicker.date earlierDate:[NSDate date]]isEqualToDate: self.dateStartPicker.date]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;

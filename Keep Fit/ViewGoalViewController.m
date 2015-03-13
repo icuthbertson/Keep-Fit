@@ -58,10 +58,28 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *testTrackProgress;
 @property (weak, nonatomic) IBOutlet UILabel *trackLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *trackProgress;
+@property (weak, nonatomic) IBOutlet UILabel *stepsPerDayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stepsPerWeekLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stepsPerMonthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stepsPerYearLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsPerDayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsPerWeekLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsPerMonthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsPerYearLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stepsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stairsTitleLabel;
 
 @property NSInteger progressSteps;
 @property NSInteger progressStairs;
 @property BOOL isRecording; // Holds bool to check if goal is currently recording.
+
+@property NSInteger totalSteps;
+@property NSInteger totalStairs;
+@property double startDate;
+@property double endDate;
+
+@property double recordingStartTime;
+@property double recordingEndTime;
 
 @end
 
@@ -156,6 +174,91 @@
         NSLog(@"Steps Time: %d",self.settings.stepsTime);
         NSLog(@"Stairs Time: %d",self.settings.stairsTime);
     }
+    
+    //load stats
+    self.totalSteps = 0;
+    self.totalStairs = 0;
+    self.startDate = 1.0;
+    self.endDate = 1.0;
+    
+    query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.testing.getStatisticsDBName, [[NSDate date] timeIntervalSince1970]];
+    
+    NSArray *statResults;
+    statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    if ([statResults count] > 0) {
+        NSInteger indexOfStartDate = [self.dbManager.arrColumnNames indexOfObject:@"startTime"];
+        NSInteger indexOfSteps = [self.dbManager.arrColumnNames indexOfObject:@"steps"];
+        NSInteger indexOfStairs = [self.dbManager.arrColumnNames indexOfObject:@"stairs"];
+        
+        self.startDate = [[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate] doubleValue];
+        self.endDate = [[NSDate date] timeIntervalSince1970];
+        
+        for (int i=0; i<[statResults count]; i++) {
+            self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
+            self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
+        }
+    }
+    [self setUpStats];
+}
+
+-(void)setUpStats {
+    double day = 86400.0;
+    double week = 604800.0;
+    double month = 2630000.0;
+    double year = 31560000.0;
+    
+    double peroid = (self.endDate - self.startDate);
+    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:peroid]);
+    
+    double dayStepsAverage = (day/peroid)*self.totalSteps;
+    double weekStepsAverage = (week/peroid)*self.totalSteps;
+    double monthStepsAverage = (month/peroid)*self.totalSteps;
+    double yearStepsAverage = (year/peroid)*self.totalSteps;
+    
+    double dayStairsAverage = (day/peroid)*self.totalStairs;
+    double weekStairsAverage = (week/peroid)*self.totalStairs;
+    double monthStairsAverage = (month/peroid)*self.totalStairs;
+    double yearStairsAverage = (year/peroid)*self.totalStairs;
+    
+    switch (self.viewGoal.goalType) {
+        case Steps:
+            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStepsAverage];
+            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStepsAverage];
+            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStepsAverage];
+            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStepsAverage];
+            self.stairsTitleLabel.text = @"";
+            self.stairsPerDayLabel.text = @"";
+            self.stairsPerWeekLabel.text = @"";
+            self.stairsPerMonthLabel.text = @"";
+            self.stairsPerYearLabel.text = @"";
+            break;
+        case Stairs:
+            self.stairsTitleLabel.text = @"";
+            self.stepsPerDayLabel.text = @"";
+            self.stepsPerWeekLabel.text = @"";
+            self.stepsPerMonthLabel.text = @"";
+            self.stepsPerYearLabel.text = @"";
+            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStairsAverage];
+            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStairsAverage];
+            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStairsAverage];
+            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
+            break;
+        case Both:
+            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStepsAverage];
+            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStepsAverage];
+            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStepsAverage];
+            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStepsAverage];
+            
+            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStairsAverage];
+            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStairsAverage];
+            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStairsAverage];
+            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
+            break;
+        default:
+            break;
+    }
+    
 }
 
 // Method to set up outlets of view to show data of the goal.
@@ -328,11 +431,15 @@
             if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
+            self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
+            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressSteps*self.settings.stepsTime;
             [self storeGoalStatusChangeToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
             self.progressSteps = 0;
+            [self loadFromDB];
         }
     }
     else if (self.viewGoal.goalType == Stairs) {
@@ -342,11 +449,15 @@
             if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
+            self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
+            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stairsTime;
             [self storeGoalStatusChangeToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperStairsLabel.text = @"0";
             self.addStairsStepper.value = 0.0;
             self.progressStairs = 0;
+            [self loadFromDB];
         }
     }
     else if (self.viewGoal.goalType == Both) {
@@ -361,7 +472,15 @@
             if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
+            self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
+            if (self.progressStairs > 0) {
+                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stairsTime;
+            }
+            else {
+                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stepsTime;
+            }
             [self storeGoalStatusChangeToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
@@ -369,16 +488,18 @@
             self.addStairsStepper.value = 0.0;
             self.progressSteps = 0;
             self.progressStairs = 0;
+            [self loadFromDB];
         }
     }
 }
 
 - (IBAction)setActiveButtonTest:(id)sender {
-    /**********************************set active*****************************************/
+    /**********************************start recording*****************************************/
     if (!self.isRecording) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Recording" message:@"This goal is now recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = YES;
+        self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
         [self storeGoalStatusChangeToDB];
         [self hideAndDisableLeftNavigationItem];
         //[self hideAndDisableRightNavigationItem];
@@ -389,12 +510,14 @@
         NSLog(@"Steps Time: %d",self.settings.stepsTime);
         NSLog(@"Stairs Time: %d",self.settings.stairsTime);
         [self startBackgroundThread];
-    } /**********************************set pending*****************************************/
+    } /**********************************stop recording*****************************************/
     else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now not recording" message:@"This goal is now not recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = NO;
+        self.recordingEndTime = [[NSDate date] timeIntervalSince1970];
         [self storeGoalStatusChangeToDB];
+        [self storeGoalStatisticsToDB];
         [self showAndEnableLeftNavigationItem];
         //[self showAndEnableRightNavigationItem];
         [self.activeOutletButtonTest setTitle:@"Start" forState:UIControlStateNormal];
@@ -694,6 +817,21 @@
     }
     
     query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+}
+
+-(void) storeGoalStatisticsToDB {
+    NSString *query;
+    
+    query = [NSString stringWithFormat:@"insert into %@ values(null, %d, '%f', '%f', '%d', '%d')", self.testing.getStatisticsDBName, self.viewGoal.goalID, self.recordingStartTime, self.recordingEndTime, self.progressSteps, self.progressStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
