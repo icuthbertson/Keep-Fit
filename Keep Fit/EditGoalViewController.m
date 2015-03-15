@@ -24,6 +24,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *numStairsLabel;
 @property (weak, nonatomic) IBOutlet UIStepper *stepsStepper;
 @property (weak, nonatomic) IBOutlet UIStepper *stairsStepper;
+- (IBAction)conversionSelector:(id)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *conversionTypeSelector;
+@property (weak, nonatomic) IBOutlet UILabel *numStepsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
 
 @end
 
@@ -62,10 +66,32 @@
         default:
             break;
     }
-    self.numStepsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountSteps];
-    self.stepsStepper.value = [self.numStepsLabel.text intValue];
-    self.numStairsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
-    self.stairsStepper.value = [self.numStairsLabel.text intValue];
+    
+    if (self.editGoal.goalConversion == StepsStairs) { //steps and stairs
+        self.numStepsTitleLabel.text = @"Number of Steps";
+        self.numStairsTitleLabel.text = @"Number of Stair";
+        self.numStepsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountSteps];
+        self.stepsStepper.value = [self.numStepsLabel.text intValue];
+        self.numStairsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
+        self.stairsStepper.value = [self.numStairsLabel.text intValue];
+    }
+    else if (self.editGoal.goalConversion == Imperial) { //imperial
+        self.numStepsTitleLabel.text = @"Number of Miles to walk";
+        self.numStairsTitleLabel.text = @"Number of Feet to climb";
+        self.numStepsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountSteps/[[self.editGoal.conversionTable objectAtIndex:1] doubleValue]];
+        self.stepsStepper.value = [self.numStepsLabel.text intValue];
+        self.numStairsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountStairs/[[self.editGoal.conversionTable objectAtIndex:3] doubleValue]];
+        self.stairsStepper.value = [self.numStairsLabel.text intValue];
+    }
+    else { //metric
+        self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+        self.numStairsTitleLabel.text = @"Number of Meters to climb";
+        self.numStepsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountSteps/[[self.editGoal.conversionTable objectAtIndex:2] doubleValue]];
+        self.stepsStepper.value = [self.numStepsLabel.text intValue];
+        self.numStairsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountStairs/[[self.editGoal.conversionTable objectAtIndex:4] doubleValue]];
+        self.stairsStepper.value = [self.numStairsLabel.text intValue];
+    }
+    
     // Set the date pickers to be active depending on the status of the goal.
     self.editTitleField.userInteractionEnabled = NO;
     if (self.editGoal.goalStatus == Active) {
@@ -75,6 +101,7 @@
         self.editDateField.userInteractionEnabled = NO;
         self.editStartDateField.userInteractionEnabled = NO;
     }
+    
     [self.editStartDateField setDate:self.editGoal.goalStartDate];
     [self.editDateField setDate:self.editGoal.goalCompletionDate];
 }
@@ -158,12 +185,24 @@
     // If the steps amount is different set to the new value.
     if (self.editGoal.goalAmountSteps != [self.numStepsLabel.text intValue]) {
         self.editGoal.goalAmountSteps = [self.numStepsLabel.text intValue];
+        if (self.conversionTypeSelector.selectedSegmentIndex == 1) {
+            self.editGoal.goalAmountSteps = self.editGoal.goalAmountSteps*2112; // to miles
+        }
+        else if (self.conversionTypeSelector.selectedSegmentIndex == 2) {
+            self.editGoal.goalAmountSteps = self.editGoal.goalAmountSteps*1312; // to km
+        }
         NSLog(@"Steps - Save: %ld",(long)self.editGoal.goalAmountSteps);
         self.wasEdit = YES;
     }
     // If the stairs amount is different set to the new value.
     if (self.editGoal.goalAmountStairs != [self.numStairsLabel.text intValue]) {
         self.editGoal.goalAmountStairs = [self.numStairsLabel.text intValue];
+        if (self.conversionTypeSelector.selectedSegmentIndex == 1) {
+            self.editGoal.goalAmountStairs = self.editGoal.goalAmountStairs*1.385; // to feet
+        }
+        else if (self.conversionTypeSelector.selectedSegmentIndex == 2) {
+            self.editGoal.goalAmountStairs = self.editGoal.goalAmountStairs*4.545; // to meters
+        }
         NSLog(@"Stairs - Save: %ld",(long)self.editGoal.goalAmountStairs);
         self.wasEdit = YES;
     }
@@ -279,6 +318,24 @@
         }
     }
     return YES;
+}
+
+- (IBAction)conversionSelector:(id)sender {
+    if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps and stairs
+        self.editGoal.goalConversion = StepsStairs;
+        self.numStepsTitleLabel.text = @"Number of Steps";
+        self.numStairsTitleLabel.text = @"Number of Stair";
+    }
+    else if (self.conversionTypeSelector.selectedSegmentIndex == 1) { //imperial
+        self.editGoal.goalConversion = Imperial;
+        self.numStepsTitleLabel.text = @"Number of Miles to walk";
+        self.numStairsTitleLabel.text = @"Number of Feet to climb";
+    }
+    else { //metric
+        self.editGoal.goalConversion = Metric;
+        self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+        self.numStairsTitleLabel.text = @"Number of Meters to climb";
+    }
 }
 
 @end

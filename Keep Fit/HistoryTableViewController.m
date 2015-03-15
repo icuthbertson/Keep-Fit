@@ -119,7 +119,15 @@
             break;
         case Active:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
-                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Stairs: %d", history.progressSteps, history.progressStairs];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Kilometers: %.2f Meters: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])];
+                }
             }
             else {
                 cell.textLabel.text = [NSString stringWithFormat:@"Active"];
@@ -130,7 +138,15 @@
             break;
         case Overdue:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
-                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Stairs: %d", history.progressSteps, history.progressStairs];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Kilometers: %.2f Meters: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])];
+                }
             }
             else {
                 cell.textLabel.text = [NSString stringWithFormat:@"Overdue"];
