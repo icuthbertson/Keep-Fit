@@ -69,8 +69,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *stepsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stairsTitleLabel;
 
-@property NSInteger progressSteps;
-@property NSInteger progressStairs;
+@property double progressSteps;
+@property double progressStairs;
 @property BOOL isRecording; // Holds bool to check if goal is currently recording.
 
 @property NSInteger totalSteps;
@@ -323,35 +323,82 @@
             break;
     }
     
+    NSString *stepsName;
+    NSString *stairsName;
+    NSInteger conversionIndexSteps;
+    NSInteger conversionIndexStairs;
+    
     // Depending on the type of the goal set the goal type label, the progress label and the progress bar accordingly.
     switch (self.viewGoal.goalType) {
         case Steps:
             self.addStairsStepper.userInteractionEnabled = NO;
             self.viewType.text = [NSString stringWithFormat:@"Steps"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stepsName = @"Steps";
+                conversionIndexSteps = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stepsName = @"Miles";
+                conversionIndexSteps = 1;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stepsName = @"Kilometers";
+                conversionIndexSteps = 2;
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+            self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+            self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             break;
         case Stairs:
             self.addStepper.userInteractionEnabled = NO;
             self.viewType.text = [NSString stringWithFormat:@"Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stairsName = @"Stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stairsName= @"Feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stairsName = @"Meters";
+                conversionIndexStairs = 4;
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             break;
         case Both:
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stepsName = @"Steps";
+                conversionIndexSteps = 0;
+                stairsName = @"Stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stepsName = @"Miles";
+                conversionIndexSteps = 1;
+                stairsName= @"Feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stepsName = @"Kilometers";
+                conversionIndexSteps = 2;
+                stairsName = @"Meters";
+                conversionIndexStairs = 4;
+            }
             self.viewType.text = [NSString stringWithFormat:@"Steps and Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.viewProgressBar setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             break;
         default:
@@ -428,7 +475,7 @@
         if ([self.stepperLabel.text intValue] > 0) {
             self.progressSteps = [self.stepperLabel.text intValue];
             self.viewGoal.goalProgressSteps += self.progressSteps;
-            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
+            if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
@@ -446,7 +493,7 @@
         if ([self.stepperStairsLabel.text intValue] > 0) {
             self.progressStairs = [self.stepperStairsLabel.text intValue];
             self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
+            if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
@@ -466,10 +513,10 @@
             self.progressStairs = [self.stepperStairsLabel.text intValue];
             self.viewGoal.goalProgressSteps += self.progressSteps;
             self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
+            if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
-            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
+            if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
@@ -567,7 +614,7 @@
 
 -(void) takeStep {
     NSLog(@"Take Step");
-    if (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps) {
+    if (self.viewGoal.goalAmountSteps > self.viewGoal.goalProgressSteps) {
         self.viewGoal.goalProgressSteps++;
         self.progressSteps++;
         [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
@@ -575,7 +622,7 @@
     else {
         [timerStep invalidate];
         timerStep = nil;
-        if ((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs)) {
+        if ((self.viewGoal.goalAmountSteps >= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs >= self.viewGoal.goalProgressStairs)) {
             [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
             [self cancelBackgroundThread];
         }
@@ -584,7 +631,7 @@
 
 -(void) takeStair {
     NSLog(@"Take Stair");
-    if (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs) {
+    if (self.viewGoal.goalAmountStairs > self.viewGoal.goalProgressStairs) {
         self.viewGoal.goalProgressStairs++;
         self.progressStairs++;
         [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
@@ -592,7 +639,7 @@
     else {
         [timerStair invalidate];
         timerStair = nil;
-        if ((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs)) {
+        if ((self.viewGoal.goalAmountSteps >= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs >= self.viewGoal.goalProgressStairs)) {
             [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
             [self cancelBackgroundThread];
         }
@@ -614,19 +661,37 @@
 
 -(void) updateView {
     NSLog(@"Update View");
+    
+    NSString *stepsName;
+    NSString *stairsName;
+    NSInteger conversionIndexSteps;
+    NSInteger conversionIndexStairs;
+    
     switch (self.viewGoal.goalType) {
         case Steps:
             if (self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) {
                 [self completedView];
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stepsName = @"Steps";
+                conversionIndexSteps = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stepsName = @"Miles";
+                conversionIndexSteps = 1;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stepsName = @"Kilometers";
+                conversionIndexSteps = 2;
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             if (self.testing.getTesting) {
-                self.testTrackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+                self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
                 [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             }
             else {
-                self.trackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps];
+                self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
                 [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             }
             break;
@@ -634,14 +699,26 @@
             if (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs) {
                 [self completedView];
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stairsName = @"Stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stairsName= @"Feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stairsName = @"Meters";
+                conversionIndexStairs = 4;
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             if (self.testing.getTesting) {
-                self.testTrackLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+                self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
                 [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             }
             else {
-                self.trackLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld",(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+                self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
                 [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             }
             break;
@@ -649,14 +726,32 @@
             if (((self.viewGoal.goalAmountSteps == self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs == self.viewGoal.goalProgressStairs))) {
                 [self completedView];
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+            if (self.viewGoal.goalConversion == StepsStairs) {
+                stepsName = @"Steps";
+                conversionIndexSteps = 0;
+                stairsName = @"Stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.viewGoal.goalConversion == Imperial) {
+                stepsName = @"Miles";
+                conversionIndexSteps = 1;
+                stairsName= @"Feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.viewGoal.goalConversion == Metric) {
+                stepsName = @"Kilometers";
+                conversionIndexSteps = 2;
+                stairsName = @"Meters";
+                conversionIndexStairs = 4;
+            }
+            self.viewProgress.text = [NSString stringWithFormat:@"%@: %f/%f  %@: %f/%f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.viewProgressBar setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             if (self.testing.getTesting) {
-                self.testTrackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+                self.testTrackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
                 [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             }
             else {
-                self.trackLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld  Stairs: %ld/%ld",(long)self.viewGoal.goalProgressSteps,(long)self.viewGoal.goalAmountSteps,(long)self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalAmountStairs];
+                self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
                 [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             }
             break;
@@ -664,7 +759,7 @@
             break;
     }
     NSString *query;
-    query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalProgressSteps='%d', goalProgressStairs='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
+    query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalProgressSteps='%f', goalProgressStairs='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -804,8 +899,8 @@
         NSLog(@"Could not execute the query.");
     }
     
-    NSLog(@"%d - %d",self.progressSteps, self.progressStairs);
-    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f', progressSteps='%d', progressStairs='%d' where historyID=%ld", self.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    NSLog(@"%f - %f",self.progressSteps, self.progressStairs);
+    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f', progressSteps='%f', progressStairs='%f' where historyID=%ld", self.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -831,7 +926,7 @@
 -(void) storeGoalStatisticsToDB {
     NSString *query;
     
-    query = [NSString stringWithFormat:@"insert into %@ values(null, %d, '%f', '%f', '%d', '%d')", self.testing.getStatisticsDBName, self.viewGoal.goalID, self.recordingStartTime, self.recordingEndTime, self.progressSteps, self.progressStairs];
+    query = [NSString stringWithFormat:@"insert into %@ values(null, %d, '%f', '%f', '%f', '%f')", self.testing.getStatisticsDBName, self.viewGoal.goalID, self.recordingStartTime, self.recordingEndTime, self.progressSteps, self.progressStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

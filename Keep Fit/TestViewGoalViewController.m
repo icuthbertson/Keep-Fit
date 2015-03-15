@@ -199,31 +199,31 @@
                     // still in middle of scheduled progress.
                     if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate])) {
                         NSLog(@"Middle");
-                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"OLD MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                         loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                         loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970] - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"NEW MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     }// second half of scheduled progress.
                     else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:tempStartDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate])) {
                         NSLog(@"Second Half");
-                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"OLD MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                         loopGoal.goalProgressSteps += (tempSteps * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
                         loopGoal.goalProgressStairs += (tempStairs * ((endDate - [self.currentDate timeIntervalSince1970])/(endDate-startDate)));
-                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"NEW MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     }// first half of scheduled progress.
                     else if (([[changeDate earlierDate:tempEndDate]isEqualToDate:changeDate]) && ([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate])) {
                         NSLog(@"First Half");
-                        NSLog(@"OLD MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"OLD MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                         loopGoal.goalProgressSteps += (tempSteps * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
                         loopGoal.goalProgressStairs += (tempStairs * (([changeDate timeIntervalSince1970]-startDate)/(endDate-startDate)));
-                        NSLog(@"NEW MID - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"NEW MID - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     }// full scheduled progress.
                     else if (([[self.currentDate earlierDate:tempStartDate]isEqualToDate:self.currentDate]) && ([[changeDate earlierDate:tempEndDate]isEqualToDate:tempEndDate]) && (endDate != 0.0)) {
                         NSLog(@"Full");
-                        NSLog(@"OLD - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"OLD - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                         loopGoal.goalProgressSteps += tempSteps;
                         loopGoal.goalProgressStairs += tempStairs;
-                        NSLog(@"NEW - Steps: %d Stairs: %d",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
+                        NSLog(@"NEW - Steps: %f Stairs: %f",loopGoal.goalProgressSteps,loopGoal.goalProgressStairs);
                     }
                     // Update status if goal is now completed.
                     if ([[[historyResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue] == Completed) {
@@ -422,7 +422,7 @@
             break;
     }
     NSString *query;
-    query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%d', goalProgressStairs='%d' where goalID=%ld", self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
+    query = [NSString stringWithFormat:@"update testGoals set goalStatus='%d', goalProgressSteps='%f', goalProgressStairs='%f' where goalID=%ld", self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

@@ -81,7 +81,7 @@
     if (goal != nil) {
         // Set up query to insert the goal data into the database.
         NSString *query;
-        query = [NSString stringWithFormat:@"insert into %@ values(null, '%@', '%d', '%d', '%ld', '%ld', '%ld', '%ld', '%f', '%f', '%f', '%d')", self.mainTabBarController.testing.getGoalDBName, goal.goalName, goal.goalStatus, goal.goalType, (long)goal.goalAmountSteps, (long)goal.goalProgressSteps, (long)goal.goalAmountStairs, (long)goal.goalProgressStairs, [goal.goalStartDate timeIntervalSince1970], [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970], goal.goalConversion];
+        query = [NSString stringWithFormat:@"insert into %@ values(null, '%@', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d')", self.mainTabBarController.testing.getGoalDBName, goal.goalName, goal.goalStatus, goal.goalType, (double)goal.goalAmountSteps, (double)goal.goalProgressSteps, (double)goal.goalAmountStairs, (double)goal.goalProgressStairs, [goal.goalStartDate timeIntervalSince1970], [goal.goalCompletionDate timeIntervalSince1970], [goal.goalCreationDate timeIntervalSince1970], goal.goalConversion];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -223,15 +223,15 @@
         goal.goalName = [NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]];
         goal.goalStatus = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue];
         goal.goalType = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalType] intValue];
-        goal.goalAmountSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountSteps] intValue];
-        goal.goalProgressSteps = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
-        goal.goalAmountStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountStairs] intValue];
-        goal.goalProgressStairs = (long)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
+        goal.goalAmountSteps = (double)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountSteps] doubleValue];
+        goal.goalProgressSteps = (double)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] doubleValue];
+        goal.goalAmountStairs = (double)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalAmountStairs] doubleValue];
+        goal.goalProgressStairs = (double)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] doubleValue];
         goal.goalStartDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalStartDate] doubleValue]];
         goal.goalCompletionDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalDate] doubleValue]];
         goal.goalCreationDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalCreationDate] doubleValue]];
         goal.goalConversion = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalConversion] intValue];
-        goal.conversionTable = [[NSArray alloc]initWithObjects:@1.0,@2.5,@0.762,@0.000473485,@0.000762,nil];
+        goal.conversionTable = [[NSArray alloc]initWithObjects:@1.0,@2112,@1312,@1.385,@4.545,nil];
         
         // check for if the start or end date has passed and update the status.
         if ((goal.goalStatus == Pending) && [[[NSDate date] earlierDate:goal.goalStartDate]isEqualToDate: goal.goalStartDate]) {
@@ -338,15 +338,39 @@
     switch (goal.goalType) {
         case Steps:
             typeText = [NSString stringWithFormat:@"Steps"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps];
+            if (goal.goalConversion == StepsStairs) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps];
+            }
+            else if (goal.goalConversion == Imperial) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Miles: %.2f/%.2f", (double)goal.goalProgressSteps/2112, (double)goal.goalAmountSteps/2112];
+            }
+            else if (goal.goalConversion == Metric) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
+            }
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld", (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+            if (goal.goalConversion == StepsStairs) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld", (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+            }
+            else if (goal.goalConversion == Imperial) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            }
+            else if (goal.goalConversion == Metric) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Meters: %.2f/%.2f", (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
+            }
             break;
         case Both:
             typeText = [NSString stringWithFormat:@"Steps and Stairs"];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld Stairs: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps, (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+            if (goal.goalConversion == StepsStairs) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld Stairs: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps, (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+            }
+            else if (goal.goalConversion == Imperial) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Miles: %.2f/%.2f Feet: %.2f/%.2f", (double)goal.goalProgressSteps/2112, (double)goal.goalAmountSteps/2112, (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            }
+            else if (goal.goalConversion == Metric) {
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f Meters: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312, (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
+            }
             break;
         default:
             break;

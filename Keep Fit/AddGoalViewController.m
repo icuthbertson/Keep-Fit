@@ -25,6 +25,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *numStairsLabel;
 @property (weak, nonatomic) IBOutlet UIStepper *stepsStepper;
 @property (weak, nonatomic) IBOutlet UIStepper *stairsStepper;
+- (IBAction)conversionSelector:(id)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *conversionTypeSelector;
+@property (weak, nonatomic) IBOutlet UILabel *numStepsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
 
 @end
 
@@ -153,6 +157,15 @@
         self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
         
     }
+    if (self.conversionTypeSelector.selectedSegmentIndex == 1) {
+        self.goal.goalAmountSteps = self.goal.goalAmountSteps*2112; // to miles
+        self.goal.goalAmountStairs = self.goal.goalAmountStairs*1.385; // to feet
+    }
+    else if (self.conversionTypeSelector.selectedSegmentIndex == 2) {
+        self.goal.goalAmountSteps = self.goal.goalAmountSteps*1312; // to km
+        self.goal.goalAmountStairs = self.goal.goalAmountStairs*4.545; // to meters
+    }
+    
     // Set the progress towards the goals to 0.
     self.goal.goalProgressSteps = 0;
     self.goal.goalProgressStairs = 0;
@@ -166,7 +179,7 @@
     self.goal.goalCreationDate = [NSDate date];
     
     // Set the coversion type of the goal to that of the type selector.
-    self.goal.goalConversion = 0;
+    self.goal.goalConversion = self.conversionTypeSelector.selectedSegmentIndex;
     
     NSLog(@"Goal Name: %@",self.goal.goalName);
     NSLog(@"Goal Status: %d",self.goal.goalStatus);
@@ -254,6 +267,24 @@
     }
     // If all of the sanity checks were passed return YES and go back to the Goal List.
     return YES;
+}
+
+- (IBAction)conversionSelector:(id)sender {
+    if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps and stairs
+        self.goal.goalConversion = StepsStairs;
+        self.numStepsTitleLabel.text = @"Number of Steps";
+        self.numStairsTitleLabel.text = @"Number of Stair";
+    }
+    else if (self.conversionTypeSelector.selectedSegmentIndex == 1) { //imperial
+        self.goal.goalConversion = Imperial;
+        self.numStepsTitleLabel.text = @"Number of Miles to walk";
+        self.numStairsTitleLabel.text = @"Number of Feet to climb";
+    }
+    else { //metric
+        self.goal.goalConversion = Metric;
+        self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+        self.numStairsTitleLabel.text = @"Number of Meters to climb";
+    }
 }
 
 @end

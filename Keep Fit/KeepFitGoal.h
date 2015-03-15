@@ -30,20 +30,18 @@ typedef NS_ENUM(NSInteger, GoalType) {
 // ENUMs of goal conversions.
 typedef NS_ENUM(NSInteger, Conversion) {
     StepsStairs = 0,
-    Feet,
-    Meters,
-    Miles,
-    Km
+    Imperial,
+    Metric
 };
 
 @property NSInteger goalID; // ID of goal.
 @property NSString *goalName; // Name of goal.
 @property GoalStatus goalStatus; // Status of goal.
 @property GoalType goalType; // Type of goal.
-@property NSInteger goalAmountSteps; // Steps amount for goal.
-@property NSInteger goalProgressSteps; // Steps progress for goal.
-@property NSInteger goalAmountStairs; // Stairs amount for goal.
-@property NSInteger goalProgressStairs; // Stairs progress for goal.
+@property double goalAmountSteps; // Steps amount for goal.
+@property double goalProgressSteps; // Steps progress for goal.
+@property double goalAmountStairs; // Stairs amount for goal.
+@property double goalProgressStairs; // Stairs progress for goal.
 @property NSDate *goalStartDate; // Start date/time for goal.
 @property NSDate *goalCompletionDate; // End date/time for goal.
 @property NSDate *goalCreationDate; // Creation date/time of goal.
