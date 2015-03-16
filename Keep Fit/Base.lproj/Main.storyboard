@@ -904,6 +904,9 @@
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="abandonButtonAction:" destination="u7R-gc-2Mv" eventType="touchUpInside" id="CK2-9V-IIW"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Completion" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fcp-dr-hv7">
                                                 <rect key="frame" x="24" y="247" width="272" height="21"/>
@@ -1186,6 +1189,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="600"/>
                     <connections>
+                        <outlet property="abandonButton" destination="fse-r7-M5R" id="zXe-1u-Ug4"/>
                         <outlet property="activeOutletButtonTest" destination="tLk-NO-ndN" id="B4m-d7-i7O"/>
                         <outlet property="addStairsStepper" destination="TDr-xw-UxL" id="HUn-db-xnk"/>
                         <outlet property="addStepper" destination="d6c-WC-OKB" id="nON-xq-D8p"/>

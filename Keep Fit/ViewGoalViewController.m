@@ -69,6 +69,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *stepsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stairsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *estimatedCompletionLabel;
+- (IBAction)abandonButtonAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *abandonButton;
 
 @property double progressSteps;
 @property double progressStairs;
@@ -193,11 +195,17 @@
     
     if ([statResults count] > 0) {
         NSInteger indexOfStartDate = [self.dbManager.arrColumnNames indexOfObject:@"startTime"];
+        NSInteger indexOfEndDate = [self.dbManager.arrColumnNames indexOfObject:@"endTime"];
         NSInteger indexOfSteps = [self.dbManager.arrColumnNames indexOfObject:@"steps"];
         NSInteger indexOfStairs = [self.dbManager.arrColumnNames indexOfObject:@"stairs"];
         
         self.startDate = [[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate] doubleValue];
-        self.endDate = [[NSDate date] timeIntervalSince1970];
+        if (self.viewGoal.goalStatus == Abandoned || self.viewGoal.goalStatus == Completed) {
+            self.endDate = [[[statResults lastObject] objectAtIndex:indexOfEndDate] doubleValue];
+        }
+        else {
+            self.endDate = [[NSDate date] timeIntervalSince1970];
+        }
         
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
@@ -344,6 +352,7 @@
             //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
+            self.abandonButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
             break;
         case Completed:
@@ -352,6 +361,7 @@
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             self.activeOutletButtonTest.hidden = YES;
+            self.abandonButton.hidden = YES;
             [self hideAndDisableRightNavigationItem];
             break;
         default:
@@ -593,6 +603,7 @@
         self.autoStepSpinner.hidden = NO;
         [self.autoStepSpinner startAnimating];
         self.outletHistoryButton.hidden = YES;
+        self.abandonButton.hidden = YES;
         NSLog(@"Steps Time: %ld",(long)self.settings.stepsTime);
         NSLog(@"Stairs Time: %ld",(long)self.settings.stairsTime);
         [self startBackgroundThread];
@@ -610,6 +621,7 @@
         self.autoStepSpinner.hidden = YES;
         [self.autoStepSpinner stopAnimating];
         self.outletHistoryButton.hidden = NO;
+        self.abandonButton.hidden = NO;
         //self.scheduleButton.hidden = NO;
         //self.timeButton.hidden = NO;
         [self cancelBackgroundThread];
@@ -817,6 +829,7 @@
     self.viewStatus.text = @"Completed";
     self.outletActiveButton.hidden = YES;
     self.activeOutletButtonTest.hidden = YES;
+    self.abandonButton.hidden = YES;
     [self.autoStepSpinner stopAnimating];
     self.autoStepSpinner.hidden = YES;
     //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
@@ -1055,6 +1068,13 @@
             [self.scrollView setScrollEnabled:NO];
         }
     }
+}
+
+- (IBAction)abandonButtonAction:(id)sender {
+    self.viewGoal.goalStatus = Abandoned;
+    [self storeGoalStatusChangeToDB];
+    [self loadFromDB];
+    [self showDetails];
 }
 
 @end
