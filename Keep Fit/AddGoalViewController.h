@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "KeepFitGoal.h"
 #import "Testing.h"
+#import "Settings.h"
 
 @interface AddGoalViewController : UIViewController /*<UIPickerViewDataSource, UIPickerViewDelegate>*/
 
@@ -17,5 +18,6 @@
 @property NSMutableArray *listGoalNames; // List of previous goal names to check against for duplicates.
 
 @property Testing *testing;
+@property Settings *settings;
 
 @end

@@ -17,6 +17,7 @@
 #import "Testing.h"
 #import "MainTabBarViewController.h"
 #import "TestViewGoalViewController.h"
+#import "Settings.h"
 
 @interface GoalListTableViewController ()
 
@@ -53,6 +54,8 @@
     self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
     self.mainTabBarController.testing = [[Testing alloc] init];
     [self.mainTabBarController.testing setTesting:NO];
+    
+    self.mainTabBarController.settings = [[Settings alloc] init];
     
     // load goals from db.
     [self loadFromDB];
@@ -175,6 +178,31 @@
         [self.mainTabBarController.testing setTime:[NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]]];
         NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
         NSLog(@"Current Time From DB: %@",self.mainTabBarController.testing.getTime);
+    }
+    
+    NSString *settingsQuery = [NSString stringWithFormat:@"select * from settings"];
+    
+    NSArray *settingsResults;
+    settingsResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:settingsQuery]];
+    // If there is not a persisted date saved, save the current date.
+    if (settingsResults.count == 0) {
+        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d)", 0];
+        // Execute the query.
+        [self.dbManager executeQuery:settingsQuery];
+        
+        if (self.dbManager.affectedRows != 0) {
+            NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        }
+        else {
+            NSLog(@"Could not execute the query.");
+        }
+        self.mainTabBarController.settings.goalConversionSetting = 0;
+    }
+    else {
+        // else set the persisted date in the testing object.
+        NSInteger indexOfGoalConversion = [self.dbManager.arrColumnNames indexOfObject:@"goalConversion"];
+        self.mainTabBarController.settings.goalConversionSetting =[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue];
+        NSLog(@"Goal Conversion From DB: %d",[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue]);
     }
     
     // Re-initialise goal array.
@@ -508,6 +536,7 @@
         destAddController.listGoalNames = goalNamesForChecking;
         // Pass the testing object.
         destAddController.testing = self.mainTabBarController.testing;
+        destAddController.settings = self.mainTabBarController.settings;
     }
     else if ([segue.identifier isEqualToString:@"showSettings"]) {
         // If going to the settings view.

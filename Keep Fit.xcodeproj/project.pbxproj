@@ -37,6 +37,7 @@
 		AE8631BB1AACED300089D10C /* StatisticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8631BA1AACED300089D10C /* StatisticsViewController.m */; };
 		AE8631BE1AACF0E70089D10C /* TestSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8631BD1AACF0E70089D10C /* TestSettings.m */; };
 		AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE969A631A8BD1B80032B287 /* EditGoalViewController.m */; };
+		AE96A7B41AB747C600C4F537 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = AE96A7B31AB747C600C4F537 /* Settings.m */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
@@ -108,6 +109,8 @@
 		AE8631BD1AACF0E70089D10C /* TestSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestSettings.m; sourceTree = "<group>"; };
 		AE969A621A8BD1B80032B287 /* EditGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditGoalViewController.h; sourceTree = "<group>"; };
 		AE969A631A8BD1B80032B287 /* EditGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditGoalViewController.m; sourceTree = "<group>"; };
+		AE96A7B21AB747C600C4F537 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		AE96A7B31AB747C600C4F537 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -178,6 +181,8 @@
 			children = (
 				AE2490B91A9CBD5100A6D816 /* ListSelectionViewController.h */,
 				AE2490BA1A9CBD5100A6D816 /* ListSelectionViewController.m */,
+				AE96A7B21AB747C600C4F537 /* Settings.h */,
+				AE96A7B31AB747C600C4F537 /* Settings.m */,
 				AE72D4661A9B9CE3008570B0 /* SettingsViewController.h */,
 				AE72D4671A9B9CE3008570B0 /* SettingsViewController.m */,
 			);
@@ -412,6 +417,7 @@
 				AE24910A1AABBE9A00A6D816 /* MainTabBarViewController.m in Sources */,
 				AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */,
 				AE40A6C91A89680A000DD45A /* GoalListTableViewController.m in Sources */,
+				AE96A7B41AB747C600C4F537 /* Settings.m in Sources */,
 				AE40A69E1A8946BB000DD45A /* main.m in Sources */,
 				AE72D4681A9B9CE3008570B0 /* SettingsViewController.m in Sources */,
 			);

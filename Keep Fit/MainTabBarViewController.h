@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Testing.h"
 #import "TestSettings.h"
+#import "Settings.h"
 
 @interface MainTabBarViewController : UITabBarController
 
 @property Testing *testing;
 @property TestSettings *testSettings;
+@property Settings *settings;
 
 @end

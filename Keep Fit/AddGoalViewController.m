@@ -46,6 +46,36 @@
     [self.dateStartPicker setMinimumDate:[NSDate date]];
     [self.datePicker setMinimumDate:[NSDate date]];
     
+    self.conversionTypeSelector.selectedSegmentIndex = self.settings.goalConversionSetting;
+    
+    if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps and stairs
+        self.goal.goalConversion = StepsStairs;
+        self.numStepsTitleLabel.text = @"Number of Steps";
+        self.numStairsTitleLabel.text = @"Number of Stair";
+        self.numStairsLabel.text = @"0";
+        self.numStepsLabel.text = @"0";
+        self.stepsStepper.value = 0;
+        self.stairsStepper.value = 0;
+    }
+    else if (self.conversionTypeSelector.selectedSegmentIndex == 1) { //imperial
+        self.goal.goalConversion = Imperial;
+        self.numStepsTitleLabel.text = @"Number of Miles to walk";
+        self.numStairsTitleLabel.text = @"Number of Feet to climb";
+        self.numStairsLabel.text = @"0";
+        self.numStepsLabel.text = @"0";
+        self.stepsStepper.value = 0;
+        self.stairsStepper.value = 0;
+    }
+    else { //metric
+        self.goal.goalConversion = Metric;
+        self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+        self.numStairsTitleLabel.text = @"Number of Meters to climb";
+        self.numStairsLabel.text = @"0";
+        self.numStepsLabel.text = @"0";
+        self.stepsStepper.value = 0;
+        self.stairsStepper.value = 0;
+    }
+    
     // Enable default steppers enabled (steps enabled, stairs disabled)
     self.stepsStepper.userInteractionEnabled = YES;
     self.stairsStepper.userInteractionEnabled = NO;

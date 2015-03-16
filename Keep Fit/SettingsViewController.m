@@ -13,6 +13,7 @@
 #import "ScheduleViewController.h"
 #import "Schedule.h"
 #import "ChangeTimeViewController.h"
+#import "Settings.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface SettingsViewController ()
@@ -31,10 +32,15 @@
 @property (weak, nonatomic) IBOutlet UISwitch *testingSwitch;
 - (IBAction)testingSwtichAction:(id)sender;
 - (IBAction)saveTestingSettings:(id)sender;
+- (IBAction)goalConversionAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *goalConversionSelector;
+- (IBAction)saveGeneralSettings:(id)sender;
+
 
 @property MainTabBarViewController *mainTabBarController;
 
 @property TestSettings *settings;
+
 
 @end
 
@@ -78,6 +84,8 @@
 }
 
 -(void)setUpView {
+    self.goalConversionSelector.selectedSegmentIndex = self.mainTabBarController.settings.goalConversionSetting;
+    
     self.stepsLabel.text = [NSString stringWithFormat:@"%d",self.settings.stepsTime];
     self.stairsLabel.text = [NSString stringWithFormat:@"%d",self.settings.stairsTime];
     self.stepsStepper.value = self.settings.stepsTime;
@@ -209,6 +217,24 @@
     self.settings.stepsTime = [self.stepsLabel.text intValue];
     self.settings.stairsTime = [self.stairsLabel.text intValue];
     [self updateSettings];
+}
+
+- (IBAction)goalConversionAction:(id)sender {
+    
+}
+
+- (IBAction)saveGeneralSettings:(id)sender {
+    // Update goal in DB.
+    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d'", self.goalConversionSelector.selectedSegmentIndex];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
 }
 
 -(void) storeGoalStatisticsToDB:(Schedule*) schedule {

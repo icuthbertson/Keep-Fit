@@ -68,6 +68,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *stairsPerYearLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stepsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stairsTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *estimatedCompletionLabel;
 
 @property double progressSteps;
 @property double progressStairs;
@@ -81,6 +82,8 @@
 @property double recordingStartTime;
 @property double recordingEndTime;
 
+@property NSDate *estimatedDate;
+
 @end
 
 @implementation ViewGoalViewController
@@ -89,7 +92,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 568)];
+    [self.scrollView setContentSize:CGSizeMake(320, 600)];
     
     self.trackingView.hidden = YES;
     self.statisticsView.hidden = YES;
@@ -120,8 +123,8 @@
     
     //Line between progress bar and options
     UIBezierPath *pathOption = [UIBezierPath bezierPath];
-    [pathOption moveToPoint:CGPointMake(24.0, 222.0)];
-    [pathOption addLineToPoint:CGPointMake(320.0, 222.0)];
+    [pathOption moveToPoint:CGPointMake(24.0, 280.0)];
+    [pathOption addLineToPoint:CGPointMake(320.0, 280.0)];
     
     CAShapeLayer *optionLine = [CAShapeLayer layer];
     optionLine.path = [pathOption CGPath];
@@ -133,6 +136,8 @@
     [self.scrollView.layer addSublayer:detailsLine];
     [self.datesView.layer addSublayer:progressLine];
     [self.datesView.layer addSublayer:optionLine];
+    
+    self.estimatedDate = [[NSDate alloc] init];
     
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
@@ -259,6 +264,21 @@
             break;
     }
     
+    double estSteps = ((self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps)/dayStepsAverage)*day;
+    double estStairs = ((self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs)/dayStairsAverage)*day;
+    if (estSteps > estStairs) {
+        double tempEpoch = [[NSDate date] timeIntervalSince1970] + estSteps;
+        self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+    }
+    else {
+        double tempEpoch = [[NSDate date] timeIntervalSince1970] + estStairs;
+        self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+    }
+    // Set up the date formatter to the required format.
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    
+    self.estimatedCompletionLabel.text = [NSString stringWithFormat:@"%@",[formatter stringFromDate:self.estimatedDate]];
 }
 
 // Method to set up outlets of view to show data of the goal.
@@ -476,6 +496,7 @@
             self.progressSteps = [self.stepperLabel.text intValue];
             self.viewGoal.goalProgressSteps += self.progressSteps;
             if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
+                self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
@@ -494,6 +515,7 @@
             self.progressStairs = [self.stepperStairsLabel.text intValue];
             self.viewGoal.goalProgressStairs += self.progressStairs;
             if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
+                self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
@@ -514,9 +536,11 @@
             self.viewGoal.goalProgressSteps += self.progressSteps;
             self.viewGoal.goalProgressStairs += self.progressStairs;
             if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
+                self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
             if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
+                self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
