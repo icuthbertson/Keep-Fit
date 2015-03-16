@@ -213,18 +213,21 @@
     double month = 2630000.0;
     double year = 31560000.0;
     
-    double peroid = (self.endDate - self.startDate);
-    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:peroid]);
+    double period = (self.endDate - self.startDate);
+    if (period == 0.0) {
+        period = 1.0;
+    }
+    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:period]);
     
-    double dayStepsAverage = (day/peroid)*self.totalSteps;
-    double weekStepsAverage = (week/peroid)*self.totalSteps;
-    double monthStepsAverage = (month/peroid)*self.totalSteps;
-    double yearStepsAverage = (year/peroid)*self.totalSteps;
+    double dayStepsAverage = (day/period)*self.totalSteps;
+    double weekStepsAverage = (week/period)*self.totalSteps;
+    double monthStepsAverage = (month/period)*self.totalSteps;
+    double yearStepsAverage = (year/period)*self.totalSteps;
     
-    double dayStairsAverage = (day/peroid)*self.totalStairs;
-    double weekStairsAverage = (week/peroid)*self.totalStairs;
-    double monthStairsAverage = (month/peroid)*self.totalStairs;
-    double yearStairsAverage = (year/peroid)*self.totalStairs;
+    double dayStairsAverage = (day/period)*self.totalStairs;
+    double weekStairsAverage = (week/period)*self.totalStairs;
+    double monthStairsAverage = (month/period)*self.totalStairs;
+    double yearStairsAverage = (year/period)*self.totalStairs;
     
     switch (self.viewGoal.goalType) {
         case Steps:

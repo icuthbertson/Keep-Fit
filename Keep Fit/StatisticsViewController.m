@@ -94,29 +94,32 @@
     double month = 2630000.0;
     double year = 31560000.0;
     
-    double peroid = (self.endDate - self.startDate);
-    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:peroid]);
+    double period = (self.endDate - self.startDate);
+    if (period == 0.0) {
+        period = 1.0;
+    }
+    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:period]);
     
-    double dayStepsAverage = (day/peroid)*self.totalSteps;
-    double weekStepsAverage = (week/peroid)*self.totalSteps;
-    double monthStepsAverage = (month/peroid)*self.totalSteps;
-    double yearStepsAverage = (year/peroid)*self.totalSteps;
+    double dayStepsAverage = (day/period)*self.totalSteps;
+    double weekStepsAverage = (week/period)*self.totalSteps;
+    double monthStepsAverage = (month/period)*self.totalSteps;
+    double yearStepsAverage = (year/period)*self.totalSteps;
     
-    double dayStairsAverage = (day/peroid)*self.totalStairs;
-    double weekStairsAverage = (week/peroid)*self.totalStairs;
-    double monthStairsAverage = (month/peroid)*self.totalStairs;
-    double yearStairsAverage = (year/peroid)*self.totalStairs;
+    double dayStairsAverage = (day/period)*self.totalStairs;
+    double weekStairsAverage = (week/period)*self.totalStairs;
+    double monthStairsAverage = (month/period)*self.totalStairs;
+    double yearStairsAverage = (year/period)*self.totalStairs;
     
     
-    self.dayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStepsAverage];
-    self.weekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStepsAverage];
-    self.monthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStepsAverage];
-    self.yearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStepsAverage];
+    self.dayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStepsAverage];
+    self.weekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStepsAverage];
+    self.monthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStepsAverage];
+    self.yearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStepsAverage];
     
-    self.dayStairsLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStairsAverage];
-    self.weekStairsLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStairsAverage];
-    self.monthStairsLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStairsAverage];
-    self.yearStairsLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
+    self.dayStairsLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStairsAverage];
+    self.weekStairsLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStairsAverage];
+    self.monthStairsLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStairsAverage];
+    self.yearStairsLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStairsAverage];
 }
 
 
