@@ -186,7 +186,7 @@
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    query = [NSString stringWithFormat:@"select * from %@ where endTime < '%f'", self.testing.getStatisticsDBName, [[NSDate date] timeIntervalSince1970]];
+    query = [NSString stringWithFormat:@"select * from %@ where endTime <= '%f' and goalID='%d'", self.testing.getStatisticsDBName, [[NSDate date] timeIntervalSince1970], self.viewGoal.goalID];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
@@ -231,10 +231,10 @@
     
     switch (self.viewGoal.goalType) {
         case Steps:
-            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStepsAverage];
-            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStepsAverage];
-            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStepsAverage];
-            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStepsAverage];
+            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStepsAverage];
+            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStepsAverage];
+            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStepsAverage];
+            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStepsAverage];
             self.stairsTitleLabel.text = @"";
             self.stairsPerDayLabel.text = @"";
             self.stairsPerWeekLabel.text = @"";
@@ -247,41 +247,53 @@
             self.stepsPerWeekLabel.text = @"";
             self.stepsPerMonthLabel.text = @"";
             self.stepsPerYearLabel.text = @"";
-            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStairsAverage];
-            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStairsAverage];
-            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStairsAverage];
-            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
+            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStairsAverage];
+            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStairsAverage];
+            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStairsAverage];
+            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStairsAverage];
             break;
         case Both:
-            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStepsAverage];
-            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStepsAverage];
-            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStepsAverage];
-            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStepsAverage];
+            self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStepsAverage];
+            self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStepsAverage];
+            self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStepsAverage];
+            self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStepsAverage];
             
-            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %f",dayStairsAverage];
-            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %f",weekStairsAverage];
-            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %f",monthStairsAverage];
-            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %f",yearStairsAverage];
+            self.stairsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStairsAverage];
+            self.stairsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStairsAverage];
+            self.stairsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStairsAverage];
+            self.stairsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStairsAverage];
             break;
         default:
             break;
     }
     
-    double estSteps = ((self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps)/dayStepsAverage)*day;
-    double estStairs = ((self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs)/dayStairsAverage)*day;
-    if (estSteps > estStairs) {
-        double tempEpoch = [[NSDate date] timeIntervalSince1970] + estSteps;
-        self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+    if (dayStepsAverage == 0.0 && dayStairsAverage == 0.0) {
+        self.estimatedCompletionLabel.text = @"No progress made yet";
     }
     else {
-        double tempEpoch = [[NSDate date] timeIntervalSince1970] + estStairs;
-        self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+        if (dayStepsAverage == 0.0) {
+            dayStepsAverage = 1.0;
+        }
+        if (dayStairsAverage == 0.0) {
+            dayStairsAverage = 1.0;
+        }
+        
+        double estSteps = ((self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps)/dayStepsAverage)*day;
+        double estStairs = ((self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs)/dayStairsAverage)*day;
+        if (estSteps > estStairs) {
+            double tempEpoch = [[NSDate date] timeIntervalSince1970] + estSteps;
+            self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+        }
+        else {
+            double tempEpoch = [[NSDate date] timeIntervalSince1970] + estStairs;
+            self.estimatedDate = [NSDate dateWithTimeIntervalSince1970:tempEpoch];
+        }
+        // Set up the date formatter to the required format.
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+        
+        self.estimatedCompletionLabel.text = [NSString stringWithFormat:@"%@",[formatter stringFromDate:self.estimatedDate]];
     }
-    // Set up the date formatter to the required format.
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
-    
-    self.estimatedCompletionLabel.text = [NSString stringWithFormat:@"%@",[formatter stringFromDate:self.estimatedDate]];
 }
 
 // Method to set up outlets of view to show data of the goal.
@@ -797,6 +809,7 @@
         NSLog(@"Could not execute the query.");
     }
     
+    [self setUpStats];
 }
 
 -(void) completedView {
@@ -1004,6 +1017,7 @@
 - (IBAction)viewSelectorAction:(id)sender {
     if(self.viewSelector.selectedSegmentIndex == 0) {
         NSLog(@"Progress");
+        [self loadFromDB];
         self.datesView.hidden = NO;
         self.statisticsView.hidden = YES;
         self.trackingView.hidden = YES;
@@ -1013,6 +1027,7 @@
     }
     else if (self.viewSelector.selectedSegmentIndex == 1) {
         NSLog(@"Statistics");
+        [self loadFromDB];
         self.datesView.hidden = YES;
         self.statisticsView.hidden = NO;
         self.trackingView.hidden = YES;
