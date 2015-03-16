@@ -75,7 +75,7 @@
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Activity - Steps: %d Staris: %d", activity.numSteps, activity.numStairs];
+    cell.textLabel.text = [NSString stringWithFormat:@"Activity - Steps: %ld Staris: %ld", (long)activity.numSteps, (long)activity.numStairs];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];

@@ -155,7 +155,7 @@
         self.settings.stepsTime = 1;
         self.settings.stairsTime = 1;
         
-        query = [NSString stringWithFormat:@"insert into testSettings values(%d,%d)", self.settings.stepsTime, self.settings.stairsTime];
+        query = [NSString stringWithFormat:@"insert into testSettings values(%ld,%ld)", (long)self.settings.stepsTime, (long)self.settings.stairsTime];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -171,8 +171,8 @@
         NSInteger indexOfStairsTime = [self.dbManager.arrColumnNames indexOfObject:@"stairsTime"];
         self.settings.stepsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStepsTime] intValue];
         self.settings.stairsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStairsTime] intValue];
-        NSLog(@"Steps Time: %d",self.settings.stepsTime);
-        NSLog(@"Stairs Time: %d",self.settings.stairsTime);
+        NSLog(@"Steps Time: %ld",(long)self.settings.stepsTime);
+        NSLog(@"Stairs Time: %ld",(long)self.settings.stairsTime);
     }
     
     //load stats
@@ -436,7 +436,7 @@
         if (self.viewGoal != nil) {
             // update the row in the goals table with the editted goal.
             NSString *query;
-            query = [NSString stringWithFormat:@"update %@ set goalName='%@', goalType='%d', goalAmountSteps='%ld', goalAmountStairs='%ld', goalStartDate='%f', goalDate='%f', goalConversion='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalName, self.viewGoal.goalType, (long)self.viewGoal.goalAmountSteps, (long)self.viewGoal.goalAmountStairs, [self.viewGoal.goalStartDate timeIntervalSince1970], [self.viewGoal.goalCompletionDate timeIntervalSince1970], self.viewGoal.goalConversion, (long)self.viewGoal.goalID];
+            query = [NSString stringWithFormat:@"update %@ set goalName='%@', goalType='%d', goalAmountSteps='%f', goalAmountStairs='%f', goalStartDate='%f', goalDate='%f', goalConversion='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalName, self.viewGoal.goalType, self.viewGoal.goalAmountSteps, self.viewGoal.goalAmountStairs, [self.viewGoal.goalStartDate timeIntervalSince1970], [self.viewGoal.goalCompletionDate timeIntervalSince1970], self.viewGoal.goalConversion, (long)self.viewGoal.goalID];
             // Execute the query.
             [self.dbManager executeQuery:query];
         
@@ -554,8 +554,8 @@
         self.autoStepSpinner.hidden = NO;
         [self.autoStepSpinner startAnimating];
         self.outletHistoryButton.hidden = YES;
-        NSLog(@"Steps Time: %d",self.settings.stepsTime);
-        NSLog(@"Stairs Time: %d",self.settings.stairsTime);
+        NSLog(@"Steps Time: %ld",(long)self.settings.stepsTime);
+        NSLog(@"Stairs Time: %ld",(long)self.settings.stairsTime);
         [self startBackgroundThread];
     } /**********************************stop recording*****************************************/
     else {
@@ -900,7 +900,7 @@
     }
     
     NSLog(@"%f - %f",self.progressSteps, self.progressStairs);
-    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f', progressSteps='%f', progressStairs='%f' where historyID=%ld", self.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, (long)[self getHistoryRowID:self.viewGoal.goalID]];
+    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f', progressSteps='%f', progressStairs='%f' where historyID=%d", self.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, [self getHistoryRowID:self.viewGoal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -926,7 +926,7 @@
 -(void) storeGoalStatisticsToDB {
     NSString *query;
     
-    query = [NSString stringWithFormat:@"insert into %@ values(null, %d, '%f', '%f', '%f', '%f')", self.testing.getStatisticsDBName, self.viewGoal.goalID, self.recordingStartTime, self.recordingEndTime, self.progressSteps, self.progressStairs];
+    query = [NSString stringWithFormat:@"insert into %@ values(null, %ld, '%f', '%f', '%f', '%f')", self.testing.getStatisticsDBName, (long)self.viewGoal.goalID, self.recordingStartTime, self.recordingEndTime, self.progressSteps, self.progressStairs];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -939,10 +939,38 @@
 }
 
 - (IBAction)stepperAction:(id)sender {
+    if (self.addStepper.value >= 0 && self.addStepper.value < 10) {
+        [self.addStepper setStepValue:1.0];
+    } else if (self.addStepper.value >= 10 && self.addStepper.value < 50) {
+        [self.addStepper setStepValue:5.0];
+    }
+    else if (self.addStepper.value >= 50 && self.addStepper.value < 250) {
+        [self.addStepper setStepValue:25.0];
+    }
+    else if (self.addStepper.value >= 250 && self.addStepper.value < 1000) {
+        [self.addStepper setStepValue:50.0];
+    }
+    else {
+        [self.addStepper setStepValue:100.0];
+    }
     self.stepperLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
 - (IBAction)stepperStairsAction:(id)sender {
+    if (self.addStairsStepper.value >= 0 && self.addStairsStepper.value < 10) {
+        [self.addStairsStepper setStepValue:1.0];
+    } else if (self.addStairsStepper.value >= 10 && self.addStairsStepper.value < 50) {
+        [self.addStairsStepper setStepValue:5.0];
+    }
+    else if (self.addStairsStepper.value >= 50 && self.addStairsStepper.value < 250) {
+        [self.addStairsStepper setStepValue:25.0];
+    }
+    else if (self.addStairsStepper.value >= 250 && self.addStairsStepper.value < 1000) {
+        [self.addStairsStepper setStepValue:50.0];
+    }
+    else {
+        [self.addStairsStepper setStepValue:100.0];
+    }
     self.stepperStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 

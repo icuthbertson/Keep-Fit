@@ -142,7 +142,7 @@
     if (source.listType == 8) return; //Cancel button was pressed.
     
     self.listType = source.listType;
-    NSLog(@"%d",self.listType);
+    NSLog(@"%ld",(long)self.listType);
     // Reload db data incase of changes.
     [self loadFromDB];
 }
@@ -183,11 +183,11 @@
     }
     self.keepFitGoals = [[NSMutableArray alloc] init];
     
-    NSLog(@"List Type: %d",self.listType);
+    NSLog(@"List Type: %ld",(long)self.listType);
     // Form the goal select query.
     NSString *query = [NSString stringWithFormat:@"select * from %@", self.mainTabBarController.testing.getGoalDBName];
     if (self.listType != 6 && self.listType != 7) { // If all the goals are not wanted to be shown.
-        query = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'", self.mainTabBarController.testing.getGoalDBName, self.listType];
+        query = [NSString stringWithFormat:@"select * from %@ where goalStatus='%ld'", self.mainTabBarController.testing.getGoalDBName, (long)self.listType];
     }
     else if (self.listType == 7) {
         query = [NSString stringWithFormat:@"select * from %@ where goalStatus=0 or goalStatus=1 or goalStatus=2", self.mainTabBarController.testing.getGoalDBName];

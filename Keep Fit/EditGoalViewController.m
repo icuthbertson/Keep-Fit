@@ -149,11 +149,47 @@
 
 // Action from Steps Stepper to change the value shown in the Steps label.
 - (IBAction)stepsStepperAction:(id)sender {
+    if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps
+        if (self.stepsStepper.value >= 0 && self.stepsStepper.value < 10) {
+            [self.stepsStepper setStepValue:1.0];
+        } else if (self.stepsStepper.value >= 10 && self.stepsStepper.value < 50) {
+            [self.stepsStepper setStepValue:5.0];
+        }
+        else if (self.stepsStepper.value >= 50 && self.stepsStepper.value < 250) {
+            [self.stepsStepper setStepValue:25.0];
+        }
+        else if (self.stepsStepper.value >= 250 && self.stepsStepper.value < 1000) {
+            [self.stepsStepper setStepValue:50.0];
+        }
+        else {
+            [self.stepsStepper setStepValue:100.0];
+        }
+    }
+    else if (self.conversionTypeSelector.selectedSegmentIndex == 1) { //miles
+        [self.stepsStepper setStepValue:1.0];
+    }
+    else { //km
+        [self.stepsStepper setStepValue:1.0];
+    }
     self.numStepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
 // Action from Stairs Stepper to change the value shown in the Stairs label.
 - (IBAction)stairsStepperAction:(id)sender {
+    if (self.stairsStepper.value >= 0 && self.stairsStepper.value < 10) {
+        [self.stairsStepper setStepValue:1.0];
+    } else if (self.stairsStepper.value >= 10 && self.stairsStepper.value < 50) {
+        [self.stairsStepper setStepValue:5.0];
+    }
+    else if (self.stairsStepper.value >= 50 && self.stairsStepper.value < 250) {
+        [self.stairsStepper setStepValue:25.0];
+    }
+    else if (self.stairsStepper.value >= 250 && self.stairsStepper.value < 1000) {
+        [self.stairsStepper setStepValue:50.0];
+    }
+    else {
+        [self.stairsStepper setStepValue:100.0];
+    }
     self.numStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
