@@ -92,6 +92,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(checkGoalStatus)
+                                                 name:@"reloadDataView"
+                                               object:nil];
+    
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 600)];
@@ -147,6 +153,31 @@
     // Set up the labels and other outlet with data of goal to be viewed.
     [self loadFromDB];
     [self showDetails];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self loadFromDB];
+}
+
+-(void) checkGoalStatus {
+    // check for if the start or end date has passed and update the status.
+    if ((self.viewGoal.goalStatus == Pending) && [[[NSDate date] earlierDate:self.viewGoal.goalStartDate]isEqualToDate: self.viewGoal.goalStartDate]) {
+        NSLog(@"active");
+        
+        self.viewGoal.goalStatus = Active;
+        
+        // Update history for the goal.
+        [self storeGoalStatusChangeToDB];
+    }
+    if ((self.viewGoal.goalStatus == Active) && [[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
+        NSLog(@"overdue");
+        
+        self.viewGoal.goalStatus = Overdue;
+        
+        // Update history for the goal.
+        [self storeGoalStatusChangeToDB];
+    }
+    [self loadFromDB];
 }
 
 -(void)loadFromDB {
@@ -212,6 +243,7 @@
             self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
         }
     }
+    [self showDetails];
     [self setUpStats];
 }
 
@@ -277,6 +309,12 @@
     
     if (dayStepsAverage == 0.0 && dayStairsAverage == 0.0) {
         self.estimatedCompletionLabel.text = @"No progress made yet";
+    }
+    else if (self.viewGoal.goalStatus == Abandoned) {
+        self.estimatedCompletionLabel.text = @"Goal Abandoned";
+    }
+    else if (self.viewGoal.goalStatus == Completed) {
+        self.estimatedCompletionLabel.text = @"Goal Completed";
     }
     else {
         if (dayStepsAverage == 0.0) {
@@ -461,6 +499,10 @@
     
     self.stepperLabel.text = @"0";
     self.stepperStairsLabel.text = @"0";
+    self.addStepper.value = 0.0;
+    [self.addStepper setStepValue:1.0];
+    self.addStairsStepper.value = 0.0;
+    [self.addStairsStepper setStepValue:1.0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -494,7 +536,12 @@
         }
     }
     // Reload the view.
-    [self showDetails];
+    [self checkGoalStatus];
+}
+
+-(IBAction)unwindFromHistory:(UIStoryboardSegue *)segue {
+    // Reload the view.
+    [self checkGoalStatus];
 }
 
 #pragma mark - Navigation
@@ -833,8 +880,14 @@
     [self.autoStepSpinner stopAnimating];
     self.autoStepSpinner.hidden = YES;
     //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now completed" message:@"This goal is now completed." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
+    
+    UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
+    completedNotification.fireDate = [NSDate date];
+    completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
+    completedNotification.soundName = UILocalNotificationDefaultSoundName;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
+    
     [self showAndEnableLeftNavigationItem];
 }
 

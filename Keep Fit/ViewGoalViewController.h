@@ -21,5 +21,6 @@
 @property Testing *testing;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue; // Returning from edit view.
+-(IBAction)unwindFromHistory:(UIStoryboardSegue *)segue;
 
 @end

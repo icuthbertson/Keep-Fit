@@ -36,6 +36,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadFromDB)
+                                                 name:@"reloadData"
+                                               object:nil];
+    
     // set navigation title.
     self.navigationItem.title = @"Goals";
     
@@ -115,6 +120,30 @@
                 }
             }
         }
+        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+        
+        // Schedule the notification
+        UILocalNotification* startNotification = [[UILocalNotification alloc] init];
+        startNotification.fireDate = goal.goalStartDate;
+        startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];
+        startNotification.soundName = UILocalNotificationDefaultSoundName;
+        startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
+        
+        UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+        endNotification.fireDate = goal.goalCompletionDate;
+        endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
+        endNotification.soundName = UILocalNotificationDefaultSoundName;
+        endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
+        
+        // Request to reload table view data
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+        
         // Reload table view data.
         [self.tableView reloadData];
     }
