@@ -246,14 +246,51 @@
     if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
         self.editGoal.goalStartDate = self.editStartDateField.date;
         NSLog(@"Start Date - Save: %@",self.editGoal.goalStartDate);
+        [self updateLocalNotification:[NSString stringWithFormat:@"%@start",self.editGoal.goalName] type:@"start"];
         self.wasEdit = YES;
     }
     // If the end date is different set to the new value.
     if (!([self.editGoal.goalCompletionDate isEqualToDate:self.editDateField.date])) {
         self.editGoal.goalCompletionDate = self.editDateField.date;
         NSLog(@"Completion Date - Save: %@",self.editGoal.goalCompletionDate);
+        [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
         self.wasEdit = YES;
     }
+}
+
+- (void)updateLocalNotification:(NSString*)notificationID type:(NSString*)typeString {
+    //loop through all scheduled notifications and cancel the one we're looking for
+    UILocalNotification *cancelThisNotification = nil;
+    BOOL hasNotification = NO;
+    
+    for (UILocalNotification *someNotification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+        if([[someNotification.userInfo objectForKey:notificationID] isEqualToString:notificationID]) {
+            cancelThisNotification = someNotification;
+            hasNotification = YES;
+            break;
+        }
+    }
+    if (hasNotification == YES) {
+        NSLog(@"%@ ",cancelThisNotification);
+        [[UIApplication sharedApplication] cancelLocalNotification:cancelThisNotification];
+    }
+    
+    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+    if ([typeString isEqualToString:@"start"]) {
+        localNotification.fireDate = self.editGoal.goalStartDate;
+        localNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",self.editGoal.goalName];
+    }
+    else {
+        localNotification.fireDate = self.editGoal.goalCompletionDate;
+        localNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",self.editGoal.goalName];
+    }
+    localNotification.soundName = UILocalNotificationDefaultSoundName;
+    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@%@",self.editGoal.goalName,typeString] forKey:[NSString stringWithFormat:@"%@%@",self.editGoal.goalName,typeString]];
+    localNotification.userInfo = infoDict;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
 // This method is used to test the inputs and stop the prepareForSegue method from being called if No is returned.

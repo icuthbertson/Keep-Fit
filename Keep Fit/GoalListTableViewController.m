@@ -131,6 +131,9 @@
         startNotification.soundName = UILocalNotificationDefaultSoundName;
         startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
         
+        NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
+        startNotification.userInfo = infoDictstart;
+        
         [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
         
         UILocalNotification* endNotification = [[UILocalNotification alloc] init];
@@ -138,6 +141,9 @@
         endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
         endNotification.soundName = UILocalNotificationDefaultSoundName;
         endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        
+        NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
+        endNotification.userInfo = infoDictend;
         
         [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
         
