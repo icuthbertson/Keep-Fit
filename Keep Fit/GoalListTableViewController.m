@@ -48,7 +48,7 @@
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     // Default list to all.
-    self.listType = 6;
+    self.listType = 7;
     
     // Initialise testing object.
     self.mainTabBarController = (MainTabBarViewController *)self.tabBarController;
@@ -218,7 +218,7 @@
         query = [NSString stringWithFormat:@"select * from %@ where goalStatus='%ld'", self.mainTabBarController.testing.getGoalDBName, (long)self.listType];
     }
     else if (self.listType == 7) {
-        query = [NSString stringWithFormat:@"select * from %@ where goalStatus=0 or goalStatus=1 or goalStatus=2", self.mainTabBarController.testing.getGoalDBName];
+        query = [NSString stringWithFormat:@"select * from %@ where goalStatus=0 or goalStatus=1 or goalStatus=2 or goalStatus=3", self.mainTabBarController.testing.getGoalDBName];
     }
     
     // Re-initialise the query results array.

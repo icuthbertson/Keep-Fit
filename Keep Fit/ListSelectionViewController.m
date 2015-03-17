@@ -105,7 +105,7 @@
     
     switch (row) {
         case 0: //Pending, Active, Overdue
-            NSLog(@"Pending, Active, Overdue");
+            NSLog(@"Pending, Active, Overdue, Suspended");
             self.listType = 7;
             break;
         case 1: //All
