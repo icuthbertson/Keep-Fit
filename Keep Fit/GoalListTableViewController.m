@@ -223,7 +223,7 @@
     settingsResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:settingsQuery]];
     // If there is not a persisted date saved, save the current date.
     if (settingsResults.count == 0) {
-        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d,%d)", 0,1];
+        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d,%d,%d,%d,%d,%d,%d,%d)", 0,1,1,1,1,1,0,0];
         // Execute the query.
         [self.dbManager executeQuery:settingsQuery];
         
@@ -234,13 +234,33 @@
             NSLog(@"Could not execute the query.");
         }
         self.mainTabBarController.settings.goalConversionSetting = 0;
+        self.mainTabBarController.settings.pending = YES;
+        self.mainTabBarController.settings.active = YES;
+        self.mainTabBarController.settings.overdue = YES;
+        self.mainTabBarController.settings.suspended = YES;
+        self.mainTabBarController.settings.abandoned = YES;
+        self.mainTabBarController.settings.completed = YES;
     }
     else {
         // else set the persisted date in the testing object.
         NSInteger indexOfGoalConversion = [self.dbManager.arrColumnNames indexOfObject:@"goalConversion"];
         NSInteger indexOfNotifications = [self.dbManager.arrColumnNames indexOfObject:@"notifications"];
+        NSInteger indexOfPending = [self.dbManager.arrColumnNames indexOfObject:@"pending"];
+        NSInteger indexOfActive = [self.dbManager.arrColumnNames indexOfObject:@"active"];
+        NSInteger indexOfOverdue = [self.dbManager.arrColumnNames indexOfObject:@"overdue"];
+        NSInteger indexOfSuspended = [self.dbManager.arrColumnNames indexOfObject:@"suspended"];
+        NSInteger indexOfAbandoned = [self.dbManager.arrColumnNames indexOfObject:@"abandoned"];
+        NSInteger indexOfCompleted = [self.dbManager.arrColumnNames indexOfObject:@"completed"];
         self.mainTabBarController.settings.goalConversionSetting =[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue];
         self.mainTabBarController.settings.notifications = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfNotifications] boolValue];
+        
+        self.mainTabBarController.settings.pending = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfPending] boolValue];
+        self.mainTabBarController.settings.active = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfActive] boolValue];
+        self.mainTabBarController.settings.overdue = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfOverdue] boolValue];
+        self.mainTabBarController.settings.suspended = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfSuspended] boolValue];
+        self.mainTabBarController.settings.abandoned = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfAbandoned] boolValue];
+        self.mainTabBarController.settings.completed = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfCompleted] boolValue];
+        
         NSLog(@"Goal Conversion From DB: %d",[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue]);
     }
     
@@ -257,7 +277,67 @@
         query = [NSString stringWithFormat:@"select * from %@ where goalStatus='%ld'", self.mainTabBarController.testing.getGoalDBName, (long)self.listType];
     }
     else if (self.listType == 7) {
-        query = [NSString stringWithFormat:@"select * from %@ where goalStatus=0 or goalStatus=1 or goalStatus=2 or goalStatus=3", self.mainTabBarController.testing.getGoalDBName];
+        NSString *defaultListQuery = [[NSString alloc] init];
+        int count = 0;
+        if (self.mainTabBarController.settings.pending) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Pending];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Pending];
+            }
+            count++;
+        }
+        if (self.mainTabBarController.settings.active) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Active];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Active];
+            }
+            count++;
+        }
+        if (self.mainTabBarController.settings.overdue) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Overdue];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Overdue];
+            }
+            count++;
+        }
+        if (self.mainTabBarController.settings.suspended) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Suspended];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Suspended];
+            }
+            count++;
+        }
+        if (self.mainTabBarController.settings.abandoned) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Abandoned];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Abandoned];
+            }
+            count++;
+        }
+        if (self.mainTabBarController.settings.completed) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"select * from %@ where goalStatus='%d'",self.mainTabBarController.testing.getGoalDBName,Completed];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@ or goalStatus='%d'",defaultListQuery,Completed];
+            }
+            count++;
+        }
+        if (count == 0) {
+            defaultListQuery = [NSString stringWithFormat:@"select * from %@ where 1=0",self.mainTabBarController.testing.getGoalDBName];
+        }
+        query = [NSString stringWithFormat:@"%@", defaultListQuery];
+        NSLog(@"%@",query);
     }
     
     // Re-initialise the query results array.

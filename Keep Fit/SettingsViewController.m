@@ -36,6 +36,12 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *goalConversionSelector;
 - (IBAction)saveGeneralSettings:(id)sender;
 @property (weak, nonatomic) IBOutlet UISwitch *notificationsSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *pendingSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *activeSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *overdueSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *suspendedSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *abandonedSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *completedSwitch;
 
 
 @property MainTabBarViewController *mainTabBarController;
@@ -55,7 +61,7 @@
     
     // Set up the scroll view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 700)];
+    [self.scrollView setContentSize:CGSizeMake(320, 1000)];
     [self.scrollView setBackgroundColor:[UIColor lightGrayColor]];
     
     self.generalView.layer.cornerRadius = 5;
@@ -106,6 +112,13 @@
     }
     
     [self.notificationsSwitch setOn:self.mainTabBarController.settings.notifications];
+    
+    [self.pendingSwitch setOn:self.mainTabBarController.settings.pending];
+    [self.activeSwitch setOn:self.mainTabBarController.settings.active];
+    [self.overdueSwitch setOn:self.mainTabBarController.settings.overdue];
+    [self.suspendedSwitch setOn:self.mainTabBarController.settings.suspended];
+    [self.abandonedSwitch setOn:self.mainTabBarController.settings.abandoned];
+    [self.completedSwitch setOn:self.mainTabBarController.settings.completed];
 }
 
 -(void)loadFromDB {
@@ -238,7 +251,7 @@
 
 - (IBAction)saveGeneralSettings:(id)sender {
     // Update goal in DB.
-    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d', notifications='%d'", self.goalConversionSelector.selectedSegmentIndex, self.notificationsSwitch.isOn];
+    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d', notifications='%d', pending='%d', active='%d', overdue='%d', suspended='%d', abandoned='%d', completed='%d'", self.goalConversionSelector.selectedSegmentIndex, self.notificationsSwitch.isOn, self.pendingSwitch.isOn, self.activeSwitch.isOn, self.overdueSwitch.isOn, self.suspendedSwitch.isOn, self.abandonedSwitch.isOn, self.completedSwitch.isOn];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

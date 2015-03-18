@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.menuItems = @[@"PAandO", @"All", @"Pending", @"Active", @"Overdue", @"Suspended", @"Abandoned", @"Completed"];
+    self.menuItems = @[@"Default", @"All", @"Pending", @"Active", @"Overdue", @"Suspended", @"Abandoned", @"Completed"];
 }
 
 - (void)didReceiveMemoryWarning {

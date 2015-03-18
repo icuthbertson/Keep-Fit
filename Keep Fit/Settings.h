@@ -13,5 +13,11 @@
 
 @property Conversion goalConversionSetting;
 @property BOOL notifications;
+@property BOOL pending;
+@property BOOL active;
+@property BOOL overdue;
+@property BOOL suspended;
+@property BOOL abandoned;
+@property BOOL completed;
 
 @end
