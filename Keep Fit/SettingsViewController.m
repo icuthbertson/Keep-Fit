@@ -35,6 +35,7 @@
 - (IBAction)goalConversionAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *goalConversionSelector;
 - (IBAction)saveGeneralSettings:(id)sender;
+@property (weak, nonatomic) IBOutlet UISwitch *notificationsSwitch;
 
 
 @property MainTabBarViewController *mainTabBarController;
@@ -103,6 +104,8 @@
             [self.scheduleView setFrame:CGRectMake(self.scheduleView.frame.origin.x, self.scheduleView.frame.origin.y, self.scheduleView.frame.size.width, 0.0)];
         }];
     }
+    
+    [self.notificationsSwitch setOn:self.mainTabBarController.settings.notifications];
 }
 
 -(void)loadFromDB {
@@ -139,7 +142,7 @@
     }
 }
 
--(void)updateSettings {
+-(void)updateTestSettings {
     // Update goal in DB.
     NSString *query = [NSString stringWithFormat:@"update testSettings set stepsTime='%d', stairsTime='%d'", self.settings.stepsTime, self.settings.stairsTime];
     // Execute the query.
@@ -147,9 +150,19 @@
     
     if (self.dbManager.affectedRows != 0) {
         NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                        message:[NSString stringWithFormat:@"Testing Settings Saved."]
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
     else {
         NSLog(@"Could not execute the query.");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                        message:[NSString stringWithFormat:@"An Error occured. General Settings not saved"]
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
 }
 
@@ -216,7 +229,7 @@
 - (IBAction)saveTestingSettings:(id)sender {
     self.settings.stepsTime = [self.stepsLabel.text intValue];
     self.settings.stairsTime = [self.stairsLabel.text intValue];
-    [self updateSettings];
+    [self updateTestSettings];
 }
 
 - (IBAction)goalConversionAction:(id)sender {
@@ -225,15 +238,28 @@
 
 - (IBAction)saveGeneralSettings:(id)sender {
     // Update goal in DB.
-    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d'", self.goalConversionSelector.selectedSegmentIndex];
+    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d', notifications='%d'", self.goalConversionSelector.selectedSegmentIndex, self.notificationsSwitch.isOn];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
     if (self.dbManager.affectedRows != 0) {
         NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        if (!self.notificationsSwitch.isOn) {
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+            message:[NSString stringWithFormat:@"General Settings Saved."]
+            delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
     else {
         NSLog(@"Could not execute the query.");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                        message:[NSString stringWithFormat:@"An Error occured. General Settings not saved"]
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
 }
 

@@ -38,6 +38,7 @@
 		AE8631BE1AACF0E70089D10C /* TestSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8631BD1AACF0E70089D10C /* TestSettings.m */; };
 		AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE969A631A8BD1B80032B287 /* EditGoalViewController.m */; };
 		AE96A7B41AB747C600C4F537 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = AE96A7B31AB747C600C4F537 /* Settings.m */; };
+		AE9D0AC51AB9F46C00C2BB6D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE9D0AC41AB9F46C00C2BB6D /* Social.framework */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
@@ -111,6 +112,7 @@
 		AE969A631A8BD1B80032B287 /* EditGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditGoalViewController.m; sourceTree = "<group>"; };
 		AE96A7B21AB747C600C4F537 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		AE96A7B31AB747C600C4F537 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		AE9D0AC41AB9F46C00C2BB6D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -125,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE9D0AC51AB9F46C00C2BB6D /* Social.framework in Frameworks */,
 				AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +216,7 @@
 		AE40A68F1A8946BB000DD45A = {
 			isa = PBXGroup;
 			children = (
+				AE9D0AC41AB9F46C00C2BB6D /* Social.framework */,
 				AE2490ED1AA4F10600A6D816 /* Default-568h@2x.png */,
 				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
 				AE40A69A1A8946BB000DD45A /* Keep Fit */,

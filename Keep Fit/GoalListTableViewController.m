@@ -125,30 +125,32 @@
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
         
         // Schedule the notification
-        UILocalNotification* startNotification = [[UILocalNotification alloc] init];
-        startNotification.fireDate = goal.goalStartDate;
-        startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];
-        startNotification.soundName = UILocalNotificationDefaultSoundName;
-        startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-        
-        NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
-        startNotification.userInfo = infoDictstart;
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
-        
-        UILocalNotification* endNotification = [[UILocalNotification alloc] init];
-        endNotification.fireDate = goal.goalCompletionDate;
-        endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
-        endNotification.soundName = UILocalNotificationDefaultSoundName;
-        endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-        
-        NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
-        endNotification.userInfo = infoDictend;
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
-        
-        // Request to reload table view data
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+        if (self.mainTabBarController.settings.notifications) {
+            UILocalNotification* startNotification = [[UILocalNotification alloc] init];
+            startNotification.fireDate = goal.goalStartDate;
+            startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];
+            startNotification.soundName = UILocalNotificationDefaultSoundName;
+            startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+            
+            NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
+            startNotification.userInfo = infoDictstart;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
+            
+            UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+            endNotification.fireDate = goal.goalCompletionDate;
+            endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
+            endNotification.soundName = UILocalNotificationDefaultSoundName;
+            endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+            
+            NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
+            endNotification.userInfo = infoDictend;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
+            
+            // Request to reload table view data
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+        }
         
         // Reload table view data.
         [self.tableView reloadData];
@@ -221,7 +223,7 @@
     settingsResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:settingsQuery]];
     // If there is not a persisted date saved, save the current date.
     if (settingsResults.count == 0) {
-        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d)", 0];
+        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d,%d)", 0,1];
         // Execute the query.
         [self.dbManager executeQuery:settingsQuery];
         
@@ -236,7 +238,9 @@
     else {
         // else set the persisted date in the testing object.
         NSInteger indexOfGoalConversion = [self.dbManager.arrColumnNames indexOfObject:@"goalConversion"];
+        NSInteger indexOfNotifications = [self.dbManager.arrColumnNames indexOfObject:@"notifications"];
         self.mainTabBarController.settings.goalConversionSetting =[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue];
+        self.mainTabBarController.settings.notifications = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfNotifications] boolValue];
         NSLog(@"Goal Conversion From DB: %d",[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue]);
     }
     
@@ -554,6 +558,7 @@
         destViewController.keepFitGoals = self.keepFitGoals;
         // Pass the testing object.
         destViewController.testing = self.mainTabBarController.testing;
+        destViewController.settings = self.mainTabBarController.settings;
         destViewController.hidesBottomBarWhenPushed = YES;
     }
     else if ([segue.identifier isEqualToString:@"addGoal"]) {

@@ -12,5 +12,6 @@
 @interface Settings : NSObject
 
 @property Conversion goalConversionSetting;
+@property BOOL notifications;
 
 @end

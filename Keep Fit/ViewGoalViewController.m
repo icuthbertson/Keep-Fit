@@ -181,7 +181,7 @@
 }
 
 -(void)loadFromDB {
-    self.settings = [[TestSettings alloc] init];
+    self.testSettings = [[TestSettings alloc] init];
     NSString *query = @"select * from testSettings";
     
     NSArray *currentSettingsResults;
@@ -190,10 +190,10 @@
     NSLog(@"%@",currentSettingsResults);
     
     if (currentSettingsResults.count == 0) {
-        self.settings.stepsTime = 1;
-        self.settings.stairsTime = 1;
+        self.testSettings.stepsTime = 1;
+        self.testSettings.stairsTime = 1;
         
-        query = [NSString stringWithFormat:@"insert into testSettings values(%ld,%ld)", (long)self.settings.stepsTime, (long)self.settings.stairsTime];
+        query = [NSString stringWithFormat:@"insert into testSettings values(%ld,%ld)", (long)self.testSettings.stepsTime, (long)self.testSettings.stairsTime];
         // Execute the query.
         [self.dbManager executeQuery:query];
         
@@ -207,10 +207,10 @@
     else {
         NSInteger indexOfStepsTime = [self.dbManager.arrColumnNames indexOfObject:@"stepsTime"];
         NSInteger indexOfStairsTime = [self.dbManager.arrColumnNames indexOfObject:@"stairsTime"];
-        self.settings.stepsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStepsTime] intValue];
-        self.settings.stairsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStairsTime] intValue];
-        NSLog(@"Steps Time: %ld",(long)self.settings.stepsTime);
-        NSLog(@"Stairs Time: %ld",(long)self.settings.stairsTime);
+        self.testSettings.stepsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStepsTime] intValue];
+        self.testSettings.stairsTime = [[[currentSettingsResults objectAtIndex:0] objectAtIndex:indexOfStairsTime] intValue];
+        NSLog(@"Steps Time: %ld",(long)self.testSettings.stepsTime);
+        NSLog(@"Stairs Time: %ld",(long)self.testSettings.stairsTime);
     }
     
     //load stats
@@ -552,6 +552,7 @@
         EditGoalViewController *destViewController = segue.destinationViewController;
         destViewController.editGoal = self.viewGoal;
         destViewController.listGoalNames = self.listGoalNames;
+        destViewController.settings = self.settings;
     }
     else if ([segue.identifier isEqualToString:@"showHistory"]) {
         HistoryTableViewController *destViewController = segue.destinationViewController;
@@ -572,7 +573,7 @@
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
-            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressSteps*self.settings.stepsTime;
+            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressSteps*self.testSettings.stepsTime;
             [self storeGoalStatusChangeToDB];
             [self storeGoalStatisticsToDB];
             [self updateView];
@@ -591,7 +592,7 @@
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
-            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stairsTime;
+            self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stairsTime;
             [self storeGoalStatusChangeToDB];
             [self storeGoalStatisticsToDB];
             [self updateView];
@@ -617,10 +618,10 @@
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             if (self.progressStairs > 0) {
-                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stairsTime;
+                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stairsTime;
             }
             else {
-                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.settings.stepsTime;
+                self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stepsTime;
             }
             [self storeGoalStatusChangeToDB];
             [self storeGoalStatisticsToDB];
@@ -651,8 +652,8 @@
         [self.autoStepSpinner startAnimating];
         self.outletHistoryButton.hidden = YES;
         self.abandonButton.hidden = YES;
-        NSLog(@"Steps Time: %ld",(long)self.settings.stepsTime);
-        NSLog(@"Stairs Time: %ld",(long)self.settings.stairsTime);
+        NSLog(@"Steps Time: %ld",(long)self.testSettings.stepsTime);
+        NSLog(@"Stairs Time: %ld",(long)self.testSettings.stairsTime);
         [self startBackgroundThread];
     } /**********************************stop recording*****************************************/
     else {
@@ -686,7 +687,7 @@
     NSLog(@"performing background thread");
     
     if (((self.viewGoal.goalType == Steps) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountSteps != self.viewGoal.goalProgressSteps)) {
-        timerStep = [NSTimer timerWithTimeInterval:(double)self.settings.stepsTime
+        timerStep = [NSTimer timerWithTimeInterval:(double)self.testSettings.stepsTime
                                             target:self
                                           selector:@selector(takeStep)
                                           userInfo:nil
@@ -694,7 +695,7 @@
         [[NSRunLoop mainRunLoop] addTimer:timerStep forMode:NSRunLoopCommonModes];
     }
     if (((self.viewGoal.goalType == Stairs) || (self.viewGoal.goalType == Both)) && (self.viewGoal.goalAmountStairs != self.viewGoal.goalProgressStairs)) {
-        timerStair = [NSTimer timerWithTimeInterval:(double)self.settings.stairsTime
+        timerStair = [NSTimer timerWithTimeInterval:(double)self.testSettings.stairsTime
                                              target:self
                                            selector:@selector(takeStair)
                                            userInfo:nil
@@ -881,12 +882,21 @@
     self.autoStepSpinner.hidden = YES;
     //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
     
-    UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
-    completedNotification.fireDate = [NSDate date];
-    completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
-    completedNotification.soundName = UILocalNotificationDefaultSoundName;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
+    if (self.settings.notifications) {
+        UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
+        completedNotification.fireDate = [NSDate date];
+        completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
+        completedNotification.soundName = UILocalNotificationDefaultSoundName;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+            message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
+            delegate:self cancelButtonTitle:@"OK"
+            otherButtonTitles:nil];
+        [alert show];
+    }
     
     [self showAndEnableLeftNavigationItem];
 }

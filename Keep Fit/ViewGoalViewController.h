@@ -10,14 +10,15 @@
 #import "KeepFitGoal.h"
 #import "TestSettings.h"
 #import "Testing.h"
+#import "Settings.h"
 
 @interface ViewGoalViewController : UIViewController<UIAlertViewDelegate>
 
 @property KeepFitGoal *viewGoal; // goal to be viewed.
 @property NSMutableArray *listGoalNames; // list of goal names.
 @property NSMutableArray *keepFitGoals; // array of goals.
-@property TestSettings *settings;
-
+@property TestSettings *testSettings;
+@property Settings *settings;
 @property Testing *testing;
 
 -(IBAction)unwindToView:(UIStoryboardSegue *)segue; // Returning from edit view.

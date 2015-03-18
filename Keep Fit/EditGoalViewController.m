@@ -246,14 +246,18 @@
     if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
         self.editGoal.goalStartDate = self.editStartDateField.date;
         NSLog(@"Start Date - Save: %@",self.editGoal.goalStartDate);
-        [self updateLocalNotification:[NSString stringWithFormat:@"%@start",self.editGoal.goalName] type:@"start"];
+        if (self.settings.notifications) {
+            [self updateLocalNotification:[NSString stringWithFormat:@"%@start",self.editGoal.goalName] type:@"start"];
+        }
         self.wasEdit = YES;
     }
     // If the end date is different set to the new value.
     if (!([self.editGoal.goalCompletionDate isEqualToDate:self.editDateField.date])) {
         self.editGoal.goalCompletionDate = self.editDateField.date;
         NSLog(@"Completion Date - Save: %@",self.editGoal.goalCompletionDate);
-        [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
+        if (self.settings.notifications) {
+            [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
+        }
         self.wasEdit = YES;
     }
 }
