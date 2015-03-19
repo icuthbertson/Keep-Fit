@@ -15,6 +15,7 @@
 @property KeepFitGoal *editGoal; // Goal object that is sent from and taken back by the GoalList.
 @property BOOL wasEdit; // Boolean to tell if there was an edit or not.
 @property NSMutableArray *listGoalNames; // List of previous goal names to check against for duplicates.
+@property NSString *currentName;
 @property Settings *settings;
 
 @end

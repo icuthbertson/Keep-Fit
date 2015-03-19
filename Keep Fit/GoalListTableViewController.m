@@ -627,6 +627,15 @@
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
         // Pass the list of goals.
         destViewController.keepFitGoals = self.keepFitGoals;
+        // Set up the list of goal names.
+        NSMutableArray *goalNamesForChecking = [[NSMutableArray alloc] init];
+        for (int i=0; i<[self.keepFitGoals count]; i++) {
+            NSString *goalNameForArray = [[NSString alloc] init];
+            goalNameForArray = [[self.keepFitGoals objectAtIndex:i] goalName];
+            [goalNamesForChecking addObject:goalNameForArray];
+        }
+        // Pass the list of goal names.
+        destViewController.listGoalNames = goalNamesForChecking;
         // Pass the testing object.
         destViewController.testing = self.mainTabBarController.testing;
         destViewController.settings = self.mainTabBarController.settings;

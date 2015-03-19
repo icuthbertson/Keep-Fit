@@ -14,8 +14,6 @@
 // UI Outlet and Action declarations.
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
-@property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
-@property (weak, nonatomic) IBOutlet UIDatePicker *dateStartPicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *typeSelecter;
 - (IBAction)typeSelecterAction:(id)sender;
 - (IBAction)stepsStepperAction:(id)sender;
@@ -29,6 +27,12 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *conversionTypeSelector;
 @property (weak, nonatomic) IBOutlet UILabel *numStepsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
+@property (weak, nonatomic) IBOutlet UITextField *startDateTextField;
+@property (weak, nonatomic) IBOutlet UITextField *endDateTextField;
+
+@property UIDatePicker *dateStartPicker;
+@property UIDatePicker *datePicker;
+@property NSDateFormatter *formatter;
 
 @end
 
@@ -43,10 +47,18 @@
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"dd MMMM yyyy HH:mm"];
+    
     // Set the minimum date of the date pickers to the current time
     // or stored time from the Testing object.
+    self.dateStartPicker = [[UIDatePicker alloc] init];
     [self.dateStartPicker setMinimumDate:[NSDate date]];
+    self.datePicker = [[UIDatePicker alloc] init];
     [self.datePicker setMinimumDate:[NSDate date]];
+    
+    self.startDateTextField.text = [self.formatter stringFromDate:[NSDate date]];
+    self.endDateTextField.text = [self.formatter stringFromDate:[NSDate date]];
     
     self.conversionTypeSelector.selectedSegmentIndex = self.settings.goalConversionSetting;
     
@@ -84,6 +96,17 @@
     self.numStepsLabel.text = @"0";
     self.numStairsLabel.text = @"0";
     
+    
+    self.dateStartPicker.datePickerMode = UIDatePickerModeDateAndTime;
+    [self.dateStartPicker addTarget:self action:@selector(updateTextField:)
+         forControlEvents:UIControlEventValueChanged];
+    [self.startDateTextField setInputView:self.dateStartPicker];
+    
+    self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    [self.datePicker addTarget:self action:@selector(updateTextField:)
+              forControlEvents:UIControlEventValueChanged];
+    [self.endDateTextField setInputView:self.datePicker];
+    
     // TapGestureRecognizer declaration for closing the keyboard if there is a tap off of it.
     // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -101,11 +124,27 @@
 // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
 -(void)dismissKeyboard {
     [self.textField resignFirstResponder];
+    [self.startDateTextField resignFirstResponder];
+    [self.endDateTextField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+-(void)updateTextField:(UIDatePicker *)sender {
+    if (sender == self.dateStartPicker) {
+        self.startDateTextField.text = [self.formatter stringFromDate:sender.date];
+    }
+    else if (sender == self.datePicker) {
+        self.endDateTextField.text = [self.formatter stringFromDate:sender.date];
+    }
+}
+
+- (NSDate *)dateWithZeroSeconds:(NSDate *)date {
+    NSTimeInterval time = floor([date timeIntervalSince1970] / 60.0) * 60.0;
+    return  [NSDate dateWithTimeIntervalSince1970:time];
 }
 
 #pragma mark - Stepper Control
@@ -244,9 +283,9 @@
     self.goal.goalProgressStairs = 0;
     
     // Set the start and end date of the goal to those from their respective date pickers.
-    self.goal.goalStartDate = self.dateStartPicker.date;
+    self.goal.goalStartDate = [self dateWithZeroSeconds:self.dateStartPicker.date];
     
-    self.goal.goalCompletionDate = self.datePicker.date;
+    self.goal.goalCompletionDate = [self dateWithZeroSeconds:self.datePicker.date];
     
     // Set the creation date of the goal to the current date.
     self.goal.goalCreationDate = [NSDate date];

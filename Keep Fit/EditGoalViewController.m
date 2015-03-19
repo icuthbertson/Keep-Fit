@@ -17,8 +17,6 @@
 - (IBAction)typeSelecterAction:(id)sender;
 - (IBAction)stepsStepperAction:(id)sender;
 - (IBAction)stairsStepperAction:(id)sender;
-@property (weak, nonatomic) IBOutlet UIDatePicker *editDateField;
-@property (weak, nonatomic) IBOutlet UIDatePicker *editStartDateField;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *numStepsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numStairsLabel;
@@ -28,6 +26,12 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *conversionTypeSelector;
 @property (weak, nonatomic) IBOutlet UILabel *numStepsTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
+@property (weak, nonatomic) IBOutlet UITextField *startDateTextField;
+@property (weak, nonatomic) IBOutlet UITextField *endDateTextField;
+
+@property UIDatePicker *editDateField;
+@property UIDatePicker *editStartDateField;
+@property NSDateFormatter *formatter;
 
 @end
 
@@ -45,6 +49,9 @@
     
     // Set the navigation bar title.
     self.navigationItem.title = [NSString stringWithFormat:@"Edit %@", self.editGoal.goalName];
+    
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"dd MMMM yyyy HH:mm"];
     
     // TapGestureRecognizer declaration for closing the keyboard if there is a tap off of it.
     // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
@@ -94,18 +101,34 @@
         self.stairsStepper.value = [self.numStairsLabel.text intValue];
     }
     
-    // Set the date pickers to be active depending on the status of the goal.
-    self.editTitleField.userInteractionEnabled = NO;
+    // Set the minimum date of the date pickers to the current time
+    // or stored time from the Testing object.
+    self.editStartDateField = [[UIDatePicker alloc] init];
+    [self.editStartDateField setDate:self.editGoal.goalStartDate];
+    self.editDateField = [[UIDatePicker alloc] init];
+    [self.editDateField setDate:self.editGoal.goalCompletionDate];
+    
+    self.editStartDateField.datePickerMode = UIDatePickerModeDateAndTime;
+    [self.editStartDateField addTarget:self action:@selector(updateTextField:)
+                   forControlEvents:UIControlEventValueChanged];
+    [self.startDateTextField setInputView:self.editStartDateField];
+    
+    self.editDateField.datePickerMode = UIDatePickerModeDateAndTime;
+    [self.editDateField addTarget:self action:@selector(updateTextField:)
+              forControlEvents:UIControlEventValueChanged];
+    [self.endDateTextField setInputView:self.editDateField];
+    
     if (self.editGoal.goalStatus == Active) {
-        self.editStartDateField.userInteractionEnabled = NO;
+        self.startDateTextField.userInteractionEnabled = NO;
     }
     else if (self.editGoal.goalStatus == Overdue) {
-        self.editDateField.userInteractionEnabled = NO;
-        self.editStartDateField.userInteractionEnabled = NO;
+        self.endDateTextField.userInteractionEnabled = NO;
+        self.startDateTextField.userInteractionEnabled = NO;
     }
     
-    [self.editStartDateField setDate:self.editGoal.goalStartDate];
-    [self.editDateField setDate:self.editGoal.goalCompletionDate];
+    self.startDateTextField.text = [self.formatter stringFromDate:self.editGoal.goalStartDate];
+    self.endDateTextField.text = [self.formatter stringFromDate:self.editGoal.goalCompletionDate];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -117,11 +140,27 @@
 // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
 -(void)dismissKeyboard {
     [self.editTitleField resignFirstResponder];
+    [self.startDateTextField resignFirstResponder];
+    [self.endDateTextField resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+-(void)updateTextField:(UIDatePicker *)sender {
+    if (sender == self.editStartDateField) {
+        self.startDateTextField.text = [self.formatter stringFromDate:sender.date];
+    }
+    else if (sender == self.editDateField) {
+        self.endDateTextField.text = [self.formatter stringFromDate:sender.date];
+    }
+}
+
+- (NSDate *)dateWithZeroSeconds:(NSDate *)date {
+    NSTimeInterval time = floor([date timeIntervalSince1970] / 60.0) * 60.0;
+    return  [NSDate dateWithTimeIntervalSince1970:time];
 }
 
 #pragma mark - Segmented Control
@@ -251,7 +290,7 @@
     }
     // If the start date is different set to the new value.
     if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
-        self.editGoal.goalStartDate = self.editStartDateField.date;
+        self.editGoal.goalStartDate = [self dateWithZeroSeconds:self.editStartDateField.date];
         NSLog(@"Start Date - Save: %@",self.editGoal.goalStartDate);
         if (self.settings.notifications) {
             [self updateLocalNotification:[NSString stringWithFormat:@"%@start",self.editGoal.goalName] type:@"start"];
@@ -260,7 +299,7 @@
     }
     // If the end date is different set to the new value.
     if (!([self.editGoal.goalCompletionDate isEqualToDate:self.editDateField.date])) {
-        self.editGoal.goalCompletionDate = self.editDateField.date;
+        self.editGoal.goalCompletionDate = [self dateWithZeroSeconds:self.editDateField.date];
         NSLog(@"Completion Date - Save: %@",self.editGoal.goalCompletionDate);
         if (self.settings.notifications) {
             [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
@@ -340,11 +379,9 @@
             }
         }
         // If the goal name has been used before alert with message and return NO.
-        int count = 0;
         for (int i=0; i<[self.listGoalNames count]; i++) {
             if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
-                count++;
-                if (count == 2) {
+                if (!([trimmedString isEqualToString:self.currentName])) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                     [alert show];
                     return NO;

@@ -572,6 +572,7 @@
         EditGoalViewController *destViewController = segue.destinationViewController;
         destViewController.editGoal = self.viewGoal;
         destViewController.listGoalNames = self.listGoalNames;
+        destViewController.currentName = self.viewGoal.goalName;
         destViewController.settings = self.settings;
     }
     else if ([segue.identifier isEqualToString:@"showHistory"]) {
