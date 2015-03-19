@@ -12,7 +12,7 @@
 #import "Testing.h"
 #import "Settings.h"
 
-@interface AddGoalViewController : UIViewController <UITextFieldDelegate>/*<UIPickerViewDataSource, UIPickerViewDelegate>*/
+@interface AddGoalViewController : UIViewController <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property KeepFitGoal *goal; // Goal object that'll to taken back by the GoalList.
 @property NSMutableArray *listGoalNames; // List of previous goal names to check against for duplicates.

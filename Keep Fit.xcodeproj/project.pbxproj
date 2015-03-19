@@ -48,6 +48,7 @@
 		AE9D0AD51ABB113200C2BB6D /* munro.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD11ABB113200C2BB6D /* munro.png */; };
 		AE9D0AD61ABB113200C2BB6D /* nevis.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD21ABB113200C2BB6D /* nevis.png */; };
 		AE9D0AD71ABB113200C2BB6D /* pluto.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD31ABB113200C2BB6D /* pluto.png */; };
+		AE9D0AD91ABB3A7C00C2BB6D /* finishline.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD81ABB3A7C00C2BB6D /* finishline.png */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
@@ -131,6 +132,7 @@
 		AE9D0AD11ABB113200C2BB6D /* munro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = munro.png; sourceTree = "<group>"; };
 		AE9D0AD21ABB113200C2BB6D /* nevis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nevis.png; sourceTree = "<group>"; };
 		AE9D0AD31ABB113200C2BB6D /* pluto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pluto.png; sourceTree = "<group>"; };
+		AE9D0AD81ABB3A7C00C2BB6D /* finishline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = finishline.png; sourceTree = "<group>"; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -300,6 +302,7 @@
 		AEBF72D61A9B5F19001505F2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AE9D0AD81ABB3A7C00C2BB6D /* finishline.png */,
 				AE9D0AD01ABB113200C2BB6D /* everest.png */,
 				AE9D0AD11ABB113200C2BB6D /* munro.png */,
 				AE9D0AD21ABB113200C2BB6D /* nevis.png */,
@@ -419,6 +422,7 @@
 				AE2490FE1AA908C400A6D816 /* home.png in Resources */,
 				AE2490EE1AA4F10600A6D816 /* Default-568h@2x.png in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
+				AE9D0AD91ABB3A7C00C2BB6D /* finishline.png in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

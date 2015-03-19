@@ -29,10 +29,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *startDateTextField;
 @property (weak, nonatomic) IBOutlet UITextField *endDateTextField;
+@property (weak, nonatomic) IBOutlet UIPickerView *presetGoalPicker;
+@property (weak, nonatomic) IBOutlet UILabel *goalSelectionLabel;
 
 @property UIDatePicker *dateStartPicker;
 @property UIDatePicker *datePicker;
 @property NSDateFormatter *formatter;
+@property NSMutableArray *presetImages;
+@property NSMutableArray *presetLabels;
 
 @end
 
@@ -113,6 +117,25 @@
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
+    
+    self.presetImages = [[NSMutableArray alloc] init];
+    [self.presetImages addObject:[UIImage imageNamed:@"finishline.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"everest.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"nevis.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"pluto.png"]];
+    
+    
+    self.presetLabels = [[NSMutableArray alloc] init];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Custom Goal"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Climb Mount Everest"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Climb Ben Nevis"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Walk Around Pluto"]];
+    
+    self.presetGoalPicker.delegate = self;
+    self.presetGoalPicker.dataSource = self;
+    self.presetGoalPicker.showsSelectionIndicator = YES;
+    
+    self.goalSelectionLabel.text = @"Custom Goal";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -145,6 +168,115 @@
 - (NSDate *)dateWithZeroSeconds:(NSDate *)date {
     NSTimeInterval time = floor([date timeIntervalSince1970] / 60.0) * 60.0;
     return  [NSDate dateWithTimeIntervalSince1970:time];
+}
+
+#pragma mark - Picker Control
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.goalSelectionLabel.text = [NSString stringWithFormat:@"%@",[self.presetLabels objectAtIndex:row]];
+    
+    switch (row) {
+        case 0:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"0";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 0.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 0;
+            self.typeSelecter.selectedSegmentIndex = 0;
+            self.numStepsTitleLabel.text = @"Number of Steps";
+            self.numStairsTitleLabel.text = @"Number of Stair";
+            
+            self.stepsStepper.userInteractionEnabled = YES;
+            self.stairsStepper.userInteractionEnabled = YES;
+            self.conversionTypeSelector.userInteractionEnabled = YES;
+            self.typeSelecter.userInteractionEnabled = YES;
+            
+            break;
+        case 1:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"29029";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 29029.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 1;
+            self.typeSelecter.selectedSegmentIndex = 1;
+            self.numStepsTitleLabel.text = @"Number of Miles to walk";
+            self.numStairsTitleLabel.text = @"Number of Feet to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.typeSelecter.userInteractionEnabled = NO;
+            break;
+        case 2:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"4409";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 4409.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 1;
+            self.typeSelecter.selectedSegmentIndex = 1;
+            self.numStepsTitleLabel.text = @"Number of Miles to walk";
+            self.numStairsTitleLabel.text = @"Number of Feet to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.typeSelecter.userInteractionEnabled = NO;
+            break;
+        case 3:
+            self.numStepsLabel.text = @"7232";
+            self.numStairsLabel.text = @"0";
+            self.stepsStepper.value = 7232.0;
+            self.stairsStepper.value = 0.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 2;
+            self.typeSelecter.selectedSegmentIndex = 0;
+            self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+            self.numStairsTitleLabel.text = @"Number of Meters to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.typeSelecter.userInteractionEnabled = NO;
+            break;
+        default:
+            break;
+    }
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
+    return 90.0;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UIView *pickerCustomView = (id)view;
+    UILabel *pickerViewLabel;
+    UIImageView *pickerImageView;
+    
+    if (!pickerCustomView) {
+        pickerCustomView= [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,
+                                                                   [pickerView rowSizeForComponent:component].width - 10.0f, [pickerView       rowSizeForComponent:component].height)];
+        pickerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 90.0f, 90.0f)];
+        pickerViewLabel= [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 0.0f,
+                                                                   [pickerView rowSizeForComponent:component].width - 10.0f, [pickerView rowSizeForComponent:component].height)];
+        
+        [pickerCustomView addSubview:pickerImageView];
+        [pickerCustomView addSubview:pickerViewLabel];
+    }
+    
+    pickerImageView.image = self.presetImages[row];
+    pickerViewLabel.backgroundColor = [UIColor clearColor];
+    pickerViewLabel.text = self.presetLabels[row];
+    return pickerCustomView;
+}
+
+- (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
+{
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.presetImages.count;
 }
 
 #pragma mark - Stepper Control
