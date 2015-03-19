@@ -380,7 +380,12 @@
         // If the type selector is at 0.
         // Set the goal type to Steps and pull the number of steps from the stepper.
         // Set the number of stairs to zero.
-        self.goal.goalType = Steps;
+        if ([self.presetGoalPicker selectedRowInComponent:0] == 0) {
+            self.goal.goalType = Steps;
+        }
+        else if ([self.presetGoalPicker selectedRowInComponent:0] == 3) {
+            self.goal.goalType = Pluto;
+        }
         self.goal.goalAmountSteps = [self.numStepsLabel.text intValue];
         self.goal.goalAmountStairs = 0;
     }
@@ -388,7 +393,15 @@
         // If the type selector is at 1.
         // Set the goal type to Stairs and pull the number of steps from the stepper.
         // Set the number of steps to zero.
-        self.goal.goalType = Stairs;
+        if ([self.presetGoalPicker selectedRowInComponent:0] == 0) {
+            self.goal.goalType = Stairs;
+        }
+        else if ([self.presetGoalPicker selectedRowInComponent:0] == 1) {
+            self.goal.goalType = Everest;
+        }
+        else if ([self.presetGoalPicker selectedRowInComponent:0] == 2) {
+            self.goal.goalType = Nevis;
+        }
         self.goal.goalAmountStairs = [self.numStairsLabel.text intValue];
         self.goal.goalAmountSteps = 0;
     }

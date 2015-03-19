@@ -24,7 +24,10 @@ typedef NS_ENUM(NSInteger, GoalStatus) {
 typedef NS_ENUM(NSInteger, GoalType) {
     Steps = 0,
     Stairs,
-    Both
+    Both,
+    Everest,
+    Nevis,
+    Pluto
 };
 
 // ENUMs of goal conversions.

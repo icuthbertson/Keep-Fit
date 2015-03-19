@@ -503,6 +503,18 @@
             }
             cellImage = [UIImage imageNamed:@"arrow-big-06.png"];
             break;
+        case Everest:
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            cellImage = [UIImage imageNamed:@"everest.png"];
+            break;
+        case Nevis:
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            cellImage = [UIImage imageNamed:@"nevis.png"];
+            break;
+        case Pluto:
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
+            cellImage = [UIImage imageNamed:@"pluto.png"];
+            break;
         default:
             break;
     }
@@ -511,9 +523,11 @@
     if (goal.goalStatus == Completed) {
         cellImage = [UIImage imageNamed:@"tick.png"];
     }
+    if (!(goal.goalType == Everest || goal.goalType == Nevis || goal.goalType == Pluto)) {
+        cellImage = [cellImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [cell.imageView setTintColor:tint];
+    }
     
-    cellImage = [cellImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [cell.imageView setTintColor:tint];
     cell.imageView.image = cellImage;
 
     return cell;
