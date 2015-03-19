@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.editTitleField.delegate = self;
+    
     // Set the minimum date of the date pickers to the current time
     // or stored time from the Testing object.
     [self.scrollView setScrollEnabled:YES];
@@ -115,6 +117,11 @@
 // Code from http://stackoverflow.com/questions/5306240/iphone-dismiss-keyboard-when-touching-outside-of-textfield
 -(void)dismissKeyboard {
     [self.editTitleField resignFirstResponder];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - Segmented Control

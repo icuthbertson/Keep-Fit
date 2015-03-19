@@ -428,54 +428,35 @@
     cell.textLabel.font = [UIFont systemFontOfSize:20];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
     
+    UIColor *tint = [[UIColor alloc] init];
+    UIImage *cellImage = [[UIImage alloc] init];
+    
     // Check what the status for the goal is and change set the statusText string accordingly and set the colour for the cell.
     NSString *statusText;
     switch (goal.goalStatus) {
         case Pending:
             statusText = [NSString stringWithFormat:@"Pending"];
-            //cell.textLabel.textColor = [UIColor blueColor];
-            //cell.detailTextLabel.textColor = [UIColor blueColor];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             break;
         case Active:
             statusText = [NSString stringWithFormat:@"Active"];
-            //cell.textLabel.textColor = [UIColor colorWithRed:((0) / 255.0) green:((204) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            //cell.detailTextLabel.textColor = [UIColor colorWithRed:((0) / 255.0) green:((204) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Overdue:
             statusText = [NSString stringWithFormat:@"Overdue"];
-            //cell.textLabel.textColor = [UIColor redColor];
-            //cell.detailTextLabel.textColor = [UIColor redColor];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((255) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Suspended:
             statusText = [NSString stringWithFormat:@"Suspended"];
-            //cell.textLabel.textColor = [UIColor colorWithRed:((255) / 255.0) green:((150) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            //cell.detailTextLabel.textColor = [UIColor colorWithRed:((255) / 255.0) green:((150) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((255) / 255.0) green:((215) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Abandoned:
             statusText = [NSString stringWithFormat:@"Abandoned"];
-            //cell.textLabel.textColor = [UIColor redColor];
-            //cell.detailTextLabel.textColor = [UIColor redColor];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((128) / 255.0) green:((128) / 255.0) blue:((128) / 255.0) alpha:1.0];
             break;
         case Completed:
             statusText = [NSString stringWithFormat:@"Completed"];
-            cell.textLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.detailTextLabel.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
-            cell.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((0) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         default:
             break;
@@ -494,6 +475,7 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
             }
+            cellImage = [UIImage imageNamed:@"arrow-big-02.png"];
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
@@ -506,6 +488,7 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Meters: %.2f/%.2f", (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
             }
+            cellImage = [UIImage imageNamed:@"arrow-big-03.png"];
             break;
         case Both:
             typeText = [NSString stringWithFormat:@"Steps and Stairs"];
@@ -518,12 +501,20 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f Meters: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312, (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
             }
+            cellImage = [UIImage imageNamed:@"arrow-big-06.png"];
             break;
         default:
             break;
     }
     // Set the text label for the cell with the status text and goal name.
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", goal.goalName, statusText];
+    if (goal.goalStatus == Completed) {
+        cellImage = [UIImage imageNamed:@"tick.png"];
+    }
+    
+    cellImage = [cellImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [cell.imageView setTintColor:tint];
+    cell.imageView.image = cellImage;
 
     return cell;
 }

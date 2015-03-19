@@ -10,7 +10,7 @@
 #import "KeepFitGoal.h"
 #import "Settings.h"
 
-@interface EditGoalViewController : UIViewController
+@interface EditGoalViewController : UIViewController <UITextFieldDelegate>
 
 @property KeepFitGoal *editGoal; // Goal object that is sent from and taken back by the GoalList.
 @property BOOL wasEdit; // Boolean to tell if there was an edit or not.

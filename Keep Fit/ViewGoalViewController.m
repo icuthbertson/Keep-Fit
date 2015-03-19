@@ -354,6 +354,9 @@
         [self showAndEnableRightNavigationItem];
     }
     
+    UIColor *tint = [[UIColor alloc] init];
+    UIImage *image = [[UIImage alloc] init];
+    
     // Set the title label to the goal name.
     self.viewTitle.text = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
     
@@ -361,25 +364,25 @@
     switch (self.viewGoal.goalStatus) {
         case Pending:
             self.viewStatus.text = [NSString stringWithFormat:@"Pending"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             break;
         case Active:
             self.viewStatus.text = [NSString stringWithFormat:@"Active"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Overdue:
             self.viewStatus.text = [NSString stringWithFormat:@"Overdue"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((255) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = NO;
             self.outletSuspendButton.hidden = NO;
             break;
         case Suspended:
             self.viewStatus.text = [NSString stringWithFormat:@"Suspended"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((255) / 255.0) green:((215) / 255.0) blue:((0) / 255.0) alpha:1.0];
             [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = NO;
@@ -387,7 +390,7 @@
             break;
         case Abandoned:
             self.viewStatus.text = [NSString stringWithFormat:@"Abandoned"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((128) / 255.0) green:((128) / 255.0) blue:((128) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             self.abandonButton.hidden = YES;
@@ -395,7 +398,7 @@
             break;
         case Completed:
             self.viewStatus.text = [NSString stringWithFormat:@"Completed"];
-            //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
+            tint = [UIColor colorWithRed:((0) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             self.outletActiveButton.hidden = YES;
             self.outletSuspendButton.hidden = YES;
             self.activeOutletButtonTest.hidden = YES;
@@ -434,6 +437,7 @@
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            image = [UIImage imageNamed:@"everest.png"];
             break;
         case Stairs:
             self.addStepper.userInteractionEnabled = NO;
@@ -456,6 +460,7 @@
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
+            image = [UIImage imageNamed:@"munro.png"];
             break;
         case Both:
             if (self.viewGoal.goalConversion == StepsStairs) {
@@ -483,6 +488,7 @@
             [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
+            image = [UIImage imageNamed:@"pluto.png"];
             break;
         default:
             break;
@@ -503,6 +509,20 @@
     [self.addStepper setStepValue:1.0];
     self.addStairsStepper.value = 0.0;
     [self.addStairsStepper setStepValue:1.0];
+    
+    if (self.viewGoal.goalStatus == Completed) {
+        image = [UIImage imageNamed:@"nevis.png"];
+    }
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 8, 90, 90)];
+    
+    //image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    //[imageView setTintColor:tint];
+    
+    imageView.image = image;
+    // optional:
+    // [imageHolder sizeToFit];
+    [self.mainDetailsView addSubview:imageView];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -39,6 +39,15 @@
 		AE969A641A8BD1B80032B287 /* EditGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE969A631A8BD1B80032B287 /* EditGoalViewController.m */; };
 		AE96A7B41AB747C600C4F537 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = AE96A7B31AB747C600C4F537 /* Settings.m */; };
 		AE9D0AC51AB9F46C00C2BB6D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE9D0AC41AB9F46C00C2BB6D /* Social.framework */; };
+		AE9D0AC71ABAF57000C2BB6D /* Abandoned.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AC61ABAF57000C2BB6D /* Abandoned.png */; };
+		AE9D0ACB1ABAFB1C00C2BB6D /* arrow-big-02.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AC81ABAFB1C00C2BB6D /* arrow-big-02.png */; };
+		AE9D0ACC1ABAFB1C00C2BB6D /* arrow-big-03.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AC91ABAFB1C00C2BB6D /* arrow-big-03.png */; };
+		AE9D0ACD1ABAFB1C00C2BB6D /* arrow-big-06.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0ACA1ABAFB1C00C2BB6D /* arrow-big-06.png */; };
+		AE9D0ACF1ABAFFA900C2BB6D /* tick.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0ACE1ABAFFA900C2BB6D /* tick.png */; };
+		AE9D0AD41ABB113200C2BB6D /* everest.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD01ABB113200C2BB6D /* everest.png */; };
+		AE9D0AD51ABB113200C2BB6D /* munro.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD11ABB113200C2BB6D /* munro.png */; };
+		AE9D0AD61ABB113200C2BB6D /* nevis.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD21ABB113200C2BB6D /* nevis.png */; };
+		AE9D0AD71ABB113200C2BB6D /* pluto.png in Resources */ = {isa = PBXBuildFile; fileRef = AE9D0AD31ABB113200C2BB6D /* pluto.png */; };
 		AEA0C38C1A8AB5BC00647E6E /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA0C38B1A8AB5BC00647E6E /* DBManager.m */; };
 		AEA0C38E1A8AB60500647E6E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */; };
 		AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = AEA0C3971A8ABD9100647E6E /* goalsDB.sql */; };
@@ -113,6 +122,15 @@
 		AE96A7B21AB747C600C4F537 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		AE96A7B31AB747C600C4F537 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		AE9D0AC41AB9F46C00C2BB6D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		AE9D0AC61ABAF57000C2BB6D /* Abandoned.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Abandoned.png; sourceTree = "<group>"; };
+		AE9D0AC81ABAFB1C00C2BB6D /* arrow-big-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-big-02.png"; sourceTree = "<group>"; };
+		AE9D0AC91ABAFB1C00C2BB6D /* arrow-big-03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-big-03.png"; sourceTree = "<group>"; };
+		AE9D0ACA1ABAFB1C00C2BB6D /* arrow-big-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-big-06.png"; sourceTree = "<group>"; };
+		AE9D0ACE1ABAFFA900C2BB6D /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick.png; sourceTree = "<group>"; };
+		AE9D0AD01ABB113200C2BB6D /* everest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = everest.png; sourceTree = "<group>"; };
+		AE9D0AD11ABB113200C2BB6D /* munro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = munro.png; sourceTree = "<group>"; };
+		AE9D0AD21ABB113200C2BB6D /* nevis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nevis.png; sourceTree = "<group>"; };
+		AE9D0AD31ABB113200C2BB6D /* pluto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pluto.png; sourceTree = "<group>"; };
 		AEA0C38A1A8AB5BC00647E6E /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		AEA0C38B1A8AB5BC00647E6E /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -282,6 +300,15 @@
 		AEBF72D61A9B5F19001505F2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AE9D0AD01ABB113200C2BB6D /* everest.png */,
+				AE9D0AD11ABB113200C2BB6D /* munro.png */,
+				AE9D0AD21ABB113200C2BB6D /* nevis.png */,
+				AE9D0AD31ABB113200C2BB6D /* pluto.png */,
+				AE9D0ACE1ABAFFA900C2BB6D /* tick.png */,
+				AE9D0AC81ABAFB1C00C2BB6D /* arrow-big-02.png */,
+				AE9D0AC91ABAFB1C00C2BB6D /* arrow-big-03.png */,
+				AE9D0ACA1ABAFB1C00C2BB6D /* arrow-big-06.png */,
+				AE9D0AC61ABAF57000C2BB6D /* Abandoned.png */,
 				AE2491031AA90B7100A6D816 /* spanner.png */,
 				AE2490FD1AA908C400A6D816 /* home.png */,
 				AE2490FB1AA908AC00A6D816 /* bar-chart.png */,
@@ -373,12 +400,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE9D0AD61ABB113200C2BB6D /* nevis.png in Resources */,
 				AE40A6A71A8946BB000DD45A /* Main.storyboard in Resources */,
+				AE9D0ACC1ABAFB1C00C2BB6D /* arrow-big-03.png in Resources */,
 				AE2491041AA90B7100A6D816 /* spanner.png in Resources */,
+				AE9D0ACD1ABAFB1C00C2BB6D /* arrow-big-06.png in Resources */,
 				AEBF72D81A9B5F56001505F2 /* menu.png in Resources */,
 				AEA0C3981A8ABD9100647E6E /* goalsDB.sql in Resources */,
+				AE9D0ACF1ABAFFA900C2BB6D /* tick.png in Resources */,
+				AE9D0AD41ABB113200C2BB6D /* everest.png in Resources */,
+				AE9D0AC71ABAF57000C2BB6D /* Abandoned.png in Resources */,
 				AE2490FC1AA908AC00A6D816 /* bar-chart.png in Resources */,
 				AE72D46A1A9B9D37008570B0 /* walking-icon-hi.png in Resources */,
+				AE9D0AD71ABB113200C2BB6D /* pluto.png in Resources */,
+				AE9D0AD51ABB113200C2BB6D /* munro.png in Resources */,
+				AE9D0ACB1ABAFB1C00C2BB6D /* arrow-big-02.png in Resources */,
 				AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */,
 				AE2490FE1AA908C400A6D816 /* home.png in Resources */,
 				AE2490EE1AA4F10600A6D816 /* Default-568h@2x.png in Resources */,
