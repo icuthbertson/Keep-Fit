@@ -933,6 +933,8 @@
 
 -(void) completedView {
     self.viewGoal.goalStatus = Completed;
+    [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+    [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
     self.viewStatus.text = @"Completed";
     self.outletActiveButton.hidden = YES;
     self.activeOutletButtonTest.hidden = YES;
@@ -964,6 +966,8 @@
     /**********************************Suspend*****************************************/
     if ((self.viewGoal.goalStatus == Pending) || (self.viewGoal.goalStatus == Active) || (self.viewGoal.goalStatus == Overdue)) {
         self.viewGoal.goalStatus = Suspended;
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now suspended" message:@"This goal is now suspended." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         [self storeGoalStatusChangeToDB];
@@ -1194,9 +1198,29 @@
 
 - (IBAction)abandonButtonAction:(id)sender {
     self.viewGoal.goalStatus = Abandoned;
+    [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+    [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
     [self storeGoalStatusChangeToDB];
     [self loadFromDB];
     [self showDetails];
+}
+
+- (void)cancelLocalNotification:(NSString*)notificationID type:(NSString*)typeString {
+    //loop through all scheduled notifications and cancel the one we're looking for
+    UILocalNotification *cancelThisNotification = nil;
+    BOOL hasNotification = NO;
+    
+    for (UILocalNotification *someNotification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+        if([[someNotification.userInfo objectForKey:notificationID] isEqualToString:notificationID]) {
+            cancelThisNotification = someNotification;
+            hasNotification = YES;
+            break;
+        }
+    }
+    if (hasNotification == YES) {
+        NSLog(@"%@ ",cancelThisNotification);
+        [[UIApplication sharedApplication] cancelLocalNotification:cancelThisNotification];
+    }
 }
 
 @end

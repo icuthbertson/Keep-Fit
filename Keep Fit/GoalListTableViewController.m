@@ -574,6 +574,8 @@
         }
         else { // Abandon goal.
             goal.goalStatus = Abandoned;
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",goal.goalName] type:@"start"];
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",goal.goalName] type:@"end"];
         }
         
         // Update history for the goal.
@@ -592,6 +594,24 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return the height for the cell.
     return 60.0;
+}
+
+- (void)cancelLocalNotification:(NSString*)notificationID type:(NSString*)typeString {
+    //loop through all scheduled notifications and cancel the one we're looking for
+    UILocalNotification *cancelThisNotification = nil;
+    BOOL hasNotification = NO;
+    
+    for (UILocalNotification *someNotification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+        if([[someNotification.userInfo objectForKey:notificationID] isEqualToString:notificationID]) {
+            cancelThisNotification = someNotification;
+            hasNotification = YES;
+            break;
+        }
+    }
+    if (hasNotification == YES) {
+        NSLog(@"%@ ",cancelThisNotification);
+        [[UIApplication sharedApplication] cancelLocalNotification:cancelThisNotification];
+    }
 }
 
 /*
