@@ -552,7 +552,7 @@
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 8, 90, 90)];
     
-    if (!(self.viewGoal.goalType == Everest || self.viewGoal.goalType == Nevis || self.viewGoal.goalType == Pluto)) {
+    if (!self.viewGoal.goalType == Everest && !self.viewGoal.goalType == Nevis && !self.viewGoal.goalType == Pluto) {
         image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [imageView setTintColor:tint];
     }
