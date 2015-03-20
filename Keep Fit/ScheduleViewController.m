@@ -113,7 +113,7 @@
     self.schedule.date = self.scheduleDatePicker.date;
     self.schedule.endDate = self.scheduleEndDatePicker.date;
 }
-
+/*
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (sender == self.saveButton)  {
         if ([[self.scheduleEndDatePicker.date earlierDate:self.testing.getTime]isEqualToDate: self.scheduleEndDatePicker.date]) {
@@ -158,7 +158,7 @@
         }
     }
     return YES;
-}
+}*/
 
 
 @end
