@@ -136,6 +136,9 @@
     self.presetGoalPicker.showsSelectionIndicator = YES;
     
     self.goalSelectionLabel.text = @"Custom Goal";
+    
+    self.stepsStepper.maximumValue = 1000000;
+    self.stairsStepper.maximumValue = 1000000;
 }
 
 - (void)didReceiveMemoryWarning {

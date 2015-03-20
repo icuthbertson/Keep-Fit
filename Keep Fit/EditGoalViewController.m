@@ -28,10 +28,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *numStairsTitleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *startDateTextField;
 @property (weak, nonatomic) IBOutlet UITextField *endDateTextField;
+@property (weak, nonatomic) IBOutlet UIPickerView *presetGoalPicker;
+@property (weak, nonatomic) IBOutlet UILabel *goalSelectionLabel;
 
 @property UIDatePicker *editDateField;
 @property UIDatePicker *editStartDateField;
 @property NSDateFormatter *formatter;
+@property NSMutableArray *presetImages;
+@property NSMutableArray *presetLabels;
+
 
 @end
 
@@ -67,11 +72,36 @@
         case Steps:
             self.stepsStepper.userInteractionEnabled = YES;
             self.stairsStepper.userInteractionEnabled = NO;
+            self.editTypeField.selectedSegmentIndex = 0;
+            self.goalSelectionLabel.text = @"Custom Goal";
+            break;
+        case Pluto:
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.editTypeField.selectedSegmentIndex = 0;
+            self.goalSelectionLabel.text = @"Walk Around Pluto";
             break;
         case Stairs:
             self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = YES;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.editTypeField.selectedSegmentIndex = 1;
+            self.goalSelectionLabel.text = @"Custom Goal";
             break;
+        case Everest:
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.editTypeField.selectedSegmentIndex = 1;
+            self.goalSelectionLabel.text = @"Climb Mount Everest";
+            break;
+        case Nevis:
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.editTypeField.selectedSegmentIndex = 1;
+            self.goalSelectionLabel.text = @"Climb Ben Nevis";
+            break;
+        case Both:
+            self.editTypeField.selectedSegmentIndex = 2;
+            self.goalSelectionLabel.text = @"Custom Goal";
         default:
             break;
     }
@@ -83,6 +113,7 @@
         self.stepsStepper.value = [self.numStepsLabel.text intValue];
         self.numStairsLabel.text = [NSString stringWithFormat:@"%ld",(long)self.editGoal.goalAmountStairs];
         self.stairsStepper.value = [self.numStairsLabel.text intValue];
+        self.conversionTypeSelector.selectedSegmentIndex = 0;
     }
     else if (self.editGoal.goalConversion == Imperial) { //imperial
         self.numStepsTitleLabel.text = @"Number of Miles to walk";
@@ -91,6 +122,7 @@
         self.stepsStepper.value = [self.numStepsLabel.text intValue];
         self.numStairsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountStairs/[[self.editGoal.conversionTable objectAtIndex:3] doubleValue]];
         self.stairsStepper.value = [self.numStairsLabel.text intValue];
+        self.conversionTypeSelector.selectedSegmentIndex = 1;
     }
     else { //metric
         self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
@@ -99,7 +131,14 @@
         self.stepsStepper.value = [self.numStepsLabel.text intValue];
         self.numStairsLabel.text = [NSString stringWithFormat:@"%.0f",(long)self.editGoal.goalAmountStairs/[[self.editGoal.conversionTable objectAtIndex:4] doubleValue]];
         self.stairsStepper.value = [self.numStairsLabel.text intValue];
+        self.conversionTypeSelector.selectedSegmentIndex = 2;
     }
+    
+    self.stepsStepper.maximumValue = 1000000;
+    self.stairsStepper.maximumValue = 1000000;
+    
+    [self updateStepsStepperValue];
+    [self updateStairsStepperValue];
     
     // Set the minimum date of the date pickers to the current time
     // or stored time from the Testing object.
@@ -129,6 +168,32 @@
     self.startDateTextField.text = [self.formatter stringFromDate:self.editGoal.goalStartDate];
     self.endDateTextField.text = [self.formatter stringFromDate:self.editGoal.goalCompletionDate];
     
+    self.presetImages = [[NSMutableArray alloc] init];
+    [self.presetImages addObject:[UIImage imageNamed:@"finishline.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"everest.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"nevis.png"]];
+    [self.presetImages addObject:[UIImage imageNamed:@"pluto.png"]];
+    
+    
+    self.presetLabels = [[NSMutableArray alloc] init];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Custom Goal"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Climb Mount Everest"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Climb Ben Nevis"]];
+    [self.presetLabels addObject:[NSString stringWithFormat:@"Walk Around Pluto"]];
+    
+    self.presetGoalPicker.delegate = self;
+    self.presetGoalPicker.dataSource = self;
+    self.presetGoalPicker.showsSelectionIndicator = YES;
+    
+    [self.presetGoalPicker selectRow:(self.editGoal.goalType-2) inComponent:0 animated:YES];
+    
+    if (self.editGoal.goalProgressSteps > 0 || self.editGoal.goalProgressStairs > 0) {
+        self.presetGoalPicker.userInteractionEnabled = NO;
+        self.stepsStepper.userInteractionEnabled = NO;
+        self.stairsStepper.userInteractionEnabled = NO;
+        self.conversionTypeSelector.userInteractionEnabled = NO;
+        self.editTypeField.userInteractionEnabled = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -163,6 +228,116 @@
     return  [NSDate dateWithTimeIntervalSince1970:time];
 }
 
+#pragma mark - Picker Control
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.goalSelectionLabel.text = [NSString stringWithFormat:@"%@",[self.presetLabels objectAtIndex:row]];
+    
+    switch (row) {
+        case 0:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"0";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 0.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 0;
+            self.editTypeField.selectedSegmentIndex = 0;
+            self.numStepsTitleLabel.text = @"Number of Steps";
+            self.numStairsTitleLabel.text = @"Number of Stair";
+            
+            self.stepsStepper.userInteractionEnabled = YES;
+            self.stairsStepper.userInteractionEnabled = YES;
+            self.conversionTypeSelector.userInteractionEnabled = YES;
+            self.editTypeField.userInteractionEnabled = YES;
+            
+            break;
+        case 1:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"29029";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 29029.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 1;
+            self.editTypeField.selectedSegmentIndex = 1;
+            self.numStepsTitleLabel.text = @"Number of Miles to walk";
+            self.numStairsTitleLabel.text = @"Number of Feet to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.editTypeField.userInteractionEnabled = NO;
+            break;
+        case 2:
+            self.numStepsLabel.text = @"0";
+            self.numStairsLabel.text = @"4409";
+            self.stepsStepper.value = 0.0;
+            self.stairsStepper.value = 4409.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 1;
+            self.editTypeField.selectedSegmentIndex = 1;
+            self.numStepsTitleLabel.text = @"Number of Miles to walk";
+            self.numStairsTitleLabel.text = @"Number of Feet to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.editTypeField.userInteractionEnabled = NO;
+            break;
+        case 3:
+            self.numStepsLabel.text = @"7232";
+            self.numStairsLabel.text = @"0";
+            self.stepsStepper.value = 7232.0;
+            self.stairsStepper.value = 0.0;
+            self.conversionTypeSelector.selectedSegmentIndex = 2;
+            self.editTypeField.selectedSegmentIndex = 0;
+            self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
+            self.numStairsTitleLabel.text = @"Number of Meters to climb";
+            
+            self.stepsStepper.userInteractionEnabled = NO;
+            self.stairsStepper.userInteractionEnabled = NO;
+            self.conversionTypeSelector.userInteractionEnabled = NO;
+            self.editTypeField.userInteractionEnabled = NO;
+            break;
+        default:
+            break;
+    }
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
+    return 90.0;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UIView *pickerCustomView = (id)view;
+    UILabel *pickerViewLabel;
+    UIImageView *pickerImageView;
+    
+    if (!pickerCustomView) {
+        pickerCustomView= [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,
+                                                                   [pickerView rowSizeForComponent:component].width - 10.0f, [pickerView       rowSizeForComponent:component].height)];
+        pickerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 90.0f, 90.0f)];
+        pickerViewLabel= [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 0.0f,
+                                                                   [pickerView rowSizeForComponent:component].width - 10.0f, [pickerView rowSizeForComponent:component].height)];
+        
+        [pickerCustomView addSubview:pickerImageView];
+        [pickerCustomView addSubview:pickerViewLabel];
+    }
+    
+    pickerImageView.image = self.presetImages[row];
+    pickerViewLabel.backgroundColor = [UIColor clearColor];
+    pickerViewLabel.text = self.presetLabels[row];
+    return pickerCustomView;
+}
+
+- (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
+{
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.presetImages.count;
+}
+
+
 #pragma mark - Segmented Control
 
 // Action from Type Selector to change the goal type between Steps, Stairs and Both.
@@ -195,6 +370,11 @@
 
 // Action from Steps Stepper to change the value shown in the Steps label.
 - (IBAction)stepsStepperAction:(id)sender {
+    [self updateStepsStepperValue];
+    self.numStepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
+-(void) updateStepsStepperValue {
     if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps
         if (self.stepsStepper.value >= 0 && self.stepsStepper.value < 10) {
             [self.stepsStepper setStepValue:1.0];
@@ -217,11 +397,15 @@
     else { //km
         [self.stepsStepper setStepValue:1.0];
     }
-    self.numStepsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
 // Action from Stairs Stepper to change the value shown in the Stairs label.
 - (IBAction)stairsStepperAction:(id)sender {
+    [self updateStairsStepperValue];
+    self.numStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
+}
+
+-(void) updateStairsStepperValue {
     if (self.stairsStepper.value >= 0 && self.stairsStepper.value < 10) {
         [self.stairsStepper setStepValue:1.0];
     } else if (self.stairsStepper.value >= 10 && self.stairsStepper.value < 50) {
@@ -236,7 +420,6 @@
     else {
         [self.stairsStepper setStepValue:100.0];
     }
-    self.numStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
 
 #pragma mark - Navigation
@@ -259,9 +442,26 @@
         self.wasEdit = YES;
     }
     // If the goal type is different set to the new value.
-    if (self.editTypeField.selectedSegmentIndex != self.editGoal.goalType) {
-        self.editGoal.goalType = self.editTypeField.selectedSegmentIndex;
-        NSLog(@"Type - Save: %d",self.editGoal.goalType);
+    int pickerRow = [self.presetGoalPicker selectedRowInComponent:0];
+    if (pickerRow == 0) {
+        if (self.editTypeField.selectedSegmentIndex != self.editGoal.goalType) {
+            self.editGoal.goalType = self.editTypeField.selectedSegmentIndex;
+            NSLog(@"Type - Save: %d",self.editGoal.goalType);
+            self.wasEdit = YES;
+        }
+    }
+    else {
+        //test presets
+        if ((pickerRow+2) != self.editGoal.goalType) {
+            self.editGoal.goalType = (pickerRow+2);
+            NSLog(@"Type - Save: %d",self.editGoal.goalType);
+            self.wasEdit = YES;
+        }
+    }
+    // If the goal converstion is different set to the new value.
+    if (self.conversionTypeSelector.selectedSegmentIndex != self.editGoal.goalConversion) {
+        self.editGoal.goalConversion = self.conversionTypeSelector.selectedSegmentIndex;
+        NSLog(@"Converstion - Save: %d",self.editGoal.goalConversion);
         self.wasEdit = YES;
     }
     // If the steps amount is different set to the new value.
