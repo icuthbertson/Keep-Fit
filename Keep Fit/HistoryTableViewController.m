@@ -76,8 +76,8 @@
         history.goalStatus = (NSInteger)[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue];
         history.startDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfStatusStartDate] doubleValue]];
         history.endDate = [NSDate dateWithTimeIntervalSince1970:[[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfStatusEndDate] doubleValue]];
-        history.progressSteps = [[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] intValue];
-        history.progressStairs = [[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] intValue];
+        history.progressSteps = [[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressSteps] doubleValue];
+        history.progressStairs = [[[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalProgressStairs] doubleValue];
         
         // Add object to the array of history objects.
         [self.historyGoals addObject:history];
@@ -120,7 +120,7 @@
         case Active:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
                 if (self.viewHistoryGoal.goalConversion == StepsStairs) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Stairs: %d", history.progressSteps, history.progressStairs];
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Stairs: %.2f", history.progressSteps, history.progressStairs];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Imperial) {
                     cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];
@@ -139,7 +139,7 @@
         case Overdue:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
                 if (self.viewHistoryGoal.goalConversion == StepsStairs) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Stairs: %d", history.progressSteps, history.progressStairs];
+                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Stairs: %.2f", history.progressSteps, history.progressStairs];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Imperial) {
                     cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];

@@ -116,7 +116,7 @@
             break;
         case Active:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
-                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Staris: %.2f", history.progressSteps, history.progressStairs];
             }
             else {
                 cell.textLabel.text = [NSString stringWithFormat:@"Active"];
@@ -127,7 +127,7 @@
             break;
         case Overdue:
             if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
-                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %d Staris: %d", history.progressSteps, history.progressStairs];
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Staris: %.2f", history.progressSteps, history.progressStairs];
             }
             else {
                 cell.textLabel.text = [NSString stringWithFormat:@"Overdue"];

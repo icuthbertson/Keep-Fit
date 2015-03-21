@@ -16,7 +16,7 @@
 @property GoalStatus goalStatus; // Goal Status.
 @property NSDate *startDate; // Date the status started.
 @property NSDate *endDate; // Date the status ended.
-@property int progressSteps; // Steps progress made during the status.
-@property int progressStairs; // Stairs progress made during the status.
+@property double progressSteps; // Steps progress made during the status.
+@property double progressStairs; // Stairs progress made during the status.
 
 @end
