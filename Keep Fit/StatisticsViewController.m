@@ -110,6 +110,8 @@
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
             self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
+            [self.stepsValues addObject:[NSNumber numberWithDouble:self.totalSteps]];
+            [self.stairsValues addObject:[NSNumber numberWithDouble:self.totalStairs]];
             [self.graphTimes addObject:[NSNumber numberWithDouble:[[[statResults objectAtIndex:i] objectAtIndex:indexOfEndDate] doubleValue]]];
         }
     }

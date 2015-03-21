@@ -14,6 +14,7 @@
 #import "HistoryTableViewController.h"
 #import "ChangeTimeViewController.h"
 #import "ScheduleViewController.h"
+#import "PNChart.h"
 #import <QuartzCore/QuartzCore.h>
 
 
@@ -58,19 +59,21 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *testTrackProgress;
 @property (weak, nonatomic) IBOutlet UILabel *trackLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *trackProgress;
-@property (weak, nonatomic) IBOutlet UILabel *stepsPerDayLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stepsPerWeekLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stepsPerMonthLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stepsPerYearLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stairsPerDayLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stairsPerWeekLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stairsPerMonthLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stairsPerYearLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stepsTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stairsTitleLabel;
+@property UILabel *stepsPerDayLabel;
+@property UILabel *stepsPerWeekLabel;
+@property UILabel *stepsPerMonthLabel;
+@property UILabel *stepsPerYearLabel;
+@property UILabel *stairsPerDayLabel;
+@property UILabel *stairsPerWeekLabel;
+@property UILabel *stairsPerMonthLabel;
+@property UILabel *stairsPerYearLabel;
 @property (weak, nonatomic) IBOutlet UILabel *estimatedCompletionLabel;
 - (IBAction)abandonButtonAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *abandonButton;
+@property UIView *stepsEstView;
+@property UIView *stepsGraphView;
+@property UIView *stairsEstView;
+@property UIView *stairsGraphView;
 
 @property double progressSteps;
 @property double progressStairs;
@@ -80,11 +83,16 @@
 @property NSInteger totalStairs;
 @property double startDate;
 @property double endDate;
+@property NSMutableArray *stepsValues;
+@property NSMutableArray *stairsValues;
+@property NSMutableArray *graphTimes;
 
 @property double recordingStartTime;
 @property double recordingEndTime;
 
 @property NSDate *estimatedDate;
+
+@property NSDateFormatter *formatter;
 
 @end
 
@@ -150,9 +158,12 @@
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"MMM dd"];
+    
     // Set up the labels and other outlet with data of goal to be viewed.
     [self loadFromDB];
-    [self showDetails];
+    //[self showDetails];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -219,7 +230,20 @@
     self.startDate = 1.0;
     self.endDate = 1.0;
     
-    query = [NSString stringWithFormat:@"select * from %@ where endTime <= '%f' and goalID='%d'", self.testing.getStatisticsDBName, [[NSDate date] timeIntervalSince1970], self.viewGoal.goalID];
+    if (self.stepsValues != nil) {
+        self.stepsValues = nil;
+    }
+    self.stepsValues = [[NSMutableArray alloc] init];
+    if (self.stairsValues != nil) {
+        self.stairsValues = nil;
+    }
+    self.stairsValues = [[NSMutableArray alloc] init];
+    if (self.graphTimes != nil) {
+        self.graphTimes = nil;
+    }
+    self.graphTimes = [[NSMutableArray alloc] init];
+    
+    query = [NSString stringWithFormat:@"select * from %@ where goalID='%d'", self.testing.getStatisticsDBName, /*[[NSDate date] timeIntervalSince1970],*/ self.viewGoal.goalID];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
@@ -238,11 +262,35 @@
             self.endDate = [[NSDate date] timeIntervalSince1970];
         }
         
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.graphTimes addObject:[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate]];
+        
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
             self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
+            [self.stepsValues addObject:[NSNumber numberWithDouble:self.totalSteps]];
+            [self.stairsValues addObject:[NSNumber numberWithDouble:self.totalStairs]];
+            [self.graphTimes addObject:[NSNumber numberWithDouble:[[[statResults objectAtIndex:i] objectAtIndex:indexOfEndDate] doubleValue]]];
         }
     }
+    else {
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+    }
+    NSLog(@"Stats %@",statResults);
+    
     [self showDetails];
     [self setUpStats];
 }
@@ -271,18 +319,19 @@
     
     switch (self.viewGoal.goalType) {
         case Steps:
+        case Pluto:
             self.stepsPerDayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStepsAverage];
             self.stepsPerWeekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStepsAverage];
             self.stepsPerMonthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStepsAverage];
             self.stepsPerYearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStepsAverage];
-            self.stairsTitleLabel.text = @"";
             self.stairsPerDayLabel.text = @"";
             self.stairsPerWeekLabel.text = @"";
             self.stairsPerMonthLabel.text = @"";
             self.stairsPerYearLabel.text = @"";
             break;
         case Stairs:
-            self.stairsTitleLabel.text = @"";
+        case Everest:
+        case Nevis:
             self.stepsPerDayLabel.text = @"";
             self.stepsPerWeekLabel.text = @"";
             self.stepsPerMonthLabel.text = @"";
@@ -339,6 +388,60 @@
         [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
         
         self.estimatedCompletionLabel.text = [NSString stringWithFormat:@"%@",[formatter stringFromDate:self.estimatedDate]];
+    }
+    
+    [self makeGraphs];
+}
+
+-(void) makeGraphs {
+    //For Line Chart
+    NSMutableArray *stepsStairsLabels = [[NSMutableArray alloc] init];
+    
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+    [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
+    
+    if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Pluto || self.viewGoal.goalType == Both) {
+        //Steps Graph
+        PNLineChart *stepsLineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 33, CGRectGetWidth(self.stepsGraphView.bounds), CGRectGetHeight(self.stepsGraphView.bounds))];
+        
+        [stepsLineChart setXLabels:stepsStairsLabels];
+        
+        PNLineChartData *dataSteps = [PNLineChartData new];
+        dataSteps.color = PNTwitterColor;
+        dataSteps.itemCount = [self.stepsValues count];
+        dataSteps.getData = ^(NSUInteger index) {
+            CGFloat yValue = [self.stepsValues[index] floatValue];
+            return [PNLineChartDataItem dataItemWithY:yValue];
+        };
+        
+        stepsLineChart.chartData = @[dataSteps];
+        [stepsLineChart strokeChart];
+        
+        [self.stepsGraphView addSubview:stepsLineChart];
+    }
+    
+    //Stairs Graph
+    if (self.viewGoal.goalType == Stairs || self.viewGoal.goalType == Everest || self.viewGoal.goalType == Nevis || self.viewGoal.goalType == Both) {
+        PNLineChart *stairsLineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 33, CGRectGetWidth(self.stairsGraphView.bounds), CGRectGetHeight(self.stairsGraphView.bounds))];
+        
+        [stairsLineChart setXLabels:stepsStairsLabels];
+        
+        PNLineChartData *dataStairs = [PNLineChartData new];
+        dataStairs.color = PNTwitterColor;
+        dataStairs.itemCount = [self.stairsValues count];
+        dataStairs.getData = ^(NSUInteger index) {
+            CGFloat yValue = [self.stairsValues[index] floatValue];
+            return [PNLineChartDataItem dataItemWithY:yValue];
+        };
+
+        stairsLineChart.chartData = @[dataStairs];
+        [stairsLineChart strokeChart];
+        
+        [self.stairsGraphView addSubview:stairsLineChart];
     }
 }
 
@@ -417,6 +520,7 @@
     // Depending on the type of the goal set the goal type label, the progress label and the progress bar accordingly.
     switch (self.viewGoal.goalType) {
         case Steps:
+            [self createStepsStatsView];
             self.addStairsStepper.userInteractionEnabled = NO;
             self.viewType.text = [NSString stringWithFormat:@"Steps"];
             if (self.viewGoal.goalConversion == StepsStairs) {
@@ -440,6 +544,7 @@
             image = [UIImage imageNamed:@"arrow_big-02.png"];
             break;
         case Stairs:
+            [self createStairsStatsView];
             self.addStepper.userInteractionEnabled = NO;
             self.viewType.text = [NSString stringWithFormat:@"Stairs"];
             if (self.viewGoal.goalConversion == StepsStairs) {
@@ -463,6 +568,7 @@
             image = [UIImage imageNamed:@"arrow_big-03.png"];
             break;
         case Both:
+            [self createBothStatsView];
             if (self.viewGoal.goalConversion == StepsStairs) {
                 stepsName = @"Steps";
                 conversionIndexSteps = 0;
@@ -491,6 +597,7 @@
             image = [UIImage imageNamed:@"arrow_big-06.png"];
             break;
         case Everest:
+            [self createStairsStatsView];
             stairsName= @"Feet";
             conversionIndexStairs = 3;
             self.viewType.text = [NSString stringWithFormat:@"Climb Everest"];
@@ -503,6 +610,7 @@
             image = [UIImage imageNamed:@"everest.png"];
             break;
         case Nevis:
+            [self createStairsStatsView];
             stairsName= @"Feet";
             conversionIndexStairs = 3;
             self.viewType.text = [NSString stringWithFormat:@"Climb Ben Nevis"];
@@ -515,6 +623,7 @@
             image = [UIImage imageNamed:@"nevis.png"];
             break;
         case Pluto:
+            [self createStepsStatsView];
             stepsName = @"Kilometers";
             conversionIndexSteps = 2;
             self.viewType.text = [NSString stringWithFormat:@"Walk Around Pluto"];
@@ -1166,13 +1275,21 @@
     }
     else if (self.viewSelector.selectedSegmentIndex == 1) {
         NSLog(@"Statistics");
-        [self loadFromDB];
         self.datesView.hidden = YES;
         self.statisticsView.hidden = NO;
         self.trackingView.hidden = YES;
         self.testTrackingView.hidden = YES;
-        [self.scrollView setContentSize:CGSizeMake(320, 568)];
-        [self.scrollView setScrollEnabled:NO];
+        if (self.viewGoal.goalType == Both) {
+            [self.scrollView setContentSize:CGSizeMake(320, 1100)];
+        }
+        else if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Pluto) {
+            [self.scrollView setContentSize:CGSizeMake(320, 650)];
+        }
+        else {
+            [self.scrollView setContentSize:CGSizeMake(320, 650)];
+        }
+        [self.scrollView setScrollEnabled:YES];
+        [self loadFromDB];
     }
     else {
         if (self.testing.getTesting) {
@@ -1194,6 +1311,241 @@
             [self.scrollView setScrollEnabled:NO];
         }
     }
+}
+
+- (void) createStepsStatsView {
+    if (self.stepsEstView != nil) {
+        self.stepsEstView = nil;
+        [self.stepsEstView removeFromSuperview];
+    }
+    if (self.stepsGraphView != nil) {
+        self.stepsGraphView = nil;
+        [self.stepsGraphView removeFromSuperview];
+    }
+    self.stepsEstView= [[UIView alloc] initWithFrame: CGRectMake(0, 41, 320, 168)];
+    
+    UILabel *stepsStatsEstLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 8, 288, 25)];
+    [stepsStatsEstLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stepsStatsEstLabel.text = @"Steps Estimated Average";
+    [self.stepsEstView addSubview:stepsStatsEstLabel];
+    
+    if (self.stepsPerDayLabel != nil) {
+        [self.stepsPerDayLabel removeFromSuperview];
+        self.stepsPerDayLabel = nil;
+    }
+    self.stepsPerDayLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 41, 288, 21)];
+    [self.stepsPerDayLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerDayLabel];
+    
+    if (self.stepsPerWeekLabel != nil) {
+        [self.stepsPerWeekLabel removeFromSuperview];
+        self.stepsPerWeekLabel = nil;
+    }
+    self.stepsPerWeekLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 70, 288, 21)];
+    [self.stepsPerWeekLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerWeekLabel];
+    
+    if (self.stepsPerMonthLabel != nil) {
+        [self.stepsPerMonthLabel removeFromSuperview];
+        self.stepsPerMonthLabel = nil;
+    }
+    self.stepsPerMonthLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 99, 288, 21)];
+    [self.stepsPerMonthLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerMonthLabel];
+    
+    if (self.stepsPerYearLabel != nil) {
+        [self.stepsPerYearLabel removeFromSuperview];
+        self.stepsPerYearLabel = nil;
+    }
+    self.stepsPerYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 128, 288, 21)];
+    [self.stepsPerYearLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerYearLabel];
+    
+    self.stepsGraphView= [[UIView alloc] initWithFrame: CGRectMake(0, 209, 320, 246)];
+    
+    UILabel *stepsStatsGraphLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 0, 288, 25)];
+    [stepsStatsGraphLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stepsStatsGraphLabel.text = @"Total Steps Over Time Graph";
+    [self.stepsGraphView addSubview:stepsStatsGraphLabel];
+    
+    [self.statisticsView addSubview:self.stepsEstView];
+    [self.statisticsView addSubview:self.stepsGraphView];
+}
+
+- (void) createStairsStatsView {
+    if (self.stairsEstView != nil) {
+        self.stairsEstView = nil;
+        [self.stairsEstView removeFromSuperview];
+    }
+    if (self.stairsGraphView != nil) {
+        self.stairsGraphView = nil;
+        [self.stairsGraphView removeFromSuperview];
+    }
+    self.stairsEstView= [[UIView alloc] initWithFrame: CGRectMake(0, 41, 320, 168)];
+    
+    UILabel *stairsStatsEstLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 8, 288, 25)];
+    [stairsStatsEstLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stairsStatsEstLabel.text = @"Stairs Estimated Average";
+    [self.stairsEstView addSubview:stairsStatsEstLabel];
+    
+    if (self.stairsPerDayLabel != nil) {
+        [self.stairsPerDayLabel removeFromSuperview];
+        self.stairsPerDayLabel = nil;
+    }
+    self.stairsPerDayLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 41, 288, 21)];
+    [self.stairsPerDayLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerDayLabel];
+    
+    if (self.stairsPerWeekLabel != nil) {
+        [self.stairsPerWeekLabel removeFromSuperview];
+        self.stairsPerWeekLabel = nil;
+    }
+    self.stairsPerWeekLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 70, 288, 21)];
+    [self.stairsPerWeekLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerWeekLabel];
+    
+    if (self.stairsPerMonthLabel != nil) {
+        [self.stairsPerMonthLabel removeFromSuperview];
+        self.stairsPerMonthLabel = nil;
+    }
+    self.stairsPerMonthLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 99, 288, 21)];
+    [self.stairsPerMonthLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerMonthLabel];
+    
+    if (self.stairsPerYearLabel != nil) {
+        [self.stairsPerYearLabel removeFromSuperview];
+        self.stairsPerYearLabel = nil;
+    }
+    self.stairsPerYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 128, 288, 21)];
+    [self.stairsPerYearLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerYearLabel];
+    
+    self.stairsGraphView = [[UIView alloc] initWithFrame:CGRectMake(0, 209, 320, 246)];
+    
+    UILabel *stairsStatsGraphLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 0, 288, 25)];
+    [stairsStatsGraphLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stairsStatsGraphLabel.text = @"Total Stairs Over Time Graph";
+    [self.stairsGraphView addSubview:stairsStatsGraphLabel];
+    
+    [self.statisticsView addSubview:self.stairsEstView];
+    [self.statisticsView addSubview:self.stairsGraphView];
+}
+
+- (void) createBothStatsView {
+    if (self.stepsEstView != nil) {
+        self.stepsEstView = nil;
+        [self.stepsEstView removeFromSuperview];
+    }
+    if (self.stepsGraphView != nil) {
+        self.stepsGraphView = nil;
+        [self.stepsGraphView removeFromSuperview];
+    }
+    self.stepsEstView= [[UIView alloc] initWithFrame: CGRectMake(0, 41, 320, 168)];
+    
+    UILabel *stepsStatsEstLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 8, 288, 25)];
+    [stepsStatsEstLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stepsStatsEstLabel.text = @"Steps Estimated Average";
+    [self.stepsEstView addSubview:stepsStatsEstLabel];
+    
+    if (self.stepsPerDayLabel != nil) {
+        [self.stepsPerDayLabel removeFromSuperview];
+        self.stepsPerDayLabel = nil;
+    }
+    self.stepsPerDayLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 41, 288, 21)];
+    [self.stepsPerDayLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerDayLabel];
+    
+    if (self.stepsPerWeekLabel != nil) {
+        [self.stepsPerWeekLabel removeFromSuperview];
+        self.stepsPerWeekLabel = nil;
+    }
+    self.stepsPerWeekLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 70, 288, 21)];
+    [self.stepsPerWeekLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerWeekLabel];
+    
+    if (self.stepsPerMonthLabel != nil) {
+        [self.stepsPerMonthLabel removeFromSuperview];
+        self.stepsPerMonthLabel = nil;
+    }
+    self.stepsPerMonthLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 99, 288, 21)];
+    [self.stepsPerMonthLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerMonthLabel];
+    
+    if (self.stepsPerYearLabel != nil) {
+        [self.stepsPerYearLabel removeFromSuperview];
+        self.stepsPerYearLabel = nil;
+    }
+    self.stepsPerYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 128, 288, 21)];
+    [self.stepsPerYearLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stepsEstView addSubview:self.stepsPerYearLabel];
+    
+    self.stepsGraphView= [[UIView alloc] initWithFrame: CGRectMake(0, 209, 320, 246)];
+    
+    UILabel *stepsStatsGraphLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 0, 288, 25)];
+    [stepsStatsGraphLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stepsStatsGraphLabel.text = @"Total Steps Over Time Graph";
+    [self.stepsGraphView addSubview:stepsStatsGraphLabel];
+    
+    [self.statisticsView addSubview:self.stepsEstView];
+    [self.statisticsView addSubview:self.stepsGraphView];
+    
+    //Stairs
+    if (self.stairsEstView != nil) {
+        self.stairsEstView = nil;
+        [self.stairsEstView removeFromSuperview];
+    }
+    if (self.stairsGraphView != nil) {
+        self.stairsGraphView = nil;
+        [self.stairsGraphView removeFromSuperview];
+    }
+    self.stairsEstView = [[UIView alloc] initWithFrame:CGRectMake(0, 480, 320, 168)];
+    
+    UILabel *stairsStatsEstLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 8, 288, 25)];
+    [stairsStatsEstLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stairsStatsEstLabel.text = @"Stairs Estimated Average";
+    [self.stairsEstView addSubview:stairsStatsEstLabel];
+    
+    if (self.stairsPerDayLabel != nil) {
+        [self.stairsPerDayLabel removeFromSuperview];
+        self.stairsPerDayLabel = nil;
+    }
+    self.stairsPerDayLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 41, 288, 21)];
+    [self.stairsPerDayLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerDayLabel];
+    
+    if (self.stairsPerWeekLabel != nil) {
+        [self.stairsPerWeekLabel removeFromSuperview];
+        self.stairsPerWeekLabel = nil;
+    }
+    self.stairsPerWeekLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 70, 288, 21)];
+    [self.stairsPerWeekLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerWeekLabel];
+    
+    if (self.stairsPerMonthLabel != nil) {
+        [self.stairsPerMonthLabel removeFromSuperview];
+        self.stairsPerMonthLabel = nil;
+    }
+    self.stairsPerMonthLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 99, 288, 21)];
+    [self.stairsPerMonthLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerMonthLabel];
+    
+    if (self.stairsPerYearLabel != nil) {
+        [self.stairsPerYearLabel removeFromSuperview];
+        self.stairsPerYearLabel = nil;
+    }
+    self.stairsPerYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 128, 288, 21)];
+    [self.stairsPerYearLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 17.0f]];
+    [self.stairsEstView addSubview:self.stairsPerYearLabel];
+    
+    self.stairsGraphView = [[UIView alloc] initWithFrame:CGRectMake(0, 648, 320, 246)];
+    
+    UILabel *stairsStatsGraphLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 0, 288, 25)];
+    [stairsStatsGraphLabel setFont:[UIFont fontWithName: @".HelveticaNeueInterface-Regular" size: 20.0f]];
+    stairsStatsGraphLabel.text = @"Total Stairs Over Time Graph";
+    [self.stairsGraphView addSubview:stairsStatsGraphLabel];
+    
+    [self.statisticsView addSubview:self.stairsEstView];
+    [self.statisticsView addSubview:self.stairsGraphView];
 }
 
 - (IBAction)abandonButtonAction:(id)sender {

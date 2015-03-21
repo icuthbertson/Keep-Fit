@@ -300,7 +300,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vhJ-Nb-hr2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="280" y="974"/>
+            <point key="canvasLocation" x="280" y="1174"/>
         </scene>
         <!--List Selection-->
         <scene sceneID="tiv-uG-N1b">
@@ -950,11 +950,11 @@
             <objects>
                 <viewController id="u7R-gc-2Mv" customClass="ViewGoalViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GuH-7Q-4tF">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="1100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="EXV-w9-ag6">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="1100"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="wxe-Of-0dD">
@@ -1228,83 +1228,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" id="Kfa-Hx-oJg">
-                                        <rect key="frame" x="0.0" y="150" width="320" height="350"/>
+                                        <rect key="frame" x="0.0" y="150" width="320" height="912"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Statistics" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Yai-1i-j22">
                                                 <rect key="frame" x="24" y="8" width="272" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Week" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q7G-6V-tnC">
-                                                <rect key="frame" x="24" y="103" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eKI-7k-vpa">
-                                                <rect key="frame" x="24" y="132" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Day" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EEq-gg-byh">
-                                                <rect key="frame" x="24" y="236" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qHc-zM-aYY">
-                                                <rect key="frame" x="24" y="323" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Week" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pj1-hB-t73">
-                                                <rect key="frame" x="24" y="265" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="21x-Vs-5Xq">
-                                                <rect key="frame" x="24" y="294" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steps Estimated Average" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dqs-03-cT1">
-                                                <rect key="frame" x="24" y="41" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Day" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RuW-jp-89l">
-                                                <rect key="frame" x="24" y="74" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="per Year" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cDQ-Qz-g7m">
-                                                <rect key="frame" x="24" y="161" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stairs Estimated Average" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Kj7-YW-kNg">
-                                                <rect key="frame" x="24" y="207" width="288" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1329,7 +1259,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="600"/>
+                    <size key="freeformSize" width="320" height="1100"/>
                     <connections>
                         <outlet property="abandonButton" destination="fse-r7-M5R" id="zXe-1u-Ug4"/>
                         <outlet property="activeOutletButtonTest" destination="tLk-NO-ndN" id="B4m-d7-i7O"/>
@@ -1343,19 +1273,9 @@
                         <outlet property="outletHistoryButton" destination="PF5-7o-L4h" id="Qw0-Pe-pgq"/>
                         <outlet property="outletSuspendButton" destination="sdq-c0-Rgt" id="uDf-Px-guS"/>
                         <outlet property="scrollView" destination="EXV-w9-ag6" id="o3l-YU-jLO"/>
-                        <outlet property="stairsPerDayLabel" destination="EEq-gg-byh" id="6rE-8u-DV6"/>
-                        <outlet property="stairsPerMonthLabel" destination="21x-Vs-5Xq" id="RsW-Og-5BH"/>
-                        <outlet property="stairsPerWeekLabel" destination="pj1-hB-t73" id="uHn-dY-Aiv"/>
-                        <outlet property="stairsPerYearLabel" destination="qHc-zM-aYY" id="pZ7-Vd-cxg"/>
-                        <outlet property="stairsTitleLabel" destination="Kj7-YW-kNg" id="636-Ux-PyI"/>
                         <outlet property="statisticsView" destination="Kfa-Hx-oJg" id="Fn3-2F-1Zf"/>
                         <outlet property="stepperLabel" destination="hK0-wk-IWl" id="mys-Si-RDh"/>
                         <outlet property="stepperStairsLabel" destination="bck-me-oaQ" id="rvp-fc-MPH"/>
-                        <outlet property="stepsPerDayLabel" destination="RuW-jp-89l" id="3Jo-Sm-6In"/>
-                        <outlet property="stepsPerMonthLabel" destination="eKI-7k-vpa" id="eIK-we-pzk"/>
-                        <outlet property="stepsPerWeekLabel" destination="Q7G-6V-tnC" id="lAg-NI-Bvg"/>
-                        <outlet property="stepsPerYearLabel" destination="cDQ-Qz-g7m" id="z8i-IQ-iyw"/>
-                        <outlet property="stepsTitleLabel" destination="Dqs-03-cT1" id="OoE-Dn-8kK"/>
                         <outlet property="testTrackLabel" destination="h90-ck-tTu" id="KAX-bM-WhY"/>
                         <outlet property="testTrackProgress" destination="cO2-5L-Zgr" id="n5Y-Nq-Pxn"/>
                         <outlet property="testTrackingView" destination="Yrm-ez-Wag" id="Dq8-2k-3k0"/>
@@ -1383,7 +1303,7 @@
             <objects>
                 <tableViewController id="iGS-Nc-2iI" customClass="HistoryTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zgJ-bP-IVU">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="1100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -1424,7 +1344,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8gV-40-jBs" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="ysQ-jt-lmS" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1018" y="-1174"/>
+            <point key="canvasLocation" x="1398" y="-1134"/>
         </scene>
         <!--Edit Goal View Controller-->
         <scene sceneID="sjF-z7-pIb">
@@ -1753,7 +1673,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="moJ-fi-GIL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="cAo-TD-bvA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="280" y="2474"/>
+            <point key="canvasLocation" x="280" y="3018"/>
         </scene>
         <!--Change Time-->
         <scene sceneID="7fK-6D-UvH">
@@ -1802,7 +1722,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uHL-ch-ooO" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="p3V-XH-SLG" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="280" y="1693"/>
+            <point key="canvasLocation" x="280" y="1999"/>
         </scene>
         <!--Statistics-->
         <scene sceneID="vtb-yW-Vn3">
