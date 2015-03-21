@@ -198,7 +198,7 @@
     currentDateResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:dateQuery]];
     // If there is not a persisted date saved, save the current date.
     if (currentDateResults.count == 0) {
-        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [self.mainTabBarController.testing.getTime timeIntervalSince1970]];
+        dateQuery = [NSString stringWithFormat:@"insert into testDate values(%f)", [[NSDate date] timeIntervalSince1970]];
         // Execute the query.
         [self.dbManager executeQuery:dateQuery];
         
@@ -214,7 +214,7 @@
         NSInteger indexOfCurrentDateID = [self.dbManager.arrColumnNames indexOfObject:@"currentTime"];
         [self.mainTabBarController.testing setTime:[NSDate dateWithTimeIntervalSince1970:[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]]];
         NSLog(@"Current Time Double From DB: %f",[[[currentDateResults objectAtIndex:0] objectAtIndex:indexOfCurrentDateID] doubleValue]);
-        NSLog(@"Current Time From DB: %@",self.mainTabBarController.testing.getTime);
+        NSLog(@"Current Time From DB: %@",[NSDate date]);
     }
     
     NSString *settingsQuery = [NSString stringWithFormat:@"select * from settings"];
@@ -732,7 +732,7 @@
     }
     
     // Add the new date to the last history entry for the goal.
-    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f' where historyID=%ld",  self.mainTabBarController.testing.getHistoryDBName, [[self.mainTabBarController.testing getTime] timeIntervalSince1970], (long)[self getHistoryRowID:goal.goalID]];
+    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f' where historyID=%ld",  self.mainTabBarController.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], (long)[self getHistoryRowID:goal.goalID]];
     // Execute the query.
     [self.dbManager executeQuery:query];
     
@@ -744,7 +744,7 @@
     }
     
     // Add new row for the history of the goal.
-    query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.mainTabBarController.testing.getHistoryDBName, (long)goal.goalID, goal.goalStatus, [[self.mainTabBarController.testing getTime] timeIntervalSince1970], 0.0, 0, 0];
+    query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.mainTabBarController.testing.getHistoryDBName, (long)goal.goalID, goal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

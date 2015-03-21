@@ -308,6 +308,8 @@
     if (period == 0.0) {
         period = 1.0;
     }
+    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:self.startDate]);
+    NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:self.endDate]);
     NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:period]);
     
     double dayStepsAverage = (day/period)*self.totalSteps;
@@ -853,7 +855,6 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now not recording" message:@"This goal is now not recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = NO;
-        self.recordingEndTime = [[NSDate date] timeIntervalSince1970];
         [self storeGoalStatusChangeToDB];
         [self storeGoalStatisticsToDB];
         self.progressSteps = 0;
@@ -961,6 +962,7 @@
 
 -(void) updateView {
     NSLog(@"Update View");
+    self.recordingEndTime = [[NSDate date] timeIntervalSince1970];
     
     NSString *stepsName;
     NSString *stairsName;
