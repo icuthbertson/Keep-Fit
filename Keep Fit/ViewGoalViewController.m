@@ -94,7 +94,7 @@
 
 @property NSDateFormatter *formatter;
 
-@property UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property UIImage *image;
 
 @end
@@ -496,12 +496,16 @@
             tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             [self enableButton:self.outletActiveButton];
             [self enableButton:self.outletSuspendButton];
+            [self enableStepper:self.addStepper];
+            [self enableStepper:self.addStairsStepper];
             break;
         case Overdue:
             self.viewStatus.text = [NSString stringWithFormat:@"Overdue"];
             tint = [UIColor colorWithRed:((255) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             [self enableButton:self.outletActiveButton];
             [self enableButton:self.outletSuspendButton];
+            [self enableStepper:self.addStepper];
+            [self enableStepper:self.addStairsStepper];
             break;
         case Suspended:
             self.viewStatus.text = [NSString stringWithFormat:@"Suspended"];
@@ -682,11 +686,12 @@
     [self.addStairsStepper setStepValue:1.0];
     
     if (self.viewGoal.goalStatus == Completed) {
+        if (self.image != nil) {
+            self.image = nil;
+        }
         self.image = [UIImage imageNamed:@"Checkmark.png"];
         tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
     }
-    
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 8, 90, 90)];
     
     if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Stairs || self.viewGoal.goalType == Both || self.viewGoal.goalStatus == Completed) {
         NSLog(@"tinting");
@@ -694,7 +699,7 @@
         [self.imageView setTintColor:tint];
     }
     
-    self.imageView.image = self.image;
+    [self.imageView setImage:self.image];
     // optional:
     // [imageHolder sizeToFit];
     [self.mainDetailsView addSubview:self.imageView];
@@ -764,7 +769,7 @@
         if ([self.stepperLabel.text intValue] > 0) {
             self.progressSteps = [self.stepperLabel.text intValue];
             self.viewGoal.goalProgressSteps += self.progressSteps;
-            if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
+            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
                 self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
@@ -783,7 +788,7 @@
         if ([self.stepperStairsLabel.text intValue] > 0) {
             self.progressStairs = [self.stepperStairsLabel.text intValue];
             self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
+            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
@@ -804,11 +809,11 @@
             self.progressStairs = [self.stepperStairsLabel.text intValue];
             self.viewGoal.goalProgressSteps += self.progressSteps;
             self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressSteps >= self.viewGoal.goalAmountSteps) {
+            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
                 self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
-            if (self.viewGoal.goalProgressStairs >= self.viewGoal.goalAmountStairs) {
+            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
                 self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
@@ -1112,14 +1117,9 @@
     [self.autoStepSpinner stopAnimating];
     self.autoStepSpinner.hidden = YES;
     
-    if (self.imageView != nil) {
-        self.imageView = nil;
-    }
     if (self.image != nil) {
         self.image = nil;
     }
-    
-    [self.imageView removeFromSuperview];
     
     UIColor *tint = [[UIColor alloc] init];
     self.image = [[UIImage alloc] init];
@@ -1127,18 +1127,14 @@
     self.image = [UIImage imageNamed:@"Checkmark.png"];
     tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 8, 90, 90)];
-    
     if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Stairs || self.viewGoal.goalType == Both || self.viewGoal.goalStatus == Completed) {
         NSLog(@"tinting");
         self.image = [self.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self.imageView setTintColor:tint];
     }
     
-    self.imageView.image = self.image;
-    // optional:
-    // [imageHolder sizeToFit];
-    [self.mainDetailsView addSubview:self.imageView];
+    [self.imageView setImage:self.image];
+    
     
     if (self.settings.notifications) {
         UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
