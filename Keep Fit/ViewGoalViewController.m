@@ -847,6 +847,7 @@
         [self.autoStepSpinner startAnimating];
         [self disableButton:self.outletHistoryButton];
         [self disableButton:self.abandonButton];
+        [self disableSegement:self.viewSelector];
         NSLog(@"Steps Time: %ld",(long)self.testSettings.stepsTime);
         NSLog(@"Stairs Time: %ld",(long)self.testSettings.stairsTime);
         [self startBackgroundThread];
@@ -865,6 +866,7 @@
         [self.autoStepSpinner stopAnimating];
         [self enableButton:self.outletHistoryButton];
         [self enableButton:self.abandonButton];
+        [self enableSegement:self.viewSelector];
         [self cancelBackgroundThread];
         [self loadFromDB];
     }
@@ -1106,6 +1108,7 @@
     [self disableButton:self.activeOutletButtonTest];
     [self disableButton:self.abandonButton];
     [self enableButton:self.outletHistoryButton];
+    [self enableSegement:self.viewSelector];
     [self.autoStepSpinner stopAnimating];
     self.autoStepSpinner.hidden = YES;
     
@@ -1273,6 +1276,18 @@
 -(void) enableStepper:(UIStepper *)stepper {
     [stepper setEnabled:YES];
     stepper.alpha = 1.0;
+}
+
+//disable segmentated control
+-(void) disableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:NO];
+    segment.alpha = 0.3;
+}
+
+//enable segmented control
+-(void) enableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:YES];
+    segment.alpha = 1.0;
 }
 
 /*****************************History DB*****************************/
