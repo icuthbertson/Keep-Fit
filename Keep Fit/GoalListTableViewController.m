@@ -475,7 +475,7 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
             }
-            cellImage = [UIImage imageNamed:@"arrow-big-02.png"];
+            cellImage = [UIImage imageNamed:@"Right_Filled.png"];
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
@@ -488,7 +488,7 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Meters: %.2f/%.2f", (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
             }
-            cellImage = [UIImage imageNamed:@"arrow-big-03.png"];
+            cellImage = [UIImage imageNamed:@"Up_Filled.png"];
             break;
         case Both:
             typeText = [NSString stringWithFormat:@"Steps and Stairs"];
@@ -501,7 +501,7 @@
             else if (goal.goalConversion == Metric) {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f Meters: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312, (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
             }
-            cellImage = [UIImage imageNamed:@"arrow-big-06.png"];
+            cellImage = [UIImage imageNamed:@"Up_Right.png"];
             break;
         case Everest:
             cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
@@ -521,9 +521,9 @@
     // Set the text label for the cell with the status text and goal name.
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", goal.goalName, statusText];
     if (goal.goalStatus == Completed) {
-        cellImage = [UIImage imageNamed:@"tick.png"];
+        cellImage = [UIImage imageNamed:@"Checkmark.png"];
     }
-    if (!(goal.goalType == Everest || goal.goalType == Nevis || goal.goalType == Pluto)) {
+    if (goal.goalType == Steps || goal.goalType == Stairs || goal.goalType == Both) {
         cellImage = [cellImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [cell.imageView setTintColor:tint];
     }

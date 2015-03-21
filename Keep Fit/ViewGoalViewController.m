@@ -558,7 +558,7 @@
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
-            image = [UIImage imageNamed:@"arrow_big-02.png"];
+            image = [UIImage imageNamed:@"Right_Filled.png"];
             break;
         case Stairs:
             [self createStairsStatsView];
@@ -582,7 +582,7 @@
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f",stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            image = [UIImage imageNamed:@"arrow_big-03.png"];
+            image = [UIImage imageNamed:@"Up_Filled.png"];
             break;
         case Both:
             [self createBothStatsView];
@@ -611,7 +611,7 @@
             [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             self.trackLabel.text = [NSString stringWithFormat:@"%@: %.2f/%.2f  %@: %.2f/%.2f",stepsName,(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stairsName,(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
             [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
-            image = [UIImage imageNamed:@"arrow_big-06.png"];
+            image = [UIImage imageNamed:@"Up_Right.png"];
             break;
         case Everest:
             [self createStairsStatsView];
@@ -673,12 +673,13 @@
     [self.addStairsStepper setStepValue:1.0];
     
     if (self.viewGoal.goalStatus == Completed) {
-        image = [UIImage imageNamed:@"tick.png"];
+        image = [UIImage imageNamed:@"Checkmark.png"];
     }
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(24, 8, 90, 90)];
     
-    if (!self.viewGoal.goalType == Everest && !self.viewGoal.goalType == Nevis && !self.viewGoal.goalType == Pluto) {
+    if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Stairs || self.viewGoal.goalType == Both) {
+        NSLog(@"tinting");
         image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [imageView setTintColor:tint];
     }
