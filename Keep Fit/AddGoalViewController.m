@@ -95,8 +95,8 @@
     }
     
     // Enable default steppers enabled (steps enabled, stairs disabled)
-    self.stepsStepper.userInteractionEnabled = YES;
-    self.stairsStepper.userInteractionEnabled = NO;
+    [self enableStepper:self.stepsStepper];
+    [self disableStepper:self.stairsStepper];
     self.numStepsLabel.text = @"0";
     self.numStairsLabel.text = @"0";
     
@@ -189,11 +189,10 @@
             self.numStepsTitleLabel.text = @"Number of Steps";
             self.numStairsTitleLabel.text = @"Number of Stair";
             
-            self.stepsStepper.userInteractionEnabled = YES;
-            self.stairsStepper.userInteractionEnabled = YES;
-            self.conversionTypeSelector.userInteractionEnabled = YES;
-            self.typeSelecter.userInteractionEnabled = YES;
-            
+            [self enableStepper:self.stepsStepper];
+            [self enableStepper:self.stairsStepper];
+            [self enableSegement:self.conversionTypeSelector];
+            [self enableSegement:self.typeSelecter];
             break;
         case 1:
             self.numStepsLabel.text = @"0";
@@ -205,10 +204,10 @@
             self.numStepsTitleLabel.text = @"Number of Miles to walk";
             self.numStairsTitleLabel.text = @"Number of Feet to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.typeSelecter.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.typeSelecter];
             break;
         case 2:
             self.numStepsLabel.text = @"0";
@@ -220,10 +219,10 @@
             self.numStepsTitleLabel.text = @"Number of Miles to walk";
             self.numStairsTitleLabel.text = @"Number of Feet to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.typeSelecter.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.typeSelecter];
             break;
         case 3:
             self.numStepsLabel.text = @"7232";
@@ -235,10 +234,10 @@
             self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
             self.numStairsTitleLabel.text = @"Number of Meters to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.typeSelecter.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.typeSelecter];
             break;
         default:
             break;
@@ -339,8 +338,8 @@
         NSLog(@"Selecter 0");
         // Set only the Steps stepper to enabled.
         // Set Stairs stepper to 0.
-        self.stepsStepper.userInteractionEnabled = YES;
-        self.stairsStepper.userInteractionEnabled = NO;
+        [self enableStepper:self.stepsStepper];
+        [self disableStepper:self.stairsStepper];
         self.numStairsLabel.text = @"0";
         self.stairsStepper.value = 0;
     }
@@ -348,16 +347,16 @@
         NSLog(@"Selecter 1");
         // Set only the Stairs stepper to enabled.
         // Set Steps stepper to 0.
-        self.stepsStepper.userInteractionEnabled = NO;
-        self.stairsStepper.userInteractionEnabled = YES;
+        [self disableStepper:self.stepsStepper];
+        [self enableStepper:self.stairsStepper];
         self.numStepsLabel.text = @"0";
         self.stepsStepper.value = 0;
     }
     else {
         NSLog(@"Selecter 2");
         // Set both the Steps and Stairs stepper to enabled.
-        self.stepsStepper.userInteractionEnabled = YES;
-        self.stairsStepper.userInteractionEnabled = YES;
+        [self enableStepper:self.stepsStepper];
+        [self enableStepper:self.stairsStepper];
     }
 }
 
@@ -557,6 +556,66 @@
         self.stepsStepper.value = 0;
         self.stairsStepper.value = 0;
     }
+}
+
+//disable button
+-(void) disableButton:(UIButton *)button {
+    [button setEnabled:NO];
+    button.alpha = 0.3;
+}
+
+//enable button
+-(void) enableButton:(UIButton *)button {
+    [button setEnabled:YES];
+    button.alpha = 1.0;
+}
+
+//disable stepper
+-(void) disableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:NO];
+    stepper.alpha = 0.3;
+}
+
+//enable stepper
+-(void) enableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:YES];
+    stepper.alpha = 1.0;
+}
+
+//disable segmentated control
+-(void) disableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:NO];
+    segment.alpha = 0.3;
+}
+
+//enable segmented control
+-(void) enableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:YES];
+    segment.alpha = 1.0;
+}
+
+//disable text field
+-(void) disableTextField:(UITextField *)textfield {
+    [textfield setEnabled:NO];
+    textfield.alpha = 0.3;
+}
+
+//enable text field
+-(void) enableTextField:(UITextField *)textfield {
+    [textfield setEnabled:YES];
+    textfield.alpha = 1.0;
+}
+
+//disable picker
+-(void) disablePicker:(UIPickerView *)picker {
+    picker.userInteractionEnabled = NO;
+    picker.alpha = 0.3;
+}
+
+//enable picker
+-(void) enablePicker:(UIPickerView *)picker {
+    picker.userInteractionEnabled = YES;
+    picker.alpha = 1.0;
 }
 
 @end

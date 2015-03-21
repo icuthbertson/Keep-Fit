@@ -477,44 +477,52 @@
         case Pending:
             self.viewStatus.text = [NSString stringWithFormat:@"Pending"];
             tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
-            self.outletActiveButton.hidden = YES;
-            self.outletSuspendButton.hidden = YES;
+            [self disableButton:self.outletActiveButton];
+            [self disableButton:self.outletSuspendButton];
+            [self disableStepper:self.addStepper];
+            [self disableStepper:self.addStairsStepper];
             break;
         case Active:
             self.viewStatus.text = [NSString stringWithFormat:@"Active"];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            self.outletActiveButton.hidden = NO;
-            self.outletSuspendButton.hidden = NO;
+            [self enableButton:self.outletActiveButton];
+            [self enableButton:self.outletSuspendButton];
             break;
         case Overdue:
             self.viewStatus.text = [NSString stringWithFormat:@"Overdue"];
             tint = [UIColor colorWithRed:((255) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            self.outletActiveButton.hidden = NO;
-            self.outletSuspendButton.hidden = NO;
+            [self enableButton:self.outletActiveButton];
+            [self enableButton:self.outletSuspendButton];
             break;
         case Suspended:
             self.viewStatus.text = [NSString stringWithFormat:@"Suspended"];
             tint = [UIColor colorWithRed:((255) / 255.0) green:((215) / 255.0) blue:((0) / 255.0) alpha:1.0];
             [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
-            self.outletActiveButton.hidden = YES;
-            self.outletSuspendButton.hidden = NO;
+            [self disableButton:self.outletActiveButton];
+            [self enableButton:self.outletSuspendButton];
+            [self disableStepper:self.addStepper];
+            [self disableStepper:self.addStairsStepper];
             [self hideAndDisableRightNavigationItem];
             break;
         case Abandoned:
             self.viewStatus.text = [NSString stringWithFormat:@"Abandoned"];
             tint = [UIColor colorWithRed:((128) / 255.0) green:((128) / 255.0) blue:((128) / 255.0) alpha:1.0];
-            self.outletActiveButton.hidden = YES;
-            self.outletSuspendButton.hidden = YES;
-            self.abandonButton.hidden = YES;
+            [self disableButton:self.outletActiveButton];
+            [self disableButton:self.outletSuspendButton];
+            [self disableButton:self.abandonButton];
+            [self disableStepper:self.addStepper];
+            [self disableStepper:self.addStairsStepper];
             [self hideAndDisableRightNavigationItem];
             break;
         case Completed:
             self.viewStatus.text = [NSString stringWithFormat:@"Completed"];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
-            self.outletActiveButton.hidden = YES;
-            self.outletSuspendButton.hidden = YES;
-            self.activeOutletButtonTest.hidden = YES;
-            self.abandonButton.hidden = YES;
+            [self disableButton:self.outletActiveButton];
+            [self disableButton:self.outletSuspendButton];
+            [self disableButton:self.abandonButton];
+            [self disableButton:self.activeOutletButtonTest];
+            [self disableStepper:self.addStepper];
+            [self disableStepper:self.addStairsStepper];
             [self hideAndDisableRightNavigationItem];
             break;
         default:
@@ -530,7 +538,7 @@
     switch (self.viewGoal.goalType) {
         case Steps:
             [self createStepsStatsView];
-            self.addStairsStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.addStairsStepper];
             self.viewType.text = [NSString stringWithFormat:@"Steps"];
             if (self.viewGoal.goalConversion == StepsStairs) {
                 stepsName = @"Steps";
@@ -554,7 +562,7 @@
             break;
         case Stairs:
             [self createStairsStatsView];
-            self.addStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.addStepper];
             self.viewType.text = [NSString stringWithFormat:@"Stairs"];
             if (self.viewGoal.goalConversion == StepsStairs) {
                 stairsName = @"Stairs";
@@ -823,12 +831,11 @@
         self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
         [self storeGoalStatusChangeToDB];
         [self hideAndDisableLeftNavigationItem];
-        //[self hideAndDisableRightNavigationItem];
         [self.activeOutletButtonTest setTitle:@"Stop" forState:UIControlStateNormal];
         self.autoStepSpinner.hidden = NO;
         [self.autoStepSpinner startAnimating];
-        self.outletHistoryButton.hidden = YES;
-        self.abandonButton.hidden = YES;
+        [self disableButton:self.outletHistoryButton];
+        [self disableButton:self.abandonButton];
         NSLog(@"Steps Time: %ld",(long)self.testSettings.stepsTime);
         NSLog(@"Stairs Time: %ld",(long)self.testSettings.stairsTime);
         [self startBackgroundThread];
@@ -841,14 +848,11 @@
         [self storeGoalStatusChangeToDB];
         [self storeGoalStatisticsToDB];
         [self showAndEnableLeftNavigationItem];
-        //[self showAndEnableRightNavigationItem];
         [self.activeOutletButtonTest setTitle:@"Start" forState:UIControlStateNormal];
         self.autoStepSpinner.hidden = YES;
         [self.autoStepSpinner stopAnimating];
-        self.outletHistoryButton.hidden = NO;
-        self.abandonButton.hidden = NO;
-        //self.scheduleButton.hidden = NO;
-        //self.timeButton.hidden = NO;
+        [self enableButton:self.outletHistoryButton];
+        [self enableButton:self.abandonButton];
         [self cancelBackgroundThread];
     }
 }
@@ -1054,12 +1058,11 @@
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
     self.viewStatus.text = @"Completed";
-    self.outletActiveButton.hidden = YES;
-    self.activeOutletButtonTest.hidden = YES;
-    self.abandonButton.hidden = YES;
+    [self disableButton:self.outletActiveButton];
+    [self disableButton:self.activeOutletButtonTest];
+    [self disableButton:self.abandonButton];
     [self.autoStepSpinner stopAnimating];
     self.autoStepSpinner.hidden = YES;
-    //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
     
     if (self.settings.notifications) {
         UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
@@ -1093,17 +1096,17 @@
         //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
         [self showAndEnableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
-        self.outletActiveButton.hidden = YES;
-        self.outletHistoryButton.hidden = NO;
+        [self disableButton:self.outletActiveButton];
+        [self enableButton:self.outletHistoryButton];
         self.stepperLabel.text = @"0";
         self.addStepper.value = 0.0;
         self.stepperStairsLabel.text = @"0";
         self.addStairsStepper.value = 0.0;
-        self.outletActiveButton.hidden = YES;
-        self.activeOutletButtonTest.hidden = YES;
+        [self disableButton:self.outletActiveButton];
+        [self disableButton:self.activeOutletButtonTest];
         self.autoStepSpinner.hidden = YES;
-        self.addStepper.userInteractionEnabled = NO;
-        self.addStairsStepper.userInteractionEnabled = NO;
+        [self disableStepper:self.addStepper];
+        [self disableStepper:self.addStairsStepper];
         [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
     }/**********************************Re-instate*****************************************/
@@ -1142,13 +1145,13 @@
             
         }
         [self storeGoalStatusChangeToDB];
-        self.outletActiveButton.hidden = NO;
-        self.outletHistoryButton.hidden = NO;
-        self.outletActiveButton.hidden = NO;
-        self.activeOutletButtonTest.hidden = NO;
+        [self enableButton:self.outletActiveButton];
+        [self enableButton:self.outletHistoryButton];
+        [self enableButton:self.outletActiveButton];
+        [self enableButton:self.activeOutletButtonTest];
         self.autoStepSpinner.hidden = NO;
-        self.addStepper.userInteractionEnabled = YES;
-        self.addStairsStepper.userInteractionEnabled = YES;
+        [self enableStepper:self.addStepper];
+        [self enableStepper:self.addStairsStepper];
         [self showAndEnableRightNavigationItem];
         [self.outletSuspendButton setTitle:@"Start" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Suspend" forState:UIControlStateNormal];
@@ -1157,26 +1160,46 @@
 
 //hide edit button
 -(void) hideAndDisableRightNavigationItem {
-    //[self.navigationItem.rightBarButtonItem setTintColor:[UIColor clearColor]];
     [self.navigationItem.rightBarButtonItem setEnabled:NO];
 }
 
 //show edit button
 -(void) showAndEnableRightNavigationItem {
-    //[self.navigationItem.rightBarButtonItem setTintColor:[UIColor blackColor]];
     [self.navigationItem.rightBarButtonItem setEnabled:YES];
 }
 
-//hide edit button
+//hide back button
 -(void) hideAndDisableLeftNavigationItem {
-    //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor clearColor]];
     [self.navigationItem.leftBarButtonItem setEnabled:NO];
 }
 
-//show edit button
+//show back button
 -(void) showAndEnableLeftNavigationItem {
-    //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor blackColor]];
     [self.navigationItem.leftBarButtonItem setEnabled:YES];
+}
+
+//disable button
+-(void) disableButton:(UIButton *)button {
+    [button setEnabled:NO];
+    button.alpha = 0.3;
+}
+
+//enable button
+-(void) enableButton:(UIButton *)button {
+    [button setEnabled:YES];
+    button.alpha = 1.0;
+}
+
+//disable stepper
+-(void) disableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:NO];
+    stepper.alpha = 0.3;
+}
+
+//enable stepper
+-(void) enableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:YES];
+    stepper.alpha = 1.0;
 }
 
 /*****************************History DB*****************************/

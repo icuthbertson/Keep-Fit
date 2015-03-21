@@ -70,36 +70,50 @@
     self.editTypeField.selectedSegmentIndex = self.editGoal.goalType;
     switch (self.editGoal.goalType) {
         case Steps:
-            self.stepsStepper.userInteractionEnabled = YES;
-            self.stairsStepper.userInteractionEnabled = NO;
+            [self enableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self enableSegement:self.conversionTypeSelector];
+            [self enableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 0;
             self.goalSelectionLabel.text = @"Custom Goal";
             break;
         case Pluto:
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 0;
             self.goalSelectionLabel.text = @"Walk Around Pluto";
             break;
         case Stairs:
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self enableStepper:self.stairsStepper];
+            [self enableSegement:self.conversionTypeSelector];
+            [self enableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 1;
             self.goalSelectionLabel.text = @"Custom Goal";
             break;
         case Everest:
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 1;
             self.goalSelectionLabel.text = @"Climb Mount Everest";
             break;
         case Nevis:
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 1;
             self.goalSelectionLabel.text = @"Climb Ben Nevis";
             break;
         case Both:
+            [self enableStepper:self.stepsStepper];
+            [self enableStepper:self.stairsStepper];
+            [self enableSegement:self.conversionTypeSelector];
+            [self enableSegement:self.editTypeField];
             self.editTypeField.selectedSegmentIndex = 2;
             self.goalSelectionLabel.text = @"Custom Goal";
         default:
@@ -158,11 +172,11 @@
     [self.endDateTextField setInputView:self.editDateField];
     
     if (self.editGoal.goalStatus == Active) {
-        self.startDateTextField.userInteractionEnabled = NO;
+        [self disableTextField:self.startDateTextField];
     }
     else if (self.editGoal.goalStatus == Overdue) {
-        self.endDateTextField.userInteractionEnabled = NO;
-        self.startDateTextField.userInteractionEnabled = NO;
+        [self disableTextField:self.startDateTextField];
+        [self disableTextField:self.endDateTextField];
     }
     
     self.startDateTextField.text = [self.formatter stringFromDate:self.editGoal.goalStartDate];
@@ -188,11 +202,11 @@
     [self.presetGoalPicker selectRow:(self.editGoal.goalType-2) inComponent:0 animated:YES];
     
     if (self.editGoal.goalProgressSteps > 0 || self.editGoal.goalProgressStairs > 0) {
-        self.presetGoalPicker.userInteractionEnabled = NO;
-        self.stepsStepper.userInteractionEnabled = NO;
-        self.stairsStepper.userInteractionEnabled = NO;
-        self.conversionTypeSelector.userInteractionEnabled = NO;
-        self.editTypeField.userInteractionEnabled = NO;
+        [self disablePicker:self.presetGoalPicker];
+        [self disableStepper:self.stepsStepper];
+        [self disableStepper:self.stairsStepper];
+        [self disableSegement:self.conversionTypeSelector];
+        [self disableSegement:self.editTypeField];
     }
 }
 
@@ -244,10 +258,10 @@
             self.numStepsTitleLabel.text = @"Number of Steps";
             self.numStairsTitleLabel.text = @"Number of Stair";
             
-            self.stepsStepper.userInteractionEnabled = YES;
-            self.stairsStepper.userInteractionEnabled = YES;
-            self.conversionTypeSelector.userInteractionEnabled = YES;
-            self.editTypeField.userInteractionEnabled = YES;
+            [self enableStepper:self.stepsStepper];
+            [self enableStepper:self.stairsStepper];
+            [self enableSegement:self.conversionTypeSelector];
+            [self enableSegement:self.editTypeField];
             
             break;
         case 1:
@@ -260,10 +274,10 @@
             self.numStepsTitleLabel.text = @"Number of Miles to walk";
             self.numStairsTitleLabel.text = @"Number of Feet to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.editTypeField.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             break;
         case 2:
             self.numStepsLabel.text = @"0";
@@ -275,10 +289,10 @@
             self.numStepsTitleLabel.text = @"Number of Miles to walk";
             self.numStairsTitleLabel.text = @"Number of Feet to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.editTypeField.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             break;
         case 3:
             self.numStepsLabel.text = @"7232";
@@ -290,10 +304,10 @@
             self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
             self.numStairsTitleLabel.text = @"Number of Meters to climb";
             
-            self.stepsStepper.userInteractionEnabled = NO;
-            self.stairsStepper.userInteractionEnabled = NO;
-            self.conversionTypeSelector.userInteractionEnabled = NO;
-            self.editTypeField.userInteractionEnabled = NO;
+            [self disableStepper:self.stepsStepper];
+            [self disableStepper:self.stairsStepper];
+            [self disableSegement:self.conversionTypeSelector];
+            [self disableSegement:self.editTypeField];
             break;
         default:
             break;
@@ -346,23 +360,23 @@
     if(self.editTypeField.selectedSegmentIndex == 0) {
         // Set only the Steps stepper to enabled.
         // Set Stairs stepper to 0.
-        self.stepsStepper.userInteractionEnabled = YES;
-        self.stairsStepper.userInteractionEnabled = NO;
+        [self enableStepper:self.stepsStepper];
+        [self disableStepper:self.stairsStepper];
         self.numStairsLabel.text = @"0";
         self.stairsStepper.value = 0;
     }
     else if (self.editTypeField.selectedSegmentIndex == 1) {
         // Set only the Stairs stepper to enabled.
         // Set Steps stepper to 0.
-        self.stepsStepper.userInteractionEnabled = NO;
-        self.stairsStepper.userInteractionEnabled = YES;
+        [self disableStepper:self.stepsStepper];
+        [self enableStepper:self.stairsStepper];
         self.numStepsLabel.text = @"0";
         self.stepsStepper.value = 0;
     }
     else {
         // Set both the Steps and Stairs stepper to enabled.
-        self.stepsStepper.userInteractionEnabled = YES;
-        self.stairsStepper.userInteractionEnabled = YES;
+        [self enableStepper:self.stepsStepper];
+        [self enableStepper:self.stairsStepper];
     }
 }
 
@@ -657,6 +671,66 @@
         self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
         self.numStairsTitleLabel.text = @"Number of Meters to climb";
     }
+}
+
+//disable button
+-(void) disableButton:(UIButton *)button {
+    [button setEnabled:NO];
+    button.alpha = 0.3;
+}
+
+//enable button
+-(void) enableButton:(UIButton *)button {
+    [button setEnabled:YES];
+    button.alpha = 1.0;
+}
+
+//disable stepper
+-(void) disableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:NO];
+    stepper.alpha = 0.3;
+}
+
+//enable stepper
+-(void) enableStepper:(UIStepper *)stepper {
+    [stepper setEnabled:YES];
+    stepper.alpha = 1.0;
+}
+
+//disable segmentated control
+-(void) disableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:NO];
+    segment.alpha = 0.3;
+}
+
+//enable segmented control
+-(void) enableSegement:(UISegmentedControl *)segment {
+    [segment setEnabled:YES];
+    segment.alpha = 1.0;
+}
+
+//disable text field
+-(void) disableTextField:(UITextField *)textfield {
+    [textfield setEnabled:NO];
+    textfield.alpha = 0.3;
+}
+
+//enable text field
+-(void) enableTextField:(UITextField *)textfield {
+    [textfield setEnabled:YES];
+    textfield.alpha = 1.0;
+}
+
+//disable picker
+-(void) disablePicker:(UIPickerView *)picker {
+    picker.userInteractionEnabled = NO;
+    picker.alpha = 0.3;
+}
+
+//enable picker
+-(void) enablePicker:(UIPickerView *)picker {
+    picker.userInteractionEnabled = YES;
+    picker.alpha = 1.0;
 }
 
 @end

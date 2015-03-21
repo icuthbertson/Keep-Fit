@@ -13,7 +13,6 @@
 		AE2490DA1A9CF37700A6D816 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490D91A9CF37700A6D816 /* Schedule.m */; };
 		AE2490E81AA4C12C00A6D816 /* TestHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490E31AA4C12C00A6D816 /* TestHistoryTableViewController.m */; };
 		AE2490E91AA4C12C00A6D816 /* TestViewGoalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490E51AA4C12C00A6D816 /* TestViewGoalViewController.m */; };
-		AE2490EE1AA4F10600A6D816 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490ED1AA4F10600A6D816 /* Default-568h@2x.png */; };
 		AE2490FA1AA5E6A300A6D816 /* ActivityHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE2490F91AA5E6A300A6D816 /* ActivityHistoryTableViewController.m */; };
 		AE2490FC1AA908AC00A6D816 /* bar-chart.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FB1AA908AC00A6D816 /* bar-chart.png */; };
 		AE2490FE1AA908C400A6D816 /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = AE2490FD1AA908C400A6D816 /* home.png */; };
@@ -96,7 +95,6 @@
 		AE2490E31AA4C12C00A6D816 /* TestHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHistoryTableViewController.m; sourceTree = "<group>"; };
 		AE2490E41AA4C12C00A6D816 /* TestViewGoalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewGoalViewController.h; sourceTree = "<group>"; };
 		AE2490E51AA4C12C00A6D816 /* TestViewGoalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewGoalViewController.m; sourceTree = "<group>"; };
-		AE2490ED1AA4F10600A6D816 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		AE2490F81AA5E6A300A6D816 /* ActivityHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityHistoryTableViewController.h; sourceTree = "<group>"; };
 		AE2490F91AA5E6A300A6D816 /* ActivityHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityHistoryTableViewController.m; sourceTree = "<group>"; };
 		AE2490FB1AA908AC00A6D816 /* bar-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar-chart.png"; sourceTree = "<group>"; };
@@ -294,7 +292,6 @@
 				AE9D0B7D1ABC844E00C2BB6D /* UIKit.framework */,
 				AE9D0B7B1ABC844300C2BB6D /* Foundation.framework */,
 				AE9D0AC41AB9F46C00C2BB6D /* Social.framework */,
-				AE2490ED1AA4F10600A6D816 /* Default-568h@2x.png */,
 				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
 				AE40A69A1A8946BB000DD45A /* Keep Fit */,
 				AE40A69B1A8946BB000DD45A /* Supporting Files */,
@@ -513,7 +510,6 @@
 				AE9D0ACB1ABAFB1C00C2BB6D /* arrow-big-02.png in Resources */,
 				AE72D4701A9BA671008570B0 /* 154_Settings@2x.png in Resources */,
 				AE2490FE1AA908C400A6D816 /* home.png in Resources */,
-				AE2490EE1AA4F10600A6D816 /* Default-568h@2x.png in Resources */,
 				AE40A6AC1A8946BB000DD45A /* LaunchScreen.xib in Resources */,
 				AE9D0AD91ABB3A7C00C2BB6D /* finishline.png in Resources */,
 				AE40A6A91A8946BB000DD45A /* Images.xcassets in Resources */,
