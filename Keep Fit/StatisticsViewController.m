@@ -174,12 +174,21 @@
     //For Line Chart
     NSMutableArray *stepsStairsLabels = [[NSMutableArray alloc] init];
     
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-    [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
+    if ([self.stepsValues count] > 6) {
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
+    }
+    else {
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
+        for (int i=0; i<([self.stepsValues count]-1); i++) {
+            [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
+        }
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
+    }
     
     
     //Steps Graph
