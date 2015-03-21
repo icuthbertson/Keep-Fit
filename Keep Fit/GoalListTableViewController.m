@@ -522,8 +522,9 @@
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", goal.goalName, statusText];
     if (goal.goalStatus == Completed) {
         cellImage = [UIImage imageNamed:@"Checkmark.png"];
+        tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
     }
-    if (goal.goalType == Steps || goal.goalType == Stairs || goal.goalType == Both) {
+    if (goal.goalType == Steps || goal.goalType == Stairs || goal.goalType == Both || goal.goalStatus == Completed) {
         cellImage = [cellImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [cell.imageView setTintColor:tint];
     }
