@@ -1118,6 +1118,17 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Active" message:@"This goal is now Active." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Active"];
+            //add the overdue notification again
+            UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+            endNotification.fireDate = self.viewGoal.goalCompletionDate;
+            endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",self.viewGoal.goalName];
+            endNotification.soundName = UILocalNotificationDefaultSoundName;
+            endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+            
+            NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] forKey:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName]];
+            endNotification.userInfo = infoDictend;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
             //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
             
         }
