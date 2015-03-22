@@ -74,6 +74,7 @@
 @property UIView *stepsGraphView;
 @property UIView *stairsEstView;
 @property UIView *stairsGraphView;
+- (IBAction)socialMediaAction:(id)sender;
 
 @property double progressSteps;
 @property double progressStairs;
@@ -97,6 +98,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property UIImage *image;
 
+@property UIImagePickerController *socialImagePicker;
+@property UIImage *socialImage;
+
 @end
 
 @implementation ViewGoalViewController
@@ -111,7 +115,7 @@
     
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 600)];
+    [self.scrollView setContentSize:CGSizeMake(320, 750)];
     
     self.trackingView.hidden = YES;
     self.statisticsView.hidden = YES;
@@ -140,10 +144,21 @@
     progressLine.lineWidth = 0.5;
     progressLine.fillColor = [[UIColor clearColor] CGColor];
     
-    //Line between progress bar and options
+    //Line between progress bar and social
+    UIBezierPath *pathSocial = [UIBezierPath bezierPath];
+    [pathSocial moveToPoint:CGPointMake(24.0, 280.0)];
+    [pathSocial addLineToPoint:CGPointMake(320.0, 280.0)];
+    
+    CAShapeLayer *socialLine = [CAShapeLayer layer];
+    socialLine.path = [pathSocial CGPath];
+    socialLine.strokeColor = [[UIColor grayColor] CGColor];
+    socialLine.lineWidth = 0.5;
+    socialLine.fillColor = [[UIColor clearColor] CGColor];
+    
+    //Line between progress social and options
     UIBezierPath *pathOption = [UIBezierPath bezierPath];
-    [pathOption moveToPoint:CGPointMake(24.0, 280.0)];
-    [pathOption addLineToPoint:CGPointMake(320.0, 280.0)];
+    [pathOption moveToPoint:CGPointMake(24.0, 359.0)];
+    [pathOption addLineToPoint:CGPointMake(320.0, 359.0)];
     
     CAShapeLayer *optionLine = [CAShapeLayer layer];
     optionLine.path = [pathOption CGPath];
@@ -1397,7 +1412,7 @@
         self.statisticsView.hidden = YES;
         self.trackingView.hidden = YES;
         self.testTrackingView.hidden = YES;
-        [self.scrollView setContentSize:CGSizeMake(320, 650)];
+        [self.scrollView setContentSize:CGSizeMake(320, 750)];
         [self.scrollView setScrollEnabled:YES];
     }
     else if (self.viewSelector.selectedSegmentIndex == 1) {
@@ -1700,6 +1715,65 @@
         NSLog(@"%@ ",cancelThisNotification);
         [[UIApplication sharedApplication] cancelLocalNotification:cancelThisNotification];
     }
+}
+
+- (IBAction)socialMediaAction:(id)sender {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Take Picture?"
+                                                        message:@"Would you like to take a picture to send with your post?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"No"
+                                              otherButtonTitles:@"Yes", nil];
+    [alertView setTag:99];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 99) {
+        if( 0 == buttonIndex ){ //no button
+            self.socialImage = nil;
+            [self shareToSocial];
+        } else if ( 1 == buttonIndex ){ //yes button
+            [self takePicture];
+        }
+    }
+}
+
+- (void)shareToSocial {
+    NSString *baseText = @"Base share text, will update once working";
+    NSArray *itemsToShare = @[baseText];
+    if (self.socialImage != nil) {
+        itemsToShare = @[baseText,self.socialImage];
+    }
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    
+    activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo, UIActivityTypeAirDrop, UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeAddToReadingList];
+    if (self.socialImage != nil) {
+        activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypePostToVimeo, UIActivityTypeAirDrop, UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypeMail, UIActivityTypeMessage, UIActivityTypePrint, UIActivityTypeAddToReadingList];
+    }
+    [self presentViewController:activityViewController animated:YES completion:nil];
+    
+}
+
+- (void)takePicture {
+    if (self.socialImagePicker != nil) {
+        self.socialImagePicker = nil;
+    }
+    self.socialImagePicker = [[UIImagePickerController alloc] init];
+    self.socialImagePicker.delegate = self;
+    [self.socialImagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [self presentViewController:self.socialImagePicker animated:YES completion:nil];
+}
+
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    self.socialImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self shareToSocial];
+}
+
+- (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    self.socialImage = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

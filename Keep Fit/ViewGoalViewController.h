@@ -12,7 +12,7 @@
 #import "Testing.h"
 #import "Settings.h"
 
-@interface ViewGoalViewController : UIViewController<UIAlertViewDelegate>
+@interface ViewGoalViewController : UIViewController<UIAlertViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property KeepFitGoal *viewGoal; // goal to be viewed.
 @property NSMutableArray *listGoalNames; // list of goal names.
