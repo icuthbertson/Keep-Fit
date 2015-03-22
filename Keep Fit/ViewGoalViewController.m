@@ -1740,7 +1740,107 @@
 }
 
 - (void)shareToSocial {
-    NSString *baseText = @"Base share text, will update once working";
+    NSString *baseText = [[NSString alloc] init];
+    
+    NSString *stepsName = [[NSString alloc] init];
+    NSString *stairsName = [[NSString alloc] init];
+    NSInteger conversionIndexSteps = 0;
+    NSInteger conversionIndexStairs = 0;
+    
+    NSString *amountText = [[NSString alloc] init];
+    NSString *progressText = [[NSString alloc] init];
+    NSString *amountTextSteps = [[NSString alloc] init];
+    NSString *progressTextSteps = [[NSString alloc] init];
+    NSString *amountTextStairs = [[NSString alloc] init];
+    NSString *progressTextStairs = [[NSString alloc] init];
+    
+    if (self.viewGoal.goalConversion == StepsStairs) {
+        stepsName = @"Steps";
+        conversionIndexSteps = 0;
+        stairsName = @"Stairs";
+        conversionIndexStairs = 0;
+    }
+    else if (self.viewGoal.goalConversion == Imperial) {
+        stepsName = @"Miles";
+        conversionIndexSteps = 1;
+        stairsName= @"Feet";
+        conversionIndexStairs = 3;
+    }
+    else if (self.viewGoal.goalConversion == Metric) {
+        stepsName = @"Kilometers";
+        conversionIndexSteps = 2;
+        stairsName = @"Meters";
+        conversionIndexStairs = 4;
+    }
+    
+    if (self.viewGoal.goalAmountStairs == 0) { //steps
+        progressText = [NSString stringWithFormat:@"%.2f/",(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
+        amountText = [NSString stringWithFormat:@"%.2f %@",(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stepsName];
+    }
+    else if (self.viewGoal.goalAmountSteps == 0) { //stairs
+        progressText = [NSString stringWithFormat:@"%.2f/",(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
+        amountText = [NSString stringWithFormat:@"%.2f %@",(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),stairsName];
+    }
+    else { //both
+        progressTextSteps = [NSString stringWithFormat:@"%.2f/",(double)(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])];
+        amountTextSteps = [NSString stringWithFormat:@"%.2f %@",(double)(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue]),stepsName];
+        progressTextStairs = [NSString stringWithFormat:@"%.2f/",(double)(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])];
+        amountTextStairs = [NSString stringWithFormat:@"%.2f %@",(double)(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue]),stairsName];
+    }
+    
+    switch (self.viewGoal.goalStatus) {
+        case Pending:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Waiting for my goal of %@ and %@ to start #KeepFit",amountTextSteps, amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Waiting for my goal of %@ to start #KeepFit",amountText];
+            }
+            break;
+        case Active:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Progress towards my goal of %@%@ and %@%@ #KeepFit",progressTextSteps,amountTextSteps,progressTextStairs,amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Progress towards my goal of %@%@ #KeepFit",progressText,amountText];
+            }
+            break;
+        case Overdue:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Progress towards my goal %@%@ and %@%@ #KeepFit",progressTextSteps,amountTextSteps,progressTextStairs,amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Progress towards my goal %@%@ #KeepFit",progressText,amountText];
+            }
+            break;
+        case Suspended:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Going to come back to my goal of %@%@ and %@%@ #KeepFit",progressTextSteps,amountTextSteps,progressTextStairs,amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Going to come back to my goal of %@%@ #KeepFit",progressText,amountText];
+            }
+            break;
+        case Abandoned:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Giving up on my goal of %@%@ and %@%@ #KeepFit",progressTextSteps,amountTextSteps,progressTextStairs,amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Giving up on my goal of %@%@ #KeepFit",progressText,amountText];
+            }
+            break;
+        case Completed:
+            if (self.viewGoal.goalType == Both) { //both
+                baseText = [NSString stringWithFormat:@"Completed my goal of %@ and %@ #KeepFit",amountTextSteps,amountTextStairs];
+            }
+            else { //everything else
+                baseText = [NSString stringWithFormat:@"Completed my goal of %@ #KeepFit",amountText];
+            }
+            break;
+        default:
+            break;
+    }
+    
     NSArray *itemsToShare = @[baseText];
     if (self.socialImage != nil) {
         itemsToShare = @[baseText,self.socialImage];
