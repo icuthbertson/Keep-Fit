@@ -453,6 +453,19 @@
     if (![self.editTitleField.text isEqualToString:self.editGoal.goalName]) {
         self.editGoal.goalName = self.editTitleField.text;
         NSLog(@"Name - Save: %@",self.editGoal.goalName);
+        if (self.editGoal.goalStatus == Pending) {
+            if (self.settings.notifications) {
+                [self updateLocalNotification:[NSString stringWithFormat:@"%@start",self.editGoal.goalName] type:@"start"];
+            }
+            if (self.settings.notifications) {
+                [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
+            }
+        }
+        else if (self.editGoal.goalStatus == Active) {
+            if (self.settings.notifications) {
+                [self updateLocalNotification:[NSString stringWithFormat:@"%@end",self.editGoal.goalName] type:@"end"];
+            }
+        }
         self.wasEdit = YES;
     }
     // If the goal type is different set to the new value.
