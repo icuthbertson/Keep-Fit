@@ -444,19 +444,18 @@
     double overdueDate = [goal.goalCompletionDate timeIntervalSince1970];
     
     double days = (60*60*24);
-    double hours = (60*60);
     
     double activeInDays = (activeDate-nowDate)/days;
     double activeInDaysFloor = floor((activeDate-nowDate)/days);
-    double activeInHours = (activeInDays-activeInDaysFloor)/hours;
+    double activeInHours = (activeInDays-activeInDaysFloor)*24;
     
     double overdueInDays = (overdueDate-nowDate)/days;
     double overdueInDaysFloor = floor((overdueDate-nowDate)/days);
-    double overdueInHours = (overdueInDays-overdueInDaysFloor)/hours;
+    double overdueInHours = (overdueInDays-overdueInDaysFloor)*24;
     
     double overdueForDays = (nowDate-overdueDate)/days;
     double overdueForDaysFloor = floor((nowDate-overdueDate)/days);
-    double overdueForHours = (overdueForDays-overdueForDaysFloor)/hours;
+    double overdueForHours = (overdueForDays-overdueForDaysFloor)*24;
     
     
     // Check what the status for the goal is and change set the statusText string accordingly and set the colour for the cell.
