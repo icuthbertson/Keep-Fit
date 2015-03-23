@@ -686,12 +686,48 @@
     
     // Set up the date formatter to the required format.
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+    [formatter setDateFormat:@"MMM dd HH:mm"];
+    
+    double nowDate = [[NSDate date] timeIntervalSince1970];
+    double activeDate = [self.viewGoal.goalStartDate timeIntervalSince1970];
+    double overdueDate = [self.viewGoal.goalCompletionDate timeIntervalSince1970];
+    
+    double days = (60*60*24);
+    
+    double activeInDays = (activeDate-nowDate)/days;
+    double activeInDaysFloor = floor((activeDate-nowDate)/days);
+    double activeInHours = (activeInDays-activeInDaysFloor)*24;
+    
+    double overdueInDays = (overdueDate-nowDate)/days;
+    double overdueInDaysFloor = floor((overdueDate-nowDate)/days);
+    double overdueInHours = (overdueInDays-overdueInDaysFloor)*24;
+    
+    double overdueForDays = (nowDate-overdueDate)/days;
+    double overdueForDaysFloor = floor((nowDate-overdueDate)/days);
+    double overdueForHours = (overdueForDays-overdueForDaysFloor)*24;
     
     // Set the date labels to their values in the required format.
     self.viewDateCreated.text = [NSString stringWithFormat:@"Date Created: %@",[formatter stringFromDate:self.viewGoal.goalCreationDate]];
-    self.viewDateStart.text = [NSString stringWithFormat:@"Start Date: %@",[formatter stringFromDate:self.viewGoal.goalStartDate]];
-    self.viewDateCompletion.text = [NSString stringWithFormat:@"Completion Date: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    if (self.viewGoal.goalStatus == Pending) {
+        self.viewDateStart.text = [NSString stringWithFormat:@"Starts on: %@",[formatter stringFromDate:self.viewGoal.goalStartDate]];
+    }
+    else {
+        self.viewDateStart.text = [NSString stringWithFormat:@"Started on: %@",[formatter stringFromDate:self.viewGoal.goalStartDate]];
+    }
+    
+    if (self.viewGoal.goalStatus == Completed) {
+        self.viewDateCompletion.text = [NSString stringWithFormat:@"Completed on: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    }
+    else if (self.viewGoal.goalStatus == Abandoned) {
+        self.viewDateCompletion.text = [NSString stringWithFormat:@"Abandoned on: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    }
+    else if (self.viewGoal.goalStatus == Overdue) {
+        self.viewDateCompletion.text = [NSString stringWithFormat:@"Overdue for: %.f Days %.f Hours", overdueForDaysFloor,overdueForHours];
+    }
+    else {
+        self.viewDateCompletion.text = [NSString stringWithFormat:@"Complete by: %@",[formatter stringFromDate:self.viewGoal.goalCompletionDate]];
+    }
+    
     
     self.stepperLabel.text = @"0";
     self.stepperStairsLabel.text = @"0";

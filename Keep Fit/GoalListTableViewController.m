@@ -466,7 +466,7 @@
             tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             break;
         case Active:
-            statusText = [NSString stringWithFormat:@"Overdue in: %.f Days %.f Hours", overdueInDaysFloor,overdueInHours];
+            statusText = [NSString stringWithFormat:@"Complete in: %.f Days %.f Hours", overdueInDaysFloor,overdueInHours];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Overdue:
@@ -478,7 +478,7 @@
             tint = [UIColor colorWithRed:((255) / 255.0) green:((215) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Abandoned:
-            statusText = [NSString stringWithFormat:@"Abandoned"];
+            statusText = [NSString stringWithFormat:@"Abandoned on %@",[dateFormatter stringFromDate:goal.goalCompletionDate]];
             tint = [UIColor colorWithRed:((128) / 255.0) green:((128) / 255.0) blue:((128) / 255.0) alpha:1.0];
             break;
         case Completed:
@@ -608,6 +608,7 @@
         }
         else { // Abandon goal.
             goal.goalStatus = Abandoned;
+            goal.goalCompletionDate = [NSDate date];
             [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",goal.goalName] type:@"start"];
             [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",goal.goalName] type:@"end"];
         }
@@ -752,7 +753,7 @@
 // store status change to db.
 -(void) storeGoalStatusChangeToDB:(KeepFitGoal*) goal {
     // Update status in goals db
-    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d' where goalID=%ld", self.mainTabBarController.testing.getGoalDBName, goal.goalStatus,(long)goal.goalID];
+    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalDate='%f' where goalID=%ld", self.mainTabBarController.testing.getGoalDBName, goal.goalStatus, [goal.goalCompletionDate timeIntervalSince1970],(long)goal.goalID];
     
     // Execute the query.
     [self.dbManager executeQuery:query];
