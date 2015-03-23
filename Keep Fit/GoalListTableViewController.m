@@ -421,6 +421,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ListPrototypeCell" forIndexPath:indexPath];
     
+    NSNumberFormatter *twoDecimalPlaces = [[NSNumberFormatter alloc] init];
+    [twoDecimalPlaces setNumberStyle:NSNumberFormatterDecimalStyle];
+    [twoDecimalPlaces setMaximumFractionDigits:2];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM dd"];
+    
     // Configure the cell...
     KeepFitGoal *goal = [self.keepFitGoals objectAtIndex:indexPath.row];
     
@@ -431,19 +438,40 @@
     UIColor *tint = [[UIColor alloc] init];
     UIImage *cellImage = [[UIImage alloc] init];
     
+    //NSDate *now = [NSDate date];
+    double nowDate = [[NSDate date] timeIntervalSince1970];
+    double activeDate = [goal.goalStartDate timeIntervalSince1970];
+    double overdueDate = [goal.goalCompletionDate timeIntervalSince1970];
+    
+    double days = (60*60*24);
+    double hours = (60*60);
+    
+    double activeInDays = (activeDate-nowDate)/days;
+    double activeInDaysFloor = floor((activeDate-nowDate)/days);
+    double activeInHours = (activeInDays-activeInDaysFloor)/hours;
+    
+    double overdueInDays = (overdueDate-nowDate)/days;
+    double overdueInDaysFloor = floor((overdueDate-nowDate)/days);
+    double overdueInHours = (overdueInDays-overdueInDaysFloor)/hours;
+    
+    double overdueForDays = (nowDate-overdueDate)/days;
+    double overdueForDaysFloor = floor((nowDate-overdueDate)/days);
+    double overdueForHours = (overdueForDays-overdueForDaysFloor)/hours;
+    
+    
     // Check what the status for the goal is and change set the statusText string accordingly and set the colour for the cell.
     NSString *statusText;
     switch (goal.goalStatus) {
         case Pending:
-            statusText = [NSString stringWithFormat:@"Pending"];
+            statusText = [NSString stringWithFormat:@"Active in: %.f Days %.f Hours", activeInDaysFloor,activeInHours];
             tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             break;
         case Active:
-            statusText = [NSString stringWithFormat:@"Active"];
+            statusText = [NSString stringWithFormat:@"Overdue in: %.f Days %.f Hours", overdueInDaysFloor,overdueInHours];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Overdue:
-            statusText = [NSString stringWithFormat:@"Overdue"];
+            statusText = [NSString stringWithFormat:@"Overdue for: %.f Days %.f Hours", overdueForDaysFloor,overdueForHours];
             tint = [UIColor colorWithRed:((255) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Suspended:
@@ -455,7 +483,7 @@
             tint = [UIColor colorWithRed:((128) / 255.0) green:((128) / 255.0) blue:((128) / 255.0) alpha:1.0];
             break;
         case Completed:
-            statusText = [NSString stringWithFormat:@"Completed"];
+            statusText = [NSString stringWithFormat:@"Completed on %@",[dateFormatter stringFromDate:goal.goalCompletionDate]];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((0) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         default:
@@ -463,63 +491,69 @@
     }
     // Check the goal type and set the detailed text for the cell accordingly
     NSString *typeText;
+    NSString *goalText;
     switch (goal.goalType) {
         case Steps:
             typeText = [NSString stringWithFormat:@"Steps"];
             if (goal.goalConversion == StepsStairs) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ steps",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:goal.goalProgressSteps]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:goal.goalAmountSteps]]];
             }
             else if (goal.goalConversion == Imperial) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Miles: %.2f/%.2f", (double)goal.goalProgressSteps/2112, (double)goal.goalAmountSteps/2112];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ miles", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps/2112)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps/2112)]]];
             }
             else if (goal.goalConversion == Metric) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ km", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps/1312)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps/1312)]]];
             }
             cellImage = [UIImage imageNamed:@"Right_Filled.png"];
             break;
         case Stairs:
             typeText = [NSString stringWithFormat:@"Stairs"];
             if (goal.goalConversion == StepsStairs) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Stairs: %ld/%ld", (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+                goalText = [NSString stringWithFormat:@"Climb: %@/%@ stairs", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs)]]];
             }
             else if (goal.goalConversion == Imperial) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+                goalText = [NSString stringWithFormat:@"Climb: %@/%@ feet", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/1.385)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/1.385)]]];
             }
             else if (goal.goalConversion == Metric) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Meters: %.2f/%.2f", (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
+                goalText = [NSString stringWithFormat:@"Climb: %@/%@ meters", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/4.545)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/4.545)]]];
             }
             cellImage = [UIImage imageNamed:@"Up_Filled.png"];
             break;
         case Both:
             typeText = [NSString stringWithFormat:@"Steps and Stairs"];
             if (goal.goalConversion == StepsStairs) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Steps: %ld/%ld Stairs: %ld/%ld", (long)goal.goalProgressSteps, (long)goal.goalAmountSteps, (long)goal.goalProgressStairs, (long)goal.goalAmountStairs];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ steps\nClimb: %@/%@ stairs", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs)]]];
             }
             else if (goal.goalConversion == Imperial) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Miles: %.2f/%.2f Feet: %.2f/%.2f", (double)goal.goalProgressSteps/2112, (double)goal.goalAmountSteps/2112, (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ miles\nClimb: %@/%@ feet", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps/2112)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps/2112)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/1.385)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/1.385)]]];
             }
             else if (goal.goalConversion == Metric) {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f Meters: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312, (double)goal.goalProgressStairs/4.545, (double)goal.goalAmountStairs/4.545];
+                goalText = [NSString stringWithFormat:@"Walk: %@/%@ km\nClimb: %@/%@ meters", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps/1312)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps/1312)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/4.545)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/4.545)]]];
             }
             cellImage = [UIImage imageNamed:@"Up_Right.png"];
             break;
         case Everest:
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            goalText = [NSString stringWithFormat:@"Climb: %@/%@ feet", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/1.385)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/1.385)]]];
             cellImage = [UIImage imageNamed:@"everest.png"];
             break;
         case Nevis:
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Feet: %.2f/%.2f", (double)goal.goalProgressStairs/1.385, (double)goal.goalAmountStairs/1.385];
+            goalText = [NSString stringWithFormat:@"Climb: %@/%@ feet", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressStairs/1.385)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountStairs/1.385)]]];
             cellImage = [UIImage imageNamed:@"nevis.png"];
             break;
         case Pluto:
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Kilometers: %.2f/%.2f", (double)goal.goalProgressSteps/1312, (double)goal.goalAmountSteps/1312];
+            goalText = [NSString stringWithFormat:@"Walk: %@/%@ km", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalProgressSteps/1312)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(goal.goalAmountSteps/1312)]]];
             cellImage = [UIImage imageNamed:@"pluto.png"];
             break;
         default:
             break;
     }
     // Set the text label for the cell with the status text and goal name.
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", goal.goalName, statusText];
+    cell.textLabel.numberOfLines = 0;
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", goal.goalName];
+    
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@",statusText, goalText];
+    
     if (goal.goalStatus == Completed) {
         cellImage = [UIImage imageNamed:@"Checkmark.png"];
         tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
@@ -594,7 +628,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return the height for the cell.
-    return 60.0;
+    return 70.0;
 }
 
 - (void)cancelLocalNotification:(NSString*)notificationID type:(NSString*)typeString {

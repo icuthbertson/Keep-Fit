@@ -195,10 +195,12 @@
     PNLineChart *stepsLineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.stepsGraphView.bounds), CGRectGetHeight(self.stepsGraphView.bounds))];
     
     [stepsLineChart setXLabels:stepsStairsLabels];
+    stepsLineChart.showCoordinateAxis = YES;
     
     PNLineChartData *dataSteps = [PNLineChartData new];
     dataSteps.color = PNTwitterColor;
     dataSteps.itemCount = [self.stepsValues count];
+    dataSteps.inflexionPointStyle = PNScatterChartPointStyleCircle;
     dataSteps.getData = ^(NSUInteger index) {
         CGFloat yValue = [self.stepsValues[index] floatValue];
         return [PNLineChartDataItem dataItemWithY:yValue];
@@ -214,6 +216,7 @@
     PNLineChart *stairsLineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.stairsGraphView.bounds), CGRectGetHeight(self.stairsGraphView.bounds))];
     
     [stairsLineChart setXLabels:stepsStairsLabels];
+    stairsLineChart.showCoordinateAxis = YES;
     
     PNLineChartData *dataStairs = [PNLineChartData new];
     dataStairs.color = PNTwitterColor;

@@ -1099,6 +1099,7 @@
 
 -(void) completedView {
     self.viewGoal.goalStatus = Completed;
+    self.viewGoal.goalCompletionDate = [NSDate date];
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
     self.viewStatus.text = @"Completed";
@@ -1317,7 +1318,7 @@
 }
 
 -(void) storeGoalStatusChangeToDB {
-    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus,(long)self.viewGoal.goalID];
+    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalDate='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus,[self.viewGoal.goalCompletionDate timeIntervalSince1970],(long)self.viewGoal.goalID];
     
     // Execute the query.
     [self.dbManager executeQuery:query];
