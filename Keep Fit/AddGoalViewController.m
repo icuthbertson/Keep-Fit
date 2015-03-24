@@ -457,6 +457,9 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     // Trim the white space from the string from the goal name TextField.
     NSString *trimmedString = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSDate *startDate = [self dateWithZeroSeconds:self.dateStartPicker.date];
+    NSDate *endDate = [self dateWithZeroSeconds:self.datePicker.date];
+    
     if (sender == self.saveButton)  {
         // If the Goal name has no loength (no entered) alert with message and return NO.
         if ((trimmedString.length == 0)) {
@@ -465,19 +468,19 @@
             return NO;
         }
         // If the end date/time is before the current date/time alert with message and return NO.
-        if ([[self.datePicker.date earlierDate:[NSDate date]]isEqualToDate: self.datePicker.date]) {
+        if ([[endDate earlierDate:[NSDate date]]isEqualToDate: endDate]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
         // If the end date/time is before the start date/time alert with message and return NO.
-        if ([[self.datePicker.date earlierDate:self.dateStartPicker.date]isEqualToDate: self.datePicker.date]) {
+        if ([[endDate earlierDate:startDate]isEqualToDate: endDate]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;
         }
         // If the start date/time is before the current date/time alert with message and return NO.
-        if ([[self.dateStartPicker.date earlierDate:[NSDate date]]isEqualToDate: self.dateStartPicker.date]) {
+        if ([[startDate earlierDate:[NSDate date]]isEqualToDate: startDate]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             return NO;

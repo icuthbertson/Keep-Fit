@@ -574,6 +574,9 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     // Trim the white space from the string from the goal name TextField.
     NSString *trimmedString = [self.editTitleField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSDate *startDate = [self dateWithZeroSeconds:self.editStartDateField.date];
+    NSDate *endDate = [self dateWithZeroSeconds:self.editDateField.date];
+    
     if (sender == self.saveButton)  {
         // If the Goal name has no loength (no entered) alert with message and return NO.
         if ((trimmedString.length == 0)) {
@@ -583,7 +586,7 @@
         }
         if (self.editGoal.goalStatus == Pending || self.editGoal.goalStatus == Active) {
             // If the end date/time is before the current date/time alert with message and return NO.
-            if ([[self.editDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editDateField.date]) {
+            if ([[endDate earlierDate:[NSDate date]]isEqualToDate: endDate]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
                 return NO;
@@ -591,7 +594,7 @@
         }
         if (self.editGoal.goalStatus == Pending || self.editGoal.goalStatus == Active) {
             // If the end date/time is before the start date/time alert with message and return NO.
-            if ([[self.editDateField.date earlierDate:self.editStartDateField.date]isEqualToDate: self.editDateField.date]) {
+            if ([[endDate earlierDate:startDate]isEqualToDate: endDate]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Completion Date/Time must not be in before the Start Date/Time." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
                 return NO;
@@ -599,7 +602,7 @@
         }
         if (self.editGoal.goalStatus == Pending) {
             // If the start date/time is before the current date/time alert with message and return NO.
-            if ([[self.editStartDateField.date earlierDate:[NSDate date]]isEqualToDate: self.editStartDateField.date]) {
+            if ([[startDate earlierDate:[NSDate date]]isEqualToDate: startDate]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Start Date/Time must be in the future." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [alert show];
                 return NO;
