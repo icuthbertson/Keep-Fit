@@ -823,6 +823,7 @@
 #pragma mark - Buttons
 
 - (IBAction)setActiveButton:(id)sender {
+    [self storeGoalStatusChangeToDB];
     if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Pluto) {
         if ([self.stepperLabel.text intValue] > 0) {
             self.progressSteps = [self.stepperLabel.text intValue];
@@ -899,6 +900,7 @@
 - (IBAction)setActiveButtonTest:(id)sender {
     /**********************************start recording*****************************************/
     if (!self.isRecording) {
+        [self storeGoalStatusChangeToDB];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now Recording" message:@"This goal is now recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = YES;
@@ -1279,7 +1281,7 @@
         [self enableButton:self.outletHistoryButton];
         [self enableButton:self.outletActiveButton];
         [self enableButton:self.activeOutletButtonTest];
-        self.autoStepSpinner.hidden = NO;
+        self.autoStepSpinner.hidden = YES;
         [self enableStepper:self.addStepper];
         [self enableStepper:self.addStairsStepper];
         [self showAndEnableRightNavigationItem];
