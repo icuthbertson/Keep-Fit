@@ -108,9 +108,17 @@
     // Configure the cell...
     GoalHistory *history = [self.historyGoals objectAtIndex:indexPath.row];
     
+    NSNumberFormatter *twoDecimalPlaces = [[NSNumberFormatter alloc] init];
+    [twoDecimalPlaces setNumberStyle:NSNumberFormatterDecimalStyle];
+    [twoDecimalPlaces setMaximumFractionDigits:2];
+    
     // Set up cell text size format.
     cell.textLabel.font = [UIFont systemFontOfSize:18];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+    cell.detailTextLabel.numberOfLines = 0;
+    
+    NSString *progressText = [[NSString alloc] init];
+    progressText = @"";
     
     // Set up the text and detialed text for the cell depending on the status of the goal and if any progress was made.
     switch (history.goalStatus) {
@@ -118,15 +126,40 @@
             cell.textLabel.text = @"Pending";
             break;
         case Active:
-            if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
+            if ((history.progressSteps != 0) && (history.progressStairs != 0)) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
                 if (self.viewHistoryGoal.goalConversion == StepsStairs) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Stairs: %.2f", history.progressSteps, history.progressStairs];
+                    progressText = [NSString stringWithFormat:@"Steps: %@\nStairs: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs)]]];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Imperial) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];
+                    progressText = [NSString stringWithFormat:@"Miles: %@\nFeet: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue])]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])]]];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Metric) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Kilometers: %.2f Meters: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])];
+                    progressText = [NSString stringWithFormat:@"Kilometers: %@\nMeters: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue])]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])]]];
+                }
+            }
+            else if (history.progressSteps != 0) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    progressText = [NSString stringWithFormat:@"Steps: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps)]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    progressText = [NSString stringWithFormat:@"Miles: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue])]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    progressText = [NSString stringWithFormat:@"Kilometers: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue])]]];
+                }
+            }
+            else if (history.progressStairs != 0) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    progressText = [NSString stringWithFormat:@"Stairs: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs)]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    progressText = [NSString stringWithFormat:@"Feet: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    progressText = [NSString stringWithFormat:@"Meters: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])]]];
                 }
             }
             else {
@@ -137,15 +170,40 @@
             cell.textLabel.text = @"Suspended";
             break;
         case Overdue:
-            if ((history.progressSteps != 0) || (history.progressStairs != 0)) {
+            if ((history.progressSteps != 0) && (history.progressStairs != 0)) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
                 if (self.viewHistoryGoal.goalConversion == StepsStairs) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Steps: %.2f Stairs: %.2f", history.progressSteps, history.progressStairs];
+                    progressText = [NSString stringWithFormat:@"Steps: %@\nStairs: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps)]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs)]]];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Imperial) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Miles: %.2f Feet: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])];
+                    progressText = [NSString stringWithFormat:@"Miles: %@\nFeet: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue])]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])]]];
                 }
                 else if (self.viewHistoryGoal.goalConversion == Metric) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"Recording - Kilometers: %.2f Meters: %.2f", (double)(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue]), (double)(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])];
+                    progressText = [NSString stringWithFormat:@"Kilometers: %@\nMeters: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue])]], [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])]]];
+                }
+            }
+            else if (history.progressSteps != 0) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    progressText = [NSString stringWithFormat:@"Steps: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps)]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    progressText = [NSString stringWithFormat:@"Miles: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:1] doubleValue])]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    progressText = [NSString stringWithFormat:@"Kilometers: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressSteps/[[self.viewHistoryGoal.conversionTable objectAtIndex:2] doubleValue])]]];
+                }
+            }
+            else if (history.progressStairs != 0) {
+                cell.textLabel.text = [NSString stringWithFormat:@"Recording"];
+                if (self.viewHistoryGoal.goalConversion == StepsStairs) {
+                    progressText = [NSString stringWithFormat:@"Stairs: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs)]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Imperial) {
+                    progressText = [NSString stringWithFormat:@"Feet: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:3] doubleValue])]]];
+                }
+                else if (self.viewHistoryGoal.goalConversion == Metric) {
+                    progressText = [NSString stringWithFormat:@"Meters: %@\n", [twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(history.progressStairs/[[self.viewHistoryGoal.conversionTable objectAtIndex:4] doubleValue])]]];
                 }
             }
             else {
@@ -156,21 +214,24 @@
             cell.textLabel.text = @"Abandoned";
             break;
         case Completed:
-            cell.textLabel.text = [NSString stringWithFormat:@"Completed - On: %@", history.startDate];
+            cell.textLabel.text = [NSString stringWithFormat:@"Completed"];
             break;
         default:
             break;
     }
     // Set up the date formatter
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+    [formatter setDateFormat:@"dd MMMM HH:mm"];
     
-    if ([[history.endDate earlierDate:history.startDate]isEqualToDate: history.endDate]) {
+    if (history.goalStatus == Completed) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@On: %@", progressText, [formatter stringFromDate:history.startDate]];
+    }
+    else if ([[history.endDate earlierDate:history.startDate]isEqualToDate: history.endDate]) {
         // If the end date is 1 Jan 1970, ie is the last history item for goal, don't display the end date.
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@", [formatter stringFromDate:history.startDate]];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@From: %@", progressText, [formatter stringFromDate:history.startDate]];
     }
     else {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@ To: %@", [formatter stringFromDate:history.startDate], [formatter stringFromDate:history.endDate]];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@From: %@ To: %@", progressText, [formatter stringFromDate:history.startDate], [formatter stringFromDate:history.endDate]];
     }
     
     return cell;
@@ -178,7 +239,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return the height for the cell.
-    return 60.0;
+    return 80.0;
 }
 
 /*
