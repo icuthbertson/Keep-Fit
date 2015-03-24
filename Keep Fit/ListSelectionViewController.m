@@ -46,6 +46,73 @@
     NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    if ([CellIdentifier isEqualToString:@"Default"]) {
+        NSString *defaultListQuery = [[NSString alloc] init];
+        int count = 0;
+        if (self.settings.pending) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Pending"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Pending",defaultListQuery];
+            }
+            count++;
+        }
+        if (self.settings.active) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Active"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Active",defaultListQuery];
+            }
+            count++;
+        }
+        if (self.settings.overdue) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Overdue"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Overdue",defaultListQuery];
+            }
+            count++;
+        }
+        if (self.settings.suspended) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Suspened"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Suspended",defaultListQuery];
+            }
+            count++;
+        }
+        if (self.settings.abandoned) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Abandoned"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Abandoned",defaultListQuery];
+            }
+            count++;
+        }
+        if (self.settings.completed) {
+            if (count == 0) {
+                defaultListQuery = [NSString stringWithFormat:@"Completed"];
+            }
+            else {
+                defaultListQuery = [NSString stringWithFormat:@"%@, Completed",defaultListQuery];
+            }
+            count++;
+        }
+        if (count == 0) {
+            defaultListQuery = [NSString stringWithFormat:@"Nothing"];
+        }
+        else if (count == 6)
+        {
+            defaultListQuery = [NSString stringWithFormat:@"Everything"];
+        }
+        cell.detailTextLabel.text = defaultListQuery;
+    }
+    
     return cell;
 }
 /*

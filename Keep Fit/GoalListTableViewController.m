@@ -727,11 +727,11 @@
         destAddController.testing = self.mainTabBarController.testing;
         destAddController.settings = self.mainTabBarController.settings;
     }
-    else if ([segue.identifier isEqualToString:@"showSettings"]) {
-        // If going to the settings view.
-        //SettingsTabBarViewController *tabBarController = segue.destinationViewController;
-        //SettingsViewController *destViewController = [[tabBarController viewControllers]objectAtIndex:1];
-        //destViewController.testing = [self.testing getTesting];
+    else if ([segue.identifier isEqualToString:@"showSelection"]) {
+        // If going to the selection view.
+        UINavigationController *navigationController = segue.destinationViewController;
+        ListSelectionViewController *destViewController = [[navigationController viewControllers]objectAtIndex:0];
+        destViewController.settings = self.mainTabBarController.settings;
     }
 }
 

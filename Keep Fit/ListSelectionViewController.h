@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Settings.h"
 
 @interface ListSelectionViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property NSInteger listType;
+@property Settings *settings;
 
 @end

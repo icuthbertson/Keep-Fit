@@ -31,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *viewDateCompletion; // Goal completion data label.
 @property (weak, nonatomic) IBOutlet UIProgressView *viewProgressBar; // Progress bar outlet.
 @property (weak, nonatomic) IBOutlet UILabel *viewProgress; // Progress label.
+@property (weak, nonatomic) IBOutlet UILabel *viewProgressStairs;
+@property (weak, nonatomic) IBOutlet UILabel *viewPercentage;
 - (IBAction)setActiveButton:(id)sender; // Active button action.
 - (IBAction)suspendButton:(id)sender; // Suspended button action.
 @property (weak, nonatomic) IBOutlet UIButton *outletActiveButton; // Active button outlet.
@@ -56,8 +58,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *activeOutletButtonTest;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *autoStepSpinner;
 @property (weak, nonatomic) IBOutlet UILabel *testTrackLabel;
+@property (weak, nonatomic) IBOutlet UILabel *testTrackStairsLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *testTrackProgress;
 @property (weak, nonatomic) IBOutlet UILabel *trackLabel;
+@property (weak, nonatomic) IBOutlet UILabel *trackStairsLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *trackProgress;
 @property UILabel *stepsPerDayLabel;
 @property UILabel *stepsPerWeekLabel;
@@ -146,8 +150,8 @@
     
     //Line between progress bar and social
     UIBezierPath *pathSocial = [UIBezierPath bezierPath];
-    [pathSocial moveToPoint:CGPointMake(24.0, 280.0)];
-    [pathSocial addLineToPoint:CGPointMake(320.0, 280.0)];
+    [pathSocial moveToPoint:CGPointMake(24.0, 361.0)];
+    [pathSocial addLineToPoint:CGPointMake(320.0, 361.0)];
     
     CAShapeLayer *socialLine = [CAShapeLayer layer];
     socialLine.path = [pathSocial CGPath];
@@ -157,8 +161,8 @@
     
     //Line between progress social and options
     UIBezierPath *pathOption = [UIBezierPath bezierPath];
-    [pathOption moveToPoint:CGPointMake(24.0, 359.0)];
-    [pathOption addLineToPoint:CGPointMake(320.0, 359.0)];
+    [pathOption moveToPoint:CGPointMake(24.0, 440.0)];
+    [pathOption addLineToPoint:CGPointMake(320.0, 440.0)];
     
     CAShapeLayer *optionLine = [CAShapeLayer layer];
     optionLine.path = [pathOption CGPath];
@@ -169,6 +173,7 @@
     //add lines to view
     [self.scrollView.layer addSublayer:detailsLine];
     [self.datesView.layer addSublayer:progressLine];
+    [self.datesView.layer addSublayer:socialLine];
     [self.datesView.layer addSublayer:optionLine];
     
     self.estimatedDate = [[NSDate alloc] init];
@@ -585,11 +590,18 @@
                 conversionIndexSteps = 2;
             }
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)*100)]]];
+            
             self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            
             self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            
             self.image = [UIImage imageNamed:@"Right_Filled.png"];
             break;
         case Stairs:
@@ -608,16 +620,24 @@
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)*100)]]];
+            
+            self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            
+            self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
+            
             self.image = [UIImage imageNamed:@"Up_Filled.png"];
             break;
         case Both:
             [self createBothStatsView];
+            self.viewType.text = [NSString stringWithFormat:@"Steps and Stairs"];
             if (self.viewGoal.goalConversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
@@ -636,41 +656,66 @@
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
-            self.viewType.text = [NSString stringWithFormat:@"Steps and Stairs"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@ Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+
             [self.viewProgressBar setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@ Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)))*100)]]];
+            
+            self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@ Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            
+            self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
+            
             self.image = [UIImage imageNamed:@"Up_Right.png"];
             break;
         case Everest:
             [self disableStepper:self.addStepper];
             [self createStairsStatsView];
+            stepsName = @"miles";
+            conversionIndexSteps = 1;
             stairsName= @"feet";
             conversionIndexStairs = 3;
             self.viewType.text = [NSString stringWithFormat:@"Climb Everest"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)*100)]]];
+            
+            self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            
+            self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
+            
             self.image = [UIImage imageNamed:@"everest.png"];
             break;
         case Nevis:
             [self disableStepper:self.addStepper];
             [self createStairsStatsView];
+            stepsName = @"miles";
+            conversionIndexSteps = 1;
             stairsName= @"feet";
             conversionIndexStairs = 3;
             self.viewType.text = [NSString stringWithFormat:@"Climb Ben Nevis"];
-            self.viewProgress.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.testTrackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)*100)]]];
+            
+            self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
-            self.trackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            
+            self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
+            
             self.image = [UIImage imageNamed:@"nevis.png"];
             break;
         case Pluto:
@@ -678,13 +723,22 @@
             [self createStepsStatsView];
             stepsName = @"km";
             conversionIndexSteps = 2;
+            stairsName = @"meters";
+            conversionIndexStairs = 4;
             self.viewType.text = [NSString stringWithFormat:@"Walk Around Pluto"];
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)*100)]]];
+            
             self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            
             self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            
             self.image = [UIImage imageNamed:@"pluto.png"];
             break;
         default:
@@ -1063,6 +1117,7 @@
             }
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)*100)]]];
             if (self.testing.getTesting) {
                 self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
                 [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
@@ -1090,14 +1145,15 @@
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:((float)(self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)*100)]]];
             if (self.testing.getTesting) {
-                self.testTrackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+                self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
                 [self.testTrackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             }
             else {
-                self.trackLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+                self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
                 [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             }
             break;
@@ -1123,14 +1179,18 @@
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
-            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@  Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+            self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+            self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
             [self.viewProgressBar setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
+            self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:((float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2))*100)]]];
             if (self.testing.getTesting) {
-                self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@  Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+                self.testTrackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+                self.testTrackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
                 [self.testTrackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             }
             else {
-                self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@  Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName,[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
+                self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
+                self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
                 [self.trackProgress setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             }
             break;
@@ -1975,6 +2035,7 @@
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     self.socialImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     [self dismissViewControllerAnimated:YES completion:nil];
+    UIImageWriteToSavedPhotosAlbum(self.socialImage, nil, nil, nil);
     [self shareToSocial];
 }
 
