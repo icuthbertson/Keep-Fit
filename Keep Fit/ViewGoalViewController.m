@@ -923,7 +923,7 @@
         self.progressSteps = 0;
         self.progressStairs = 0;
         [self showAndEnableLeftNavigationItem];
-        [self.activeOutletButtonTest setTitle:@"Start" forState:UIControlStateNormal];
+        [self.activeOutletButtonTest setTitle:@"Record" forState:UIControlStateNormal];
         self.autoStepSpinner.hidden = YES;
         [self.autoStepSpinner stopAnimating];
         [self enableButton:self.outletHistoryButton];
@@ -1237,7 +1237,7 @@
         self.autoStepSpinner.hidden = YES;
         [self disableStepper:self.addStepper];
         [self disableStepper:self.addStairsStepper];
-        [self.outletActiveButton setTitle:@"Start" forState:UIControlStateNormal];
+        [self.outletActiveButton setTitle:@"Record" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
     }/**********************************Re-instate*****************************************/
     else if (self.viewGoal.goalStatus == Suspended) {
@@ -1283,7 +1283,7 @@
         [self enableStepper:self.addStepper];
         [self enableStepper:self.addStairsStepper];
         [self showAndEnableRightNavigationItem];
-        [self.outletSuspendButton setTitle:@"Start" forState:UIControlStateNormal];
+        [self.outletActiveButton setTitle:@"Record" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Suspend" forState:UIControlStateNormal];
     }
 }
