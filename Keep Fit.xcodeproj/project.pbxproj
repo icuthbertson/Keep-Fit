@@ -295,12 +295,7 @@
 		AE40A68F1A8946BB000DD45A = {
 			isa = PBXGroup;
 			children = (
-				AE9D0B811ABC845E00C2BB6D /* QuartzCore.framework */,
-				AE9D0B7F1ABC845600C2BB6D /* CoreGraphics.framework */,
-				AE9D0B7D1ABC844E00C2BB6D /* UIKit.framework */,
-				AE9D0B7B1ABC844300C2BB6D /* Foundation.framework */,
-				AE9D0AC41AB9F46C00C2BB6D /* Social.framework */,
-				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
+				AE4FDF241AC1986500C56AEF /* Framework */,
 				AE40A69A1A8946BB000DD45A /* Keep Fit */,
 				AE40A69B1A8946BB000DD45A /* Supporting Files */,
 				AE40A6B41A8946BB000DD45A /* Keep FitTests */,
@@ -360,6 +355,19 @@
 				AE40A6B61A8946BB000DD45A /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AE4FDF241AC1986500C56AEF /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				AE9D0B811ABC845E00C2BB6D /* QuartzCore.framework */,
+				AE9D0B7F1ABC845600C2BB6D /* CoreGraphics.framework */,
+				AE9D0B7D1ABC844E00C2BB6D /* UIKit.framework */,
+				AE9D0B7B1ABC844300C2BB6D /* Foundation.framework */,
+				AE9D0AC41AB9F46C00C2BB6D /* Social.framework */,
+				AEA0C38D1A8AB60500647E6E /* libsqlite3.dylib */,
+			);
+			name = Framework;
 			sourceTree = "<group>";
 		};
 		AE9D0B4E1ABC841100C2BB6D /* PNChart */ = {

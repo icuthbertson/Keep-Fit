@@ -833,8 +833,8 @@
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressSteps*self.testSettings.stepsTime;
-            //[self storeGoalStatusChangeToDB];
-            //[self storeGoalStatisticsToDB];
+            [self storeGoalProgressToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
@@ -852,8 +852,8 @@
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stairsTime;
-            //[self storeGoalStatusChangeToDB];
-            //[self storeGoalStatisticsToDB];
+            [self storeGoalProgressToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperStairsLabel.text = @"0";
             self.addStairsStepper.value = 0.0;
@@ -882,8 +882,8 @@
             else {
                 self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stepsTime;
             }
-            //[self storeGoalStatusChangeToDB];
-            //[self storeGoalStatisticsToDB];
+            [self storeGoalProgressToDB];
+            [self storeGoalStatisticsToDB];
             [self updateView];
             self.stepperLabel.text = @"0";
             self.addStepper.value = 0.0;
@@ -903,7 +903,6 @@
         [alert show];
         self.isRecording = YES;
         self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
-        [self storeGoalStatusChangeToDB];
         [self hideAndDisableLeftNavigationItem];
         [self.activeOutletButtonTest setTitle:@"Stop" forState:UIControlStateNormal];
         self.autoStepSpinner.hidden = NO;
@@ -919,7 +918,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now not recording" message:@"This goal is now not recording." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         self.isRecording = NO;
-        [self storeGoalStatusChangeToDB];
+        [self storeGoalProgressToDB];
         [self storeGoalStatisticsToDB];
         self.progressSteps = 0;
         self.progressStairs = 0;
@@ -985,6 +984,8 @@
         NSLog(@"Steps Progress: %f",self.viewGoal.goalProgressSteps);
         if ((self.viewGoal.goalAmountSteps <= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs <= self.viewGoal.goalProgressStairs)) {
             NSLog(@"Stairs Progress: %f",self.viewGoal.goalProgressStairs);
+            [self performSelectorOnMainThread:@selector(storeGoalProgressToDB) withObject:nil waitUntilDone:YES];
+            [self performSelectorOnMainThread:@selector(storeGoalStatisticsToDB) withObject:nil waitUntilDone:YES];
             [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
             [self cancelBackgroundThread];
         }
@@ -1006,6 +1007,8 @@
         NSLog(@"Stairs Progress: %f",self.viewGoal.goalProgressStairs);
         if ((self.viewGoal.goalAmountSteps <= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs <= self.viewGoal.goalProgressStairs)) {
             NSLog(@"Steps Progress: %f",self.viewGoal.goalProgressSteps);
+            [self performSelectorOnMainThread:@selector(storeGoalProgressToDB) withObject:nil waitUntilDone:YES];
+            [self performSelectorOnMainThread:@selector(storeGoalStatisticsToDB) withObject:nil waitUntilDone:YES];
             [self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:YES];
             [self cancelBackgroundThread];
         }
@@ -1132,17 +1135,6 @@
         default:
             break;
     }
-    NSString *query;
-    query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalProgressSteps='%f', goalProgressStairs='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus, self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs, (long)self.viewGoal.goalID];
-    // Execute the query.
-    [self.dbManager executeQuery:query];
-    
-    if (self.dbManager.affectedRows != 0) {
-        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-    }
-    else {
-        NSLog(@"Could not execute the query.");
-    }
     
     [self setUpStats];
 }
@@ -1171,10 +1163,10 @@
     NSLog(@"Progress Stairs: %f",self.progressStairs);
     NSLog(@"Goal Progress Stairs: %f",self.viewGoal.goalProgressStairs);
     
-    [self storeGoalStatusChangeToDB];
-    [self storeGoalStatisticsToDB];
     self.progressSteps = 0;
     self.progressStairs = 0;
+    [self storeGoalStatusCompleteToDB];
+    
     [self disableButton:self.outletActiveButton];
     [self disableButton:self.activeOutletButtonTest];
     [self disableButton:self.abandonButton];
@@ -1367,8 +1359,69 @@
     return [[[historyResults objectAtIndex:0] objectAtIndex:indexOfHistoryID] intValue];
 }
 
+-(void) storeGoalStatusCompleteToDB {
+    NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalDate='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus,[self.viewGoal.goalCompletionDate timeIntervalSince1970],(long)self.viewGoal.goalID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', statusEndDate='%f', progressSteps='%f', progressStairs='%f' where historyID=%d", self.testing.getHistoryDBName, self.viewGoal.goalStatus,[[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, [self getHistoryRowID:self.viewGoal.goalID]];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+}
+
 -(void) storeGoalStatusChangeToDB {
     NSString *query = [NSString stringWithFormat:@"update %@ set goalStatus='%d', goalDate='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalStatus,[self.viewGoal.goalCompletionDate timeIntervalSince1970],(long)self.viewGoal.goalID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"update %@ set statusEndDate='%f', progressSteps='%f', progressStairs='%f' where historyID=%d", self.testing.getHistoryDBName, [[NSDate date] timeIntervalSince1970], self.progressSteps, self.progressStairs, [self getHistoryRowID:self.viewGoal.goalID]];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+    
+    query = [NSString stringWithFormat:@"insert into %@ values(null, '%ld', '%d', '%f', '%f', '%d', '%d')", self.testing.getHistoryDBName, (long)self.viewGoal.goalID, self.viewGoal.goalStatus, [[NSDate date] timeIntervalSince1970], 0.0, 0, 0];
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else {
+        NSLog(@"Could not execute the query.");
+    }
+}
+
+-(void) storeGoalProgressToDB {
+    NSString *query = [NSString stringWithFormat:@"update %@ set goalProgressSteps='%f', goalProgressStairs='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalID];
     
     // Execute the query.
     [self.dbManager executeQuery:query];
@@ -1743,6 +1796,7 @@
 
 - (IBAction)abandonButtonAction:(id)sender {
     self.viewGoal.goalStatus = Abandoned;
+    self.viewGoal.goalCompletionDate = [NSDate date];
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
     [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
     [self storeGoalStatusChangeToDB];
