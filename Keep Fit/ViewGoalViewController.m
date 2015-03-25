@@ -17,7 +17,6 @@
 #import "PNChart.h"
 #import <QuartzCore/QuartzCore.h>
 
-
 @interface ViewGoalViewController () {
     NSThread *BackgroundThread; // Background thread used for holding the steps and stairs timers.
     NSTimer *timerStep; // Timer for steps.
@@ -109,6 +108,8 @@
 
 @property Conversion conversion;
 
+@property UIImage *mask;
+
 @end
 
 @implementation ViewGoalViewController
@@ -189,6 +190,9 @@
     
     self.formatter = [[NSDateFormatter alloc] init];
     [self.formatter setDateFormat:@"MMM dd"];
+    
+    self.mask = [self imageWithColor:[UIColor blackColor] andX:0.0 andY: 0.0 andSize:CGSizeMake(90, 90)];
+    
     
     // Set up the labels and other outlet with data of goal to be viewed.
     [self loadFromDB];
@@ -818,11 +822,33 @@
         self.image = [self.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self.imageView setTintColor:tint];
     }
+    else if (self.viewGoal.goalType == Everest || self.viewGoal.goalType == Nevis) {
+        double tempPrecent = (float)(self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs);
+        [self maskMainImageWithX:0.0 andY:0.0 andWidth:90.0 andHeight:(90.0-(90*tempPrecent))];
+    }
+    else if (self.viewGoal.goalType == Pluto) {
+        double tempPrecent = (float)(self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps);
+        [self maskMainImageWithX:(90*tempPrecent) andY:0.0 andWidth:(90.0-(90*tempPrecent)) andHeight:90.0];
+    }
     
     [self.imageView setImage:self.image];
     // optional:
     // [imageHolder sizeToFit];
     [self.mainDetailsView addSubview:self.imageView];
+}
+
+-(void) maskMainImageWithX:(float)x andY:(float)y andWidth:(float)width andHeight:(float)height {
+    CGSize size = CGSizeMake(90, 90);
+    UIGraphicsBeginImageContext(size);
+    
+    // Use existing opacity as is
+    [self.image drawInRect:CGRectMake(0,0,size.width,size.height)];
+    // Apply supplied opacity
+    [self.mask drawInRect:CGRectMake(x,y,width,height) blendMode:kCGBlendModeNormal alpha:0.6];
+    
+    self.image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1134,6 +1160,12 @@
                 self.trackLabel.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
                 [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
             }
+            if (self.viewGoal.goalType == Pluto) {
+                double tempPrecent = (float)(self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps);
+                [self maskMainImageWithX:(90*tempPrecent) andY:0.0 andWidth:(90.0-(90*tempPrecent)) andHeight:90.0];
+            }
+            
+            [self.imageView setImage:self.image];
             break;
         case Everest:
         case Nevis:
@@ -1164,6 +1196,12 @@
                 self.trackStairsLabel.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
                 [self.trackProgress setProgress:(float)((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs) animated:YES];
             }
+            if (self.viewGoal.goalType == Everest || self.viewGoal.goalType == Nevis) {
+                double tempPrecent = (float)(self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs);
+                [self maskMainImageWithX:0.0 andY:0.0 andWidth:90.0 andHeight:(90.0-(90*tempPrecent))];
+            }
+            
+            [self.imageView setImage:self.image];
             break;
         case Both:
             if (((self.viewGoal.goalAmountSteps <= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs <= self.viewGoal.goalProgressStairs))) {
@@ -1554,8 +1592,11 @@
     else if (self.addStepper.value >= 250 && self.addStepper.value < 1000) {
         [self.addStepper setStepValue:50.0];
     }
-    else {
+    else if (self.addStepper.value >= 1000 && self.addStepper.value < 5000) {
         [self.addStepper setStepValue:100.0];
+    }
+    else {
+        [self.addStepper setStepValue:1000.0];
     }
     self.stepperLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
@@ -1572,8 +1613,11 @@
     else if (self.addStairsStepper.value >= 250 && self.addStairsStepper.value < 1000) {
         [self.addStairsStepper setStepValue:50.0];
     }
-    else {
+    else if (self.addStairsStepper.value >= 1000 && self.addStairsStepper.value < 5000) {
         [self.addStairsStepper setStepValue:100.0];
+    }
+    else {
+        [self.addStairsStepper setStepValue:1000.0];
     }
     self.stepperStairsLabel.text = [NSString stringWithFormat:@"%d",[[NSNumber numberWithDouble:[(UIStepper *)sender value]] intValue]];
 }
@@ -2056,4 +2100,19 @@
     self.conversion = self.conversionSelector.selectedSegmentIndex;
     [self updateView];
 }
+
+#pragma mark - Image Masking
+
+- (UIImage *)imageWithColor:(UIColor *)color andX:(float)x andY:(float)y andSize:(CGSize)size
+{
+    CGRect rect = CGRectMake(x, y, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 @end
