@@ -120,12 +120,13 @@
                 }
             }
         }
-        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
         
         // Schedule the notification
         if (self.mainTabBarController.settings.notifications) {
+            UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+            
             UILocalNotification* startNotification = [[UILocalNotification alloc] init];
             startNotification.fireDate = goal.goalStartDate;
             startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];

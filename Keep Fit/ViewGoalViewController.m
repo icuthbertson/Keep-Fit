@@ -79,6 +79,8 @@
 @property UIView *stairsEstView;
 @property UIView *stairsGraphView;
 - (IBAction)socialMediaAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *conversionSelector;
+- (IBAction)ConversionAction:(id)sender;
 
 @property double progressSteps;
 @property double progressStairs;
@@ -105,6 +107,8 @@
 @property UIImagePickerController *socialImagePicker;
 @property UIImage *socialImage;
 
+@property Conversion conversion;
+
 @end
 
 @implementation ViewGoalViewController
@@ -119,7 +123,7 @@
     
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
-    [self.scrollView setContentSize:CGSizeMake(320, 750)];
+    [self.scrollView setContentSize:CGSizeMake(320, 800)];
     
     self.trackingView.hidden = YES;
     self.statisticsView.hidden = YES;
@@ -150,8 +154,8 @@
     
     //Line between progress bar and social
     UIBezierPath *pathSocial = [UIBezierPath bezierPath];
-    [pathSocial moveToPoint:CGPointMake(24.0, 361.0)];
-    [pathSocial addLineToPoint:CGPointMake(320.0, 361.0)];
+    [pathSocial moveToPoint:CGPointMake(24.0, 411.0)];
+    [pathSocial addLineToPoint:CGPointMake(320.0, 411.0)];
     
     CAShapeLayer *socialLine = [CAShapeLayer layer];
     socialLine.path = [pathSocial CGPath];
@@ -161,8 +165,8 @@
     
     //Line between progress social and options
     UIBezierPath *pathOption = [UIBezierPath bezierPath];
-    [pathOption moveToPoint:CGPointMake(24.0, 440.0)];
-    [pathOption addLineToPoint:CGPointMake(320.0, 440.0)];
+    [pathOption moveToPoint:CGPointMake(24.0, 490.0)];
+    [pathOption addLineToPoint:CGPointMake(320.0, 490.0)];
     
     CAShapeLayer *optionLine = [CAShapeLayer layer];
     optionLine.path = [pathOption CGPath];
@@ -175,6 +179,8 @@
     [self.datesView.layer addSublayer:progressLine];
     [self.datesView.layer addSublayer:socialLine];
     [self.datesView.layer addSublayer:optionLine];
+    
+    self.conversion = self.viewGoal.goalConversion;
     
     self.estimatedDate = [[NSDate alloc] init];
     
@@ -484,6 +490,8 @@
     // Set the title of the navigation bar.
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.viewGoal.goalName];
     
+    self.conversionSelector.selectedSegmentIndex = self.conversion;
+    
     if (self.testing.getTesting) {
         [self hideAndDisableRightNavigationItem];
     }
@@ -577,15 +585,15 @@
             [self createStepsStatsView];
             [self disableStepper:self.addStairsStepper];
             self.viewType.text = [NSString stringWithFormat:@"Steps"];
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
             }
@@ -608,15 +616,15 @@
             [self createStairsStatsView];
             [self disableStepper:self.addStepper];
             self.viewType.text = [NSString stringWithFormat:@"Stairs"];
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
@@ -638,19 +646,19 @@
         case Both:
             [self createBothStatsView];
             self.viewType.text = [NSString stringWithFormat:@"Steps and Stairs"];
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
                 stairsName = @"meters";
@@ -1103,15 +1111,15 @@
             if (self.viewGoal.goalAmountSteps <= self.viewGoal.goalProgressSteps) {
                 [self completedView];
             }
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
             }
@@ -1133,15 +1141,15 @@
             if (self.viewGoal.goalAmountStairs <= self.viewGoal.goalProgressStairs) {
                 [self completedView];
             }
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
@@ -1161,19 +1169,19 @@
             if (((self.viewGoal.goalAmountSteps <= self.viewGoal.goalProgressSteps) && (self.viewGoal.goalAmountStairs <= self.viewGoal.goalProgressStairs))) {
                 [self completedView];
             }
-            if (self.viewGoal.goalConversion == StepsStairs) {
+            if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
-            else if (self.viewGoal.goalConversion == Imperial) {
+            else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
-            else if (self.viewGoal.goalConversion == Metric) {
+            else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
                 stairsName = @"meters";
@@ -1578,7 +1586,7 @@
         self.statisticsView.hidden = YES;
         self.trackingView.hidden = YES;
         self.testTrackingView.hidden = YES;
-        [self.scrollView setContentSize:CGSizeMake(320, 750)];
+        [self.scrollView setContentSize:CGSizeMake(320, 800)];
         [self.scrollView setScrollEnabled:YES];
     }
     else if (self.viewSelector.selectedSegmentIndex == 1) {
@@ -1921,19 +1929,19 @@
     NSString *amountTextStairs = [[NSString alloc] init];
     NSString *progressTextStairs = [[NSString alloc] init];
     
-    if (self.viewGoal.goalConversion == StepsStairs) {
+    if (self.conversion == StepsStairs) {
         stepsName = @"Steps";
         conversionIndexSteps = 0;
         stairsName = @"Stairs";
         conversionIndexStairs = 0;
     }
-    else if (self.viewGoal.goalConversion == Imperial) {
+    else if (self.conversion == Imperial) {
         stepsName = @"Miles";
         conversionIndexSteps = 1;
         stairsName= @"Feet";
         conversionIndexStairs = 3;
     }
-    else if (self.viewGoal.goalConversion == Metric) {
+    else if (self.conversion == Metric) {
         stepsName = @"Kilometers";
         conversionIndexSteps = 2;
         stairsName = @"Meters";
@@ -2044,4 +2052,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)ConversionAction:(id)sender {
+    self.conversion = self.conversionSelector.selectedSegmentIndex;
+    [self updateView];
+}
 @end
