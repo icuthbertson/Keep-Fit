@@ -717,10 +717,24 @@
         case Everest:
             [self disableStepper:self.addStepper];
             [self createStairsStatsView];
-            stepsName = @"miles";
-            conversionIndexSteps = 1;
-            stairsName= @"feet";
-            conversionIndexStairs = 3;
+            if (self.conversion == StepsStairs) {
+                stepsName = @"steps";
+                conversionIndexSteps = 0;
+                stairsName = @"stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.conversion == Imperial) {
+                stepsName = @"miles";
+                conversionIndexSteps = 1;
+                stairsName= @"feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.conversion == Metric) {
+                stepsName = @"km";
+                conversionIndexSteps = 2;
+                stairsName = @"meters";
+                conversionIndexStairs = 4;
+            }
             self.viewType.text = [NSString stringWithFormat:@"Climb Everest"];
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
@@ -740,10 +754,24 @@
         case Nevis:
             [self disableStepper:self.addStepper];
             [self createStairsStatsView];
-            stepsName = @"miles";
-            conversionIndexSteps = 1;
-            stairsName= @"feet";
-            conversionIndexStairs = 3;
+            if (self.conversion == StepsStairs) {
+                stepsName = @"steps";
+                conversionIndexSteps = 0;
+                stairsName = @"stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.conversion == Imperial) {
+                stepsName = @"miles";
+                conversionIndexSteps = 1;
+                stairsName= @"feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.conversion == Metric) {
+                stepsName = @"km";
+                conversionIndexSteps = 2;
+                stairsName = @"meters";
+                conversionIndexStairs = 4;
+            }
             self.viewType.text = [NSString stringWithFormat:@"Climb Ben Nevis"];
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
@@ -763,10 +791,24 @@
         case Pluto:
             [self disableStepper:self.addStairsStepper];
             [self createStepsStatsView];
-            stepsName = @"km";
-            conversionIndexSteps = 2;
-            stairsName = @"meters";
-            conversionIndexStairs = 4;
+            if (self.conversion == StepsStairs) {
+                stepsName = @"steps";
+                conversionIndexSteps = 0;
+                stairsName = @"stairs";
+                conversionIndexStairs = 0;
+            }
+            else if (self.conversion == Imperial) {
+                stepsName = @"miles";
+                conversionIndexSteps = 1;
+                stairsName= @"feet";
+                conversionIndexStairs = 3;
+            }
+            else if (self.conversion == Metric) {
+                stepsName = @"km";
+                conversionIndexSteps = 2;
+                stairsName = @"meters";
+                conversionIndexStairs = 4;
+            }
             self.viewType.text = [NSString stringWithFormat:@"Walk Around Pluto"];
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
