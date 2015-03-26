@@ -89,10 +89,16 @@
     }
     self.graphTimes = [[NSMutableArray alloc] init];
     
+    NSMutableArray *totalStepsValues = [[NSMutableArray alloc] init];
+    NSMutableArray *totalStairsValues = [[NSMutableArray alloc] init];
+    NSMutableArray *tempDates = [[NSMutableArray alloc] init];
+    
     NSString *query = [NSString stringWithFormat:@"select * from %@", self.mainTabBarController.testing.getMainpageStatsDBName/*, [self.mainTabBarController.testing.getTime timeIntervalSince1970]*/];
     
     NSArray *statResults;
     statResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    NSLog(@"%@",statResults);
     
     if ([statResults count] > 0) {
         NSInteger indexOfStartDate = [self.dbManager.arrColumnNames indexOfObject:@"startTime"];
@@ -102,18 +108,35 @@
         
         self.startDate = [[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate] doubleValue];
         self.endDate = [self.mainTabBarController.testing.getTime timeIntervalSince1970];
-        
-        [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
-        [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
-        [self.graphTimes addObject:[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate]];
+
+        //[self.graphTimes addObject:[[statResults objectAtIndex:0] objectAtIndex:indexOfStartDate]];
         
         for (int i=0; i<[statResults count]; i++) {
             self.totalSteps += [[[statResults objectAtIndex:i] objectAtIndex:indexOfSteps] intValue];
             self.totalStairs += [[[statResults objectAtIndex:i] objectAtIndex:indexOfStairs] intValue];
-            [self.stepsValues addObject:[NSNumber numberWithDouble:self.totalSteps]];
-            [self.stairsValues addObject:[NSNumber numberWithDouble:self.totalStairs]];
-            [self.graphTimes addObject:[NSNumber numberWithDouble:[[[statResults objectAtIndex:i] objectAtIndex:indexOfEndDate] doubleValue]]];
+            [totalStepsValues addObject:[NSNumber numberWithDouble:self.totalSteps]];
+            [totalStairsValues addObject:[NSNumber numberWithDouble:self.totalStairs]];
+            [tempDates addObject:[NSNumber numberWithDouble:[[[statResults objectAtIndex:i] objectAtIndex:indexOfEndDate] doubleValue]]];
         }
+        int fract = floor([statResults count]/7);
+        
+        [self.stepsValues addObject:[NSNumber numberWithDouble:0.0]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:0.0]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[[tempDates objectAtIndex:0] doubleValue]]];
+        
+        for (int i=1; i<=5; i++) {
+            [self.stepsValues addObject:[NSNumber numberWithDouble:[[totalStepsValues objectAtIndex:(i*fract)] doubleValue]]];
+            [self.stairsValues addObject:[NSNumber numberWithDouble:[[totalStairsValues
+                                                                      objectAtIndex:(i*fract)] doubleValue]]];
+            [self.graphTimes addObject:[NSNumber numberWithDouble:[[tempDates objectAtIndex:(i*fract)] doubleValue]]];
+        }
+        
+        [self.stepsValues addObject:[NSNumber numberWithDouble:[[totalStepsValues lastObject] doubleValue]]];
+        [self.stairsValues addObject:[NSNumber numberWithDouble:[[totalStairsValues lastObject] doubleValue]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[[tempDates lastObject] doubleValue]]];
+        
+        NSLog(@"%@",self.stepsValues);
+        NSLog(@"%@",self.stairsValues);
     }
     else {
         [self.stepsValues addObject:[NSNumber numberWithDouble:0]];
@@ -128,10 +151,14 @@
         [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
         [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
         [self.stairsValues addObject:[NSNumber numberWithDouble:0]];
-        [self.graphTimes addObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
+        [self.graphTimes addObject:[NSNumber numberWithDouble:[self.mainTabBarController.testing.getTime timeIntervalSince1970]]];
     }
-    
-    NSLog(@"%@",statResults);
 }
 
 -(void)setUpView {
@@ -174,22 +201,9 @@
     //For Line Chart
     NSMutableArray *stepsStairsLabels = [[NSMutableArray alloc] init];
     
-    if ([self.stepsValues count] > 6) {
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
+    for (int i=0; i<[self.stepsValues count]; i++) {
+        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:i] doubleValue]]]]];
     }
-    else {
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes objectAtIndex:0] doubleValue]]]]];
-        for (int i=0; i<([self.stepsValues count]-1); i++) {
-            [stepsStairsLabels addObject:[NSString stringWithFormat:@""]];
-        }
-        [stepsStairsLabels addObject:[NSString stringWithFormat:@"%@",[self.formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[[self.graphTimes lastObject] doubleValue]]]]];
-    }
-    
     
     //Steps Graph
     PNLineChart *stepsLineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.stepsGraphView.bounds), CGRectGetHeight(self.stepsGraphView.bounds))];
