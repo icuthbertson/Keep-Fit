@@ -592,14 +592,20 @@
             if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
+                stairsName = @"stairs";
+                conversionIndexStairs = 0;
             }
             else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
+                stairsName= @"feet";
+                conversionIndexStairs = 3;
             }
             else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
+                stairsName = @"meters";
+                conversionIndexStairs = 4;
             }
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
@@ -621,14 +627,20 @@
             [self disableStepper:self.addStepper];
             self.viewType.text = [NSString stringWithFormat:@"Stairs"];
             if (self.conversion == StepsStairs) {
+                stepsName = @"steps";
+                conversionIndexSteps = 0;
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
             else if (self.conversion == Imperial) {
+                stepsName = @"miles";
+                conversionIndexSteps = 1;
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
             else if (self.conversion == Metric) {
+                stepsName = @"km";
+                conversionIndexSteps = 2;
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
@@ -915,11 +927,16 @@
     if (self.viewGoal.goalType == Steps || self.viewGoal.goalType == Pluto) {
         if ([self.stepperLabel.text intValue] > 0) {
             self.progressSteps = [self.stepperLabel.text intValue];
-            self.viewGoal.goalProgressSteps += self.progressSteps;
-            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
-                self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
+            if ((self.viewGoal.goalProgressSteps + self.progressSteps) > self.viewGoal.goalAmountSteps) {
+                self.progressSteps -= ((self.viewGoal.goalProgressSteps + self.progressSteps)- self.viewGoal.goalAmountSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
+            else {
+                self.viewGoal.goalProgressSteps += self.progressSteps;
+            }
+            NSLog(@"Steps Amount: %f",self.viewGoal.goalAmountSteps);
+            NSLog(@"Steps Progress: %f",self.viewGoal.goalProgressSteps);
+            NSLog(@"Progress: %f",self.progressSteps);
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressSteps*self.testSettings.stepsTime;
             [self storeGoalProgressToDB];
@@ -934,10 +951,17 @@
     else if (self.viewGoal.goalType == Stairs || self.viewGoal.goalType == Everest || self.viewGoal.goalType == Nevis) {
         if ([self.stepperStairsLabel.text intValue] > 0) {
             self.progressStairs = [self.stepperStairsLabel.text intValue];
-            self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
-                self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
+            NSLog(@"Stairs Amount: %f",self.viewGoal.goalAmountStairs);
+            NSLog(@"Stairs Progress: %f",self.viewGoal.goalProgressStairs);
+            NSLog(@"Progress Stairs: %f",self.progressStairs);
+            NSLog(@"Total Progress: %f",(self.viewGoal.goalProgressStairs+self.progressStairs));
+            if ((self.viewGoal.goalProgressStairs + self.progressStairs) > self.viewGoal.goalAmountStairs) {
+                NSLog(@"Over");
+                self.progressStairs -= ((self.viewGoal.goalProgressStairs + self.progressStairs)-self.viewGoal.goalAmountStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
+            }
+            else {
+                self.viewGoal.goalProgressStairs += self.progressStairs;
             }
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stairsTime;
@@ -954,16 +978,26 @@
         if (([self.stepperLabel.text intValue] > 0) || ([self.stepperStairsLabel.text intValue] > 0)) {
             self.progressSteps = [self.stepperLabel.text intValue];
             self.progressStairs = [self.stepperStairsLabel.text intValue];
-            self.viewGoal.goalProgressSteps += self.progressSteps;
-            self.viewGoal.goalProgressStairs += self.progressStairs;
-            if (self.viewGoal.goalProgressSteps > self.viewGoal.goalAmountSteps) {
-                self.progressSteps = (self.viewGoal.goalAmountSteps - self.viewGoal.goalProgressSteps);
+            if ((self.viewGoal.goalProgressSteps + self.progressSteps) > self.viewGoal.goalAmountSteps) {
+                self.progressSteps -= ((self.viewGoal.goalProgressSteps + self.progressSteps)- self.viewGoal.goalAmountSteps);
                 self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
             }
-            if (self.viewGoal.goalProgressStairs > self.viewGoal.goalAmountStairs) {
-                self.progressStairs = (self.viewGoal.goalAmountStairs - self.viewGoal.goalProgressStairs);
+            else {
+                self.viewGoal.goalProgressSteps += self.progressSteps;
+            }
+            if ((self.viewGoal.goalProgressStairs + self.progressStairs) > self.viewGoal.goalAmountStairs) {
+                self.progressStairs -= ((self.viewGoal.goalProgressStairs + self.progressStairs)-self.viewGoal.goalAmountStairs);
                 self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
             }
+            else {
+                self.viewGoal.goalProgressStairs += self.progressStairs;
+            }
+            NSLog(@"Steps Amount: %f",self.viewGoal.goalAmountSteps);
+            NSLog(@"Steps Progress: %f",self.viewGoal.goalProgressSteps);
+            NSLog(@"Progress: %f",self.progressSteps);
+            NSLog(@"Stairs Amount: %f",self.viewGoal.goalAmountStairs);
+            NSLog(@"Stairs Progress: %f",self.viewGoal.goalProgressStairs);
+            NSLog(@"Progress: %f",self.progressStairs);
             self.recordingStartTime = [[NSDate date] timeIntervalSince1970];
             if (self.progressStairs > 0) {
                 self.recordingEndTime = [[NSDate date] timeIntervalSince1970] + self.progressStairs*self.testSettings.stairsTime;
@@ -1140,14 +1174,20 @@
             if (self.conversion == StepsStairs) {
                 stepsName = @"steps";
                 conversionIndexSteps = 0;
+                stairsName = @"stairs";
+                conversionIndexStairs = 0;
             }
             else if (self.conversion == Imperial) {
                 stepsName = @"miles";
                 conversionIndexSteps = 1;
+                stairsName= @"feet";
+                conversionIndexStairs = 3;
             }
             else if (self.conversion == Metric) {
                 stepsName = @"km";
                 conversionIndexSteps = 2;
+                stairsName = @"meters";
+                conversionIndexStairs = 4;
             }
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             [self.viewProgressBar setProgress:(float)((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps) animated:YES];
@@ -1174,14 +1214,20 @@
                 [self completedView];
             }
             if (self.conversion == StepsStairs) {
+                stepsName = @"steps";
+                conversionIndexSteps = 0;
                 stairsName = @"stairs";
                 conversionIndexStairs = 0;
             }
             else if (self.conversion == Imperial) {
+                stepsName = @"miles";
+                conversionIndexSteps = 1;
                 stairsName= @"feet";
                 conversionIndexStairs = 3;
             }
             else if (self.conversion == Metric) {
+                stepsName = @"km";
+                conversionIndexSteps = 2;
                 stairsName = @"meters";
                 conversionIndexStairs = 4;
             }
@@ -1260,6 +1306,7 @@
         self.viewGoal.goalProgressSteps = self.viewGoal.goalAmountSteps;
     }
     if (self.viewGoal.goalAmountStairs < self.viewGoal.goalProgressStairs) {
+        NSLog(@"here");
         double stairsDiff = (self.viewGoal.goalProgressStairs-self.viewGoal.goalAmountStairs);
         self.progressStairs = (self.progressStairs-stairsDiff);
         self.viewGoal.goalProgressStairs = self.viewGoal.goalAmountStairs;
@@ -1529,6 +1576,7 @@
 }
 
 -(void) storeGoalProgressToDB {
+    NSLog(@"Goal Progress Steps: %f\n Goal  Progress Stairs: %f",self.viewGoal.goalProgressSteps, self.viewGoal.goalProgressStairs);
     NSString *query = [NSString stringWithFormat:@"update %@ set goalProgressSteps='%f', goalProgressStairs='%f' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalProgressSteps,self.viewGoal.goalProgressStairs,(long)self.viewGoal.goalID];
     
     // Execute the query.
@@ -2098,7 +2146,7 @@
 
 - (IBAction)ConversionAction:(id)sender {
     self.conversion = self.conversionSelector.selectedSegmentIndex;
-    [self updateView];
+    [self showDetails];
 }
 
 #pragma mark - Image Masking
