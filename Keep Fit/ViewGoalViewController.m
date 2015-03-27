@@ -1437,7 +1437,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now suspended" message:@"This goal is now suspended." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         [self storeGoalStatusChangeToDB];
-        self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Suspended"];
+        self.viewStatus.text = [NSString stringWithFormat:@"Suspended"];
         //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((255) / 255.0) blue:((102) / 255.0) alpha:1.0];
         [self showAndEnableLeftNavigationItem];
         [self hideAndDisableRightNavigationItem];
@@ -1454,20 +1454,21 @@
         [self disableStepper:self.addStairsStepper];
         [self.outletActiveButton setTitle:@"Record" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Re-instate" forState:UIControlStateNormal];
+        [self showDetails];
     }/**********************************Re-instate*****************************************/
     else if (self.viewGoal.goalStatus == Suspended) {
         if ([[[NSDate date] earlierDate:self.viewGoal.goalStartDate]isEqualToDate: [NSDate date]]) {
             self.viewGoal.goalStatus = Pending;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now pending" message:@"This goal is now pending." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
-            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Pending"];
+            self.viewStatus.text = [NSString stringWithFormat:@"Pending"];
             //self.scrollView.backgroundColor = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
         }
         else if ([[[NSDate date] earlierDate:self.viewGoal.goalCompletionDate]isEqualToDate: self.viewGoal.goalCompletionDate]) {
             self.viewGoal.goalStatus = Overdue;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now overdue" message:@"This goal is now overdue." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
-            self.viewStatus.text = [NSString stringWithFormat:@"Goal Status: Overdue"];
+            self.viewStatus.text = [NSString stringWithFormat:@"Overdue"];
             //self.scrollView.backgroundColor = [UIColor colorWithRed:((255) / 255.0) green:((102) / 255.0) blue:((102) / 255.0) alpha:1.0];
         }
         else {
@@ -1500,6 +1501,7 @@
         [self showAndEnableRightNavigationItem];
         [self.outletActiveButton setTitle:@"Record" forState:UIControlStateNormal];
         [self.outletSuspendButton setTitle:@"Suspend" forState:UIControlStateNormal];
+        [self showDetails];
     }
 }
 
