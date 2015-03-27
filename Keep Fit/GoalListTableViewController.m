@@ -403,7 +403,19 @@
     }
     
     // Reload the table view.
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
+    /* Animate the table view reload */
+    [UIView transitionWithView: self.tableView
+                      duration: 0.35f
+                       options: UIViewAnimationOptionTransitionCrossDissolve
+                    animations: ^(void)
+     {
+         [self.tableView reloadData];
+     }
+                    completion: ^(BOOL isFinished)
+     {
+         
+     }];
 }
 
 #pragma mark - Table view data source
