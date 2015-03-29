@@ -489,7 +489,7 @@
             tint = [UIColor colorWithRed:((102) / 255.0) green:((178) / 255.0) blue:((255) / 255.0) alpha:1.0];
             break;
         case Active:
-            statusText = [NSString stringWithFormat:@"Complete in: %.f Days %.f Hours", overdueInDaysFloor,overdueInHours];
+            statusText = [NSString stringWithFormat:@"Due in: %.f Days %.f Hours", overdueInDaysFloor,overdueInHours];
             tint = [UIColor colorWithRed:((0) / 255.0) green:((152) / 255.0) blue:((0) / 255.0) alpha:1.0];
             break;
         case Overdue:

@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *stepsGraphView;
 @property (weak, nonatomic) IBOutlet UIView *stairsGraphView;
+@property (weak, nonatomic) IBOutlet UILabel *totalStepsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *totalStairsLabel;
 
 @property NSInteger totalSteps;
 @property NSInteger totalStairs;
@@ -172,6 +174,9 @@
         period = 1.0;
     }
     NSLog(@"%@",[NSDate dateWithTimeIntervalSince1970:period]);
+    NSNumberFormatter *twoDecimalPlaces = [[NSNumberFormatter alloc] init];
+    [twoDecimalPlaces setNumberStyle:NSNumberFormatterDecimalStyle];
+    [twoDecimalPlaces setMaximumFractionDigits:2];
     
     double dayStepsAverage = (day/period)*self.totalSteps;
     double weekStepsAverage = (week/period)*self.totalSteps;
@@ -184,15 +189,17 @@
     double yearStairsAverage = (year/period)*self.totalStairs;
     
     
-    self.dayLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStepsAverage];
-    self.weekLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStepsAverage];
-    self.monthLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStepsAverage];
-    self.yearLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStepsAverage];
+    self.dayLabel.text = [NSString stringWithFormat:@"per Day: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:dayStepsAverage]]];
+    self.weekLabel.text = [NSString stringWithFormat:@"per Week: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:weekStepsAverage]]];
+    self.monthLabel.text = [NSString stringWithFormat:@"per Month: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:monthStepsAverage]]];
+    self.yearLabel.text = [NSString stringWithFormat:@"per Year: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:yearStepsAverage]]];
+    self.totalStepsLabel.text = [NSString stringWithFormat:@"Total Steps: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:self.totalSteps]]];
     
-    self.dayStairsLabel.text = [NSString stringWithFormat:@"per Day: %.2f",dayStairsAverage];
-    self.weekStairsLabel.text = [NSString stringWithFormat:@"per Week: %.2f",weekStairsAverage];
-    self.monthStairsLabel.text = [NSString stringWithFormat:@"per Month: %.2f",monthStairsAverage];
-    self.yearStairsLabel.text = [NSString stringWithFormat:@"per Year: %.2f",yearStairsAverage];
+    self.dayStairsLabel.text = [NSString stringWithFormat:@"per Day: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:dayStairsAverage]]];
+    self.weekStairsLabel.text = [NSString stringWithFormat:@"per Week: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:weekStairsAverage]]];
+    self.monthStairsLabel.text = [NSString stringWithFormat:@"per Month: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:monthStairsAverage]]];
+    self.yearStairsLabel.text = [NSString stringWithFormat:@"per Year: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:yearStairsAverage]]];
+    self.totalStairsLabel.text = [NSString stringWithFormat:@"Total Stairs: %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:self.totalStairs]]];
     
     [self makeGraphs];
 }
