@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NSArray *arrDBResults; // array to hold db select query results.
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton; // Outlet for select button.
 
+@property NSMutableArray *goalNamesForChecking;
+
 @end
 
 @implementation GoalListTableViewController
@@ -403,6 +405,23 @@
         [self.keepFitGoals addObject:goal];
     }
     
+    if (self.goalNamesForChecking != nil) {
+        self.goalNamesForChecking = nil;
+    }
+    self.goalNamesForChecking = [[NSMutableArray alloc] init];
+    NSString *nameQuery = [NSString stringWithFormat:@"select * from %@", self.mainTabBarController.testing.getGoalDBName];
+    NSArray *nameDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:nameQuery]];
+    
+    // Set up indexes for getting column results for the rows in the database.
+    indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+    
+    NSLog(@"Goal Names: %@", nameDBResults);
+    
+    // Set up the goal object with data from the rows returned by the query.
+    for (int i=0; i<[nameDBResults count]; i++) {
+        [self.goalNamesForChecking addObject:[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]];
+    }
+    
     // Reload the table view.
     //[self.tableView reloadData];
     /* Animate the table view reload */
@@ -710,15 +729,8 @@
         destViewController.viewGoal = [self.keepFitGoals objectAtIndex:indexPath.row];
         // Pass the list of goals.
         destViewController.keepFitGoals = self.keepFitGoals;
-        // Set up the list of goal names.
-        NSMutableArray *goalNamesForChecking = [[NSMutableArray alloc] init];
-        for (int i=0; i<[self.keepFitGoals count]; i++) {
-            NSString *goalNameForArray = [[NSString alloc] init];
-            goalNameForArray = [[self.keepFitGoals objectAtIndex:i] goalName];
-            [goalNamesForChecking addObject:goalNameForArray];
-        }
         // Pass the list of goal names.
-        destViewController.listGoalNames = goalNamesForChecking;
+        destViewController.listGoalNames = self.goalNamesForChecking;
         // Pass the testing object.
         destViewController.testing = self.mainTabBarController.testing;
         destViewController.settings = self.mainTabBarController.settings;
