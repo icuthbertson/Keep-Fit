@@ -29,9 +29,6 @@
 @property (nonatomic, strong) NSArray *arrDBResults; // array to hold db select query results.
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton; // Outlet for select button.
 
-@property UIImagePickerController *socialImagePicker;
-@property UIImage *socialImage;
-
 @end
 
 @implementation GoalListTableViewController
@@ -117,46 +114,43 @@
                 
                 if (self.dbManager.affectedRows != 0) {
                     NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-                    // Schedule the notification
-                    if (self.mainTabBarController.settings.notifications) {
-                        UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-                        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-                        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-                        
-                        UILocalNotification* startNotification = [[UILocalNotification alloc] init];
-                        startNotification.fireDate = goal.goalStartDate;
-                        startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];
-                        startNotification.soundName = UILocalNotificationDefaultSoundName;
-                        startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-                        
-                        NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
-                        startNotification.userInfo = infoDictstart;
-                        
-                        [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
-                        
-                        UILocalNotification* endNotification = [[UILocalNotification alloc] init];
-                        endNotification.fireDate = goal.goalCompletionDate;
-                        endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
-                        endNotification.soundName = UILocalNotificationDefaultSoundName;
-                        endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-                        
-                        NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
-                        endNotification.userInfo = infoDictend;
-                        
-                        [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
-                        
-                        // Request to reload table view data
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
-                    }
-                    
-                    if (self.mainTabBarController.settings.socialMedia) {
-                        [self socialMediaCreatedAlert];
-                    }
                 }
                 else {
                     NSLog(@"Could not execute the query.");
                 }
             }
+        }
+        
+        // Schedule the notification
+        if (self.mainTabBarController.settings.notifications) {
+            UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+            
+            UILocalNotification* startNotification = [[UILocalNotification alloc] init];
+            startNotification.fireDate = goal.goalStartDate;
+            startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goal.goalName];
+            startNotification.soundName = UILocalNotificationDefaultSoundName;
+            startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+            
+            NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
+            startNotification.userInfo = infoDictstart;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
+            
+            UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+            endNotification.fireDate = goal.goalCompletionDate;
+            endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goal.goalName];
+            endNotification.soundName = UILocalNotificationDefaultSoundName;
+            endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+            
+            NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
+            endNotification.userInfo = infoDictend;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
+            
+            // Request to reload table view data
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
         }
         
         // Reload table view data.
@@ -230,7 +224,7 @@
     settingsResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:settingsQuery]];
     // If there is not a persisted date saved, save the current date.
     if (settingsResults.count == 0) {
-        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d,%d,%d,%d,%d,%d,%d,%d,%d)", 0,1,1,1,1,1,1,0,0];
+        settingsQuery = [NSString stringWithFormat:@"insert into settings values(%d,%d,%d,%d,%d,%d,%d,%d)", 0,1,1,1,1,1,0,0];
         // Execute the query.
         [self.dbManager executeQuery:settingsQuery];
         
@@ -241,20 +235,17 @@
             NSLog(@"Could not execute the query.");
         }
         self.mainTabBarController.settings.goalConversionSetting = 0;
-        self.mainTabBarController.settings.notifications = YES;
-        self.mainTabBarController.settings.socialMedia = YES;
         self.mainTabBarController.settings.pending = YES;
         self.mainTabBarController.settings.active = YES;
         self.mainTabBarController.settings.overdue = YES;
         self.mainTabBarController.settings.suspended = YES;
-        self.mainTabBarController.settings.abandoned = NO;
-        self.mainTabBarController.settings.completed = NO;
+        self.mainTabBarController.settings.abandoned = YES;
+        self.mainTabBarController.settings.completed = YES;
     }
     else {
         // else set the persisted date in the testing object.
         NSInteger indexOfGoalConversion = [self.dbManager.arrColumnNames indexOfObject:@"goalConversion"];
         NSInteger indexOfNotifications = [self.dbManager.arrColumnNames indexOfObject:@"notifications"];
-        NSInteger indexOfSocialMedia = [self.dbManager.arrColumnNames indexOfObject:@"socialMedia"];
         NSInteger indexOfPending = [self.dbManager.arrColumnNames indexOfObject:@"pending"];
         NSInteger indexOfActive = [self.dbManager.arrColumnNames indexOfObject:@"active"];
         NSInteger indexOfOverdue = [self.dbManager.arrColumnNames indexOfObject:@"overdue"];
@@ -263,7 +254,6 @@
         NSInteger indexOfCompleted = [self.dbManager.arrColumnNames indexOfObject:@"completed"];
         self.mainTabBarController.settings.goalConversionSetting =[[[settingsResults objectAtIndex:0] objectAtIndex:indexOfGoalConversion] intValue];
         self.mainTabBarController.settings.notifications = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfNotifications] boolValue];
-        self.mainTabBarController.settings.socialMedia = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfSocialMedia] boolValue];
         
         self.mainTabBarController.settings.pending = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfPending] boolValue];
         self.mainTabBarController.settings.active = [[[settingsResults objectAtIndex:0] objectAtIndex:indexOfActive] boolValue];
@@ -586,7 +576,7 @@
     }
     
     cell.imageView.image = cellImage;
-
+    
     return cell;
 }
 
@@ -605,7 +595,7 @@
         return UITableViewCellEditingStyleNone;
     }
     return UITableViewCellEditingStyleDelete;
-
+    
 }
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -673,38 +663,38 @@
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 
 #pragma mark - Navigation
@@ -811,94 +801,6 @@
     else {
         NSLog(@"Could not execute the query.");
     }
-}
-
-#pragma mark - Social Media
-
-- (IBAction)socialMediaAction:(id)sender {
-    [self socialMediaPictureAlert];
-}
-
-- (void)socialMediaCreatedAlert {
-    if (self.mainTabBarController.settings.socialMedia) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Goal Created"
-                                                            message:@"Would you like to tell your friends about the new goal you've created?"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"No"
-                                                  otherButtonTitles:@"Yes", nil];
-        [alertView setTag:98];
-        [alertView show];
-    }
-}
-
-- (void)socialMediaPictureAlert {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Take Picture?"
-                                                        message:@"Would you like to take a picture to send with your post?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"No"
-                                              otherButtonTitles:@"Yes", nil];
-    [alertView setTag:99];
-    [alertView show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == 99) {
-        if(0 == buttonIndex){ //no button
-            self.socialImage = nil;
-            [self shareToSocial];
-        } else if (1 == buttonIndex){ //yes button
-            [self takePicture];
-        }
-    }
-    else if (alertView.tag == 98) {
-        if(0 == buttonIndex){ //no button
-            return;
-        } else if (1 == buttonIndex){ //yes button
-            [self socialMediaPictureAlert];
-        }
-    }
-}
-
-- (void)shareToSocial {
-    NSString *baseText = [[NSString alloc] init];
-    
-    baseText = @"Just created a new #KeepFit goal, I'll keep you up-to-date with how it goes.";
-    
-    NSArray *itemsToShare = @[baseText];
-    if (self.socialImage != nil) {
-        itemsToShare = @[baseText,self.socialImage];
-    }
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-    
-    activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo, UIActivityTypeAirDrop, UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeAddToReadingList];
-    if (self.socialImage != nil) {
-        activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypePostToVimeo, UIActivityTypeAirDrop, UIActivityTypeAddToReadingList, UIActivityTypeAssignToContact, UIActivityTypeMail, UIActivityTypeMessage, UIActivityTypePrint, UIActivityTypeAddToReadingList];
-    }
-    [self presentViewController:activityViewController animated:YES completion:nil];
-    
-}
-
-- (void)takePicture {
-    if (self.socialImagePicker != nil) {
-        self.socialImagePicker = nil;
-    }
-    self.socialImagePicker = [[UIImagePickerController alloc] init];
-    self.socialImagePicker.delegate = self;
-    [self.socialImagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-    [self presentViewController:self.socialImagePicker animated:YES completion:nil];
-}
-
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    self.socialImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    [self dismissViewControllerAnimated:YES completion:nil];
-    UIImageWriteToSavedPhotosAlbum(self.socialImage, nil, nil, nil);
-    [self shareToSocial];
-}
-
-- (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    self.socialImage = nil;
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

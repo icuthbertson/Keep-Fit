@@ -122,11 +122,6 @@
                                                  name:@"reloadDataView"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(socialMediaCompletedAlert)
-                                                 name:@"socialMedia"
-                                               object:nil];
-    
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
@@ -504,7 +499,7 @@
             CGFloat yValue = [self.stairsValues[index] floatValue];
             return [PNLineChartDataItem dataItemWithY:yValue];
         };
-
+        
         stairsLineChart.chartData = @[dataStairs];
         [stairsLineChart strokeChart];
         
@@ -705,7 +700,7 @@
             }
             self.viewProgress.text = [NSString stringWithFormat:@"Walk: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountSteps/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexSteps] doubleValue])]],stepsName];
             self.viewProgressStairs.text = [NSString stringWithFormat:@"Climb: %@/%@ %@",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalProgressStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(self.viewGoal.goalAmountStairs/[[self.viewGoal.conversionTable objectAtIndex:conversionIndexStairs] doubleValue])]],stairsName];
-
+            
             [self.viewProgressBar setProgress:(float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)) animated:YES];
             self.viewPercentage.text = [NSString stringWithFormat:@"Percentage: %@%%",[twoDecimalPlaces stringFromNumber:[NSNumber numberWithDouble:(((float)((((float)self.viewGoal.goalProgressSteps/(float)self.viewGoal.goalAmountSteps)/2)+(((float)self.viewGoal.goalProgressStairs/(float)self.viewGoal.goalAmountStairs)/2)))*100)]]];
             
@@ -949,7 +944,7 @@
             query = [NSString stringWithFormat:@"update %@ set goalName='%@', goalType='%d', goalAmountSteps='%f', goalAmountStairs='%f', goalStartDate='%f', goalDate='%f', goalConversion='%d' where goalID=%ld", self.testing.getGoalDBName, self.viewGoal.goalName, self.viewGoal.goalType, self.viewGoal.goalAmountSteps, self.viewGoal.goalAmountStairs, [self.viewGoal.goalStartDate timeIntervalSince1970], [self.viewGoal.goalCompletionDate timeIntervalSince1970], self.viewGoal.goalConversion, (long)self.viewGoal.goalID];
             // Execute the query.
             [self.dbManager executeQuery:query];
-        
+            
             if (self.dbManager.affectedRows != 0) {
                 NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
             }
@@ -1414,24 +1409,13 @@
     [self.imageView setImage:self.image];
     
     
-    if (self.settings.notifications && self.settings.socialMedia) {
+    if (self.settings.notifications) {
         UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
         completedNotification.fireDate = [NSDate date];
         completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
         completedNotification.soundName = UILocalNotificationDefaultSoundName;
         
         [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
-    }
-    else if (self.settings.notifications) {
-        UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
-        completedNotification.fireDate = [NSDate date];
-        completedNotification.alertBody = [NSString stringWithFormat:@"You have now finished Goal %@.",self.viewGoal.goalName];
-        completedNotification.soundName = UILocalNotificationDefaultSoundName;
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
-    }
-    else if (self.settings.socialMedia) {
-        [self socialMediaCompletedAlert];
     }
     else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
@@ -2063,29 +2047,6 @@
 }
 
 - (IBAction)socialMediaAction:(id)sender {
-    [self socialMediaPictureAlert];
-}
-
-- (void)socialMediaCompletedAlert {
-    if (self.settings.socialMedia) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Goal Completed"
-                                                            message:[NSString stringWithFormat:@"Goal %@ is now Completed. Would you like to to post to social media?",self.viewGoal.goalName]
-                                                           delegate:self
-                                                  cancelButtonTitle:@"No"
-                                                  otherButtonTitles:@"Yes", nil];
-        [alertView setTag:98];
-        [alertView show];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
-                                                        message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
-                                                       delegate:self cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-}
-
-- (void)socialMediaPictureAlert {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Take Picture?"
                                                         message:@"Would you like to take a picture to send with your post?"
                                                        delegate:self
@@ -2098,18 +2059,11 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 99) {
-        if(0 == buttonIndex){ //no button
+        if( 0 == buttonIndex ){ //no button
             self.socialImage = nil;
             [self shareToSocial];
-        } else if (1 == buttonIndex){ //yes button
+        } else if ( 1 == buttonIndex ){ //yes button
             [self takePicture];
-        }
-    }
-    else if (alertView.tag == 98) {
-        if(0 == buttonIndex){ //no button
-            return;
-        } else if (1 == buttonIndex){ //yes button
-            [self socialMediaPictureAlert];
         }
     }
 }
