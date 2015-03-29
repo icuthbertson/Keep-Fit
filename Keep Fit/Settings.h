@@ -13,6 +13,7 @@
 
 @property Conversion goalConversionSetting;
 @property BOOL notifications;
+@property BOOL socialMedia;
 @property BOOL pending;
 @property BOOL active;
 @property BOOL overdue;

@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GoalListTableViewController : UITableViewController
+@interface GoalListTableViewController : UITableViewController <UIAlertViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 -(IBAction)unwindToList:(UIStoryboardSegue *)segue; // Segue returning from add view.
 -(IBAction)unwindFromView:(UIStoryboardSegue *)segue; // Segue returning from view goal view.

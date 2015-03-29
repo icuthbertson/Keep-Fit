@@ -300,7 +300,6 @@
 				AE40A69B1A8946BB000DD45A /* Supporting Files */,
 				AE40A6B41A8946BB000DD45A /* Keep FitTests */,
 				AE40A6991A8946BB000DD45A /* Products */,
-				AE9D0B4E1ABC841100C2BB6D /* PNChart */,
 			);
 			sourceTree = "<group>";
 		};
@@ -360,6 +359,7 @@
 		AE4FDF241AC1986500C56AEF /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				AE9D0B4E1ABC841100C2BB6D /* PNChart */,
 				AE9D0B811ABC845E00C2BB6D /* QuartzCore.framework */,
 				AE9D0B7F1ABC845600C2BB6D /* CoreGraphics.framework */,
 				AE9D0B7D1ABC844E00C2BB6D /* UIKit.framework */,

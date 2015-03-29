@@ -122,6 +122,11 @@
                                                  name:@"reloadDataView"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(socialMediaCompletedAlert)
+                                                 name:@"socialMedia"
+                                               object:nil];
+    
     // Do any additional setup after loading the view.
     [self.scrollView setScrollEnabled:YES];
     [self.scrollView setContentSize:CGSizeMake(320, 800)];
@@ -1409,7 +1414,7 @@
     [self.imageView setImage:self.image];
     
     
-    if (self.settings.notifications) {
+    if (self.settings.notifications && self.settings.socialMedia) {
         UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
         completedNotification.fireDate = [NSDate date];
         completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
@@ -1417,11 +1422,22 @@
         
         [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
     }
+    else if (self.settings.notifications) {
+        UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
+        completedNotification.fireDate = [NSDate date];
+        completedNotification.alertBody = [NSString stringWithFormat:@"You have now finished Goal %@.",self.viewGoal.goalName];
+        completedNotification.soundName = UILocalNotificationDefaultSoundName;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
+    }
+    else if (self.settings.socialMedia) {
+        [self socialMediaCompletedAlert];
+    }
     else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
-            message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
-            delegate:self cancelButtonTitle:@"OK"
-            otherButtonTitles:nil];
+                                                        message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
         [alert show];
     }
     
@@ -2047,6 +2063,29 @@
 }
 
 - (IBAction)socialMediaAction:(id)sender {
+    [self socialMediaPictureAlert];
+}
+
+- (void)socialMediaCompletedAlert {
+    if (self.settings.socialMedia) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Goal Completed"
+                                                            message:[NSString stringWithFormat:@"Goal %@ is now Completed. Would you like to to post to social media?",self.viewGoal.goalName]
+                                                           delegate:self
+                                                  cancelButtonTitle:@"No"
+                                                  otherButtonTitles:@"Yes", nil];
+        [alertView setTag:98];
+        [alertView show];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                        message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void)socialMediaPictureAlert {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Take Picture?"
                                                         message:@"Would you like to take a picture to send with your post?"
                                                        delegate:self
@@ -2059,11 +2098,18 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 99) {
-        if( 0 == buttonIndex ){ //no button
+        if(0 == buttonIndex){ //no button
             self.socialImage = nil;
             [self shareToSocial];
-        } else if ( 1 == buttonIndex ){ //yes button
+        } else if (1 == buttonIndex){ //yes button
             [self takePicture];
+        }
+    }
+    else if (alertView.tag == 98) {
+        if(0 == buttonIndex){ //no button
+            return;
+        } else if (1 == buttonIndex){ //yes button
+            [self socialMediaPictureAlert];
         }
     }
 }
