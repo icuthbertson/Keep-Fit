@@ -519,6 +519,7 @@
                 break;
         }
         // If the goal name has been used before alert with message and return NO.
+        NSLog(@"here %@", self.listGoalNames);
         for (int i=0; i<[self.listGoalNames count]; i++) {
             if ([trimmedString isEqualToString:[self.listGoalNames objectAtIndex:i]]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Goal" message:@"Goal with the same name already exists. Please choose a different name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];

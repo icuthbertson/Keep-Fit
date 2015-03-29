@@ -27,6 +27,7 @@
 @property MainTabBarViewController *mainTabBarController;
 
 @property (nonatomic, strong) NSArray *arrDBResults; // array to hold db select query results.
+@property (nonatomic, strong) NSArray *nameDBResults; // array to hold db select query results.
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton; // Outlet for select button.
 
 @property NSMutableArray *goalNamesForChecking;
@@ -51,6 +52,11 @@
         self.keepFitGoals = nil;
     }
     self.keepFitGoals = [[NSMutableArray alloc] init];
+    
+    if (self.goalNamesForChecking != nil) {
+        self.goalNamesForChecking = nil;
+    }
+    self.goalNamesForChecking = [[NSMutableArray alloc] init];
     
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
@@ -242,8 +248,8 @@
         self.mainTabBarController.settings.active = YES;
         self.mainTabBarController.settings.overdue = YES;
         self.mainTabBarController.settings.suspended = YES;
-        self.mainTabBarController.settings.abandoned = YES;
-        self.mainTabBarController.settings.completed = YES;
+        self.mainTabBarController.settings.abandoned = NO;
+        self.mainTabBarController.settings.completed = NO;
     }
     else {
         // else set the persisted date in the testing object.
@@ -410,17 +416,22 @@
     }
     self.goalNamesForChecking = [[NSMutableArray alloc] init];
     NSString *nameQuery = [NSString stringWithFormat:@"select * from %@", self.mainTabBarController.testing.getGoalDBName];
-    NSArray *nameDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:nameQuery]];
+    if (self.nameDBResults != nil) {
+        self.nameDBResults = nil;
+    }
+    self.nameDBResults = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:nameQuery]];
     
     // Set up indexes for getting column results for the rows in the database.
     indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
     
-    NSLog(@"Goal Names: %@", nameDBResults);
+    NSLog(@"Goal Names: %@", self.nameDBResults);
     
     // Set up the goal object with data from the rows returned by the query.
-    for (int i=0; i<[nameDBResults count]; i++) {
-        [self.goalNamesForChecking addObject:[NSString stringWithFormat:@"%@", [[self.arrDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]];
+    for (int i=0; i<[self.nameDBResults count]; i++) {
+        [self.goalNamesForChecking addObject:[NSString stringWithFormat:@"%@", [[self.nameDBResults objectAtIndex:i] objectAtIndex:indexOfGoalName]]];
     }
+    
+    NSLog(@"Goal Names List: %@", self.goalNamesForChecking);
     
     // Reload the table view.
     //[self.tableView reloadData];
@@ -740,15 +751,8 @@
         // If going to the add view.
         UINavigationController *navigationController = segue.destinationViewController;
         AddGoalViewController *destAddController = [[navigationController viewControllers]objectAtIndex:0];
-        NSMutableArray *goalNamesForChecking = [[NSMutableArray alloc] init];
-        // Set up the list of goal names.
-        for (int i=0; i<[self.keepFitGoals count]; i++) {
-            NSString *goalNameForArray = [[NSString alloc] init];
-            goalNameForArray = [[self.keepFitGoals objectAtIndex:i] goalName];
-            [goalNamesForChecking addObject:goalNameForArray];
-        }
         // Pass the list of goal names.
-        destAddController.listGoalNames = goalNamesForChecking;
+        destAddController.listGoalNames = self.goalNamesForChecking;
         // Pass the testing object.
         destAddController.testing = self.mainTabBarController.testing;
         destAddController.settings = self.mainTabBarController.settings;
