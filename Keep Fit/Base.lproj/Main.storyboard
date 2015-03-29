@@ -833,17 +833,6 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="3Ri-ym-O4Q">
-                                                <rect key="frame" x="232" y="153" width="51" height="31"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </switch>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Social Media Alerts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OmN-cj-60c">
-                                                <rect key="frame" x="8" y="158" width="218" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -947,7 +936,6 @@
                         <outlet property="pendingSwitch" destination="XuV-Oc-kQ7" id="Je5-Yt-hvc"/>
                         <outlet property="scheduleView" destination="c4r-Xo-22I" id="rR6-Lx-Pl9"/>
                         <outlet property="scrollView" destination="ayw-aq-cLP" id="PtN-JU-qfw"/>
-                        <outlet property="socialMediaSwitch" destination="3Ri-ym-O4Q" id="5a1-WB-PHi"/>
                         <outlet property="stairsLabel" destination="rtj-RL-ujw" id="rBF-XJ-7sm"/>
                         <outlet property="stairsStepper" destination="WSk-n1-m8Y" id="7nX-ZE-yNx"/>
                         <outlet property="stepsLabel" destination="XH4-Mh-6xj" id="GFj-lr-g9g"/>

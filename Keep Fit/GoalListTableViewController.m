@@ -235,6 +235,7 @@
             NSLog(@"Could not execute the query.");
         }
         self.mainTabBarController.settings.goalConversionSetting = 0;
+        self.mainTabBarController.settings.notifications = YES;
         self.mainTabBarController.settings.pending = YES;
         self.mainTabBarController.settings.active = YES;
         self.mainTabBarController.settings.overdue = YES;
