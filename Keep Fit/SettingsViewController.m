@@ -42,7 +42,6 @@
 @property (weak, nonatomic) IBOutlet UISwitch *suspendedSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *abandonedSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *completedSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *socialMediaSwitch;
 
 
 @property MainTabBarViewController *mainTabBarController;
@@ -113,7 +112,6 @@
     }
     
     [self.notificationsSwitch setOn:self.mainTabBarController.settings.notifications];
-    [self.socialMediaSwitch setOn:self.mainTabBarController.settings.socialMedia];
     
     [self.pendingSwitch setOn:self.mainTabBarController.settings.pending];
     [self.activeSwitch setOn:self.mainTabBarController.settings.active];
@@ -253,9 +251,7 @@
 
 - (IBAction)saveGeneralSettings:(id)sender {
     // Update goal in DB.
-    NSLog(@"%d",self.mainTabBarController.settings.socialMedia);
-    NSLog(@"%d",self.socialMediaSwitch.isOn);
-    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d', notifications='%d', socialMedia='%d', pending='%d', active='%d', overdue='%d', suspended='%d', abandoned='%d', completed='%d'", self.goalConversionSelector.selectedSegmentIndex, self.notificationsSwitch.isOn, self.socialMediaSwitch.isOn, self.pendingSwitch.isOn, self.activeSwitch.isOn, self.overdueSwitch.isOn, self.suspendedSwitch.isOn, self.abandonedSwitch.isOn, self.completedSwitch.isOn];
+    NSString *query = [NSString stringWithFormat:@"update settings set goalConversion='%d', notifications='%d', pending='%d', active='%d', overdue='%d', suspended='%d', abandoned='%d', completed='%d'", self.goalConversionSelector.selectedSegmentIndex, self.notificationsSwitch.isOn,  self.pendingSwitch.isOn, self.activeSwitch.isOn, self.overdueSwitch.isOn, self.suspendedSwitch.isOn, self.abandonedSwitch.isOn, self.completedSwitch.isOn];
     // Execute the query.
     [self.dbManager executeQuery:query];
     

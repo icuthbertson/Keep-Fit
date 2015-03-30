@@ -1356,8 +1356,14 @@
 -(void) completedView {
     self.viewGoal.goalStatus = Completed;
     self.viewGoal.goalCompletionDate = [NSDate date];
-    [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
-    [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+    if (self.testing.getTesting) {
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@startTesting",self.viewGoal.goalName] type:@"start"];
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@endTesting",self.viewGoal.goalName] type:@"end"];
+    }
+    else {
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+    }
     self.viewStatus.text = @"Completed";
     
     if (self.viewGoal.goalAmountSteps < self.viewGoal.goalProgressSteps) {
@@ -1410,6 +1416,7 @@
     
     
     if (self.settings.notifications) {
+        NSLog(@"Completed Notification.");
         UILocalNotification* completedNotification = [[UILocalNotification alloc] init];
         completedNotification.fireDate = [NSDate date];
         completedNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName];
@@ -1418,6 +1425,7 @@
         [[UIApplication sharedApplication] scheduleLocalNotification:completedNotification];
     }
     else {
+        NSLog(@"Completed Alert View.");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
                                                         message:[NSString stringWithFormat:@"Goal %@ is now Completed.",self.viewGoal.goalName]
                                                        delegate:self cancelButtonTitle:@"OK"
@@ -1432,8 +1440,14 @@
     /**********************************Suspend*****************************************/
     if ((self.viewGoal.goalStatus == Pending) || (self.viewGoal.goalStatus == Active) || (self.viewGoal.goalStatus == Overdue)) {
         self.viewGoal.goalStatus = Suspended;
-        [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
-        [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+        if (self.testing.getTesting) {
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@startTesting",self.viewGoal.goalName] type:@"start"];
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@endTesting",self.viewGoal.goalName] type:@"end"];
+        }
+        else {
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+            [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+        }
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Goal now suspended" message:@"This goal is now suspended." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         [self storeGoalStatusChangeToDB];
@@ -1483,7 +1497,13 @@
             endNotification.soundName = UILocalNotificationDefaultSoundName;
             endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
             
-            NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] forKey:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName]];
+            NSDictionary *infoDictend = [[NSDictionary alloc] init];
+            if (self.testing.getTesting) {
+                infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@endTesting",self.viewGoal.goalName] forKey:[NSString stringWithFormat:@"%@endTesting",self.viewGoal.goalName]];
+            }
+            else {
+                infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] forKey:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName]];
+            }
             endNotification.userInfo = infoDictend;
             
             [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
@@ -2021,8 +2041,14 @@
 - (IBAction)abandonButtonAction:(id)sender {
     self.viewGoal.goalStatus = Abandoned;
     self.viewGoal.goalCompletionDate = [NSDate date];
-    [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
-    [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+    if (self.testing.getTesting) {
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@startTesting",self.viewGoal.goalName] type:@"start"];
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@endTesting",self.viewGoal.goalName] type:@"end"];
+    }
+    else {
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",self.viewGoal.goalName] type:@"start"];
+        [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",self.viewGoal.goalName] type:@"end"];
+    }
     [self storeGoalStatusChangeToDB];
     [self loadFromDB];
     [self showDetails];

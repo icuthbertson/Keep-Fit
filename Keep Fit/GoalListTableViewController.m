@@ -141,7 +141,13 @@
             startNotification.soundName = UILocalNotificationDefaultSoundName;
             startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
             
-            NSDictionary *infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
+            NSDictionary *infoDictstart = [[NSDictionary alloc] init];
+            if (self.mainTabBarController.testing.getTesting) {
+                infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@startTesting",goal.goalName] forKey:[NSString stringWithFormat:@"%@startTesting",goal.goalName]];
+            }
+            else {
+                infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goal.goalName] forKey:[NSString stringWithFormat:@"%@start",goal.goalName]];
+            }
             startNotification.userInfo = infoDictstart;
             
             [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
@@ -152,7 +158,13 @@
             endNotification.soundName = UILocalNotificationDefaultSoundName;
             endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
             
-            NSDictionary *infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
+            NSDictionary *infoDictend = [[NSDictionary alloc] init];
+            if (self.mainTabBarController.testing.getTesting) {
+                infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@endTesting",goal.goalName] forKey:[NSString stringWithFormat:@"%@endTesting",goal.goalName]];
+            }
+            else {
+            infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goal.goalName] forKey:[NSString stringWithFormat:@"%@end",goal.goalName]];
+            }
             endNotification.userInfo = infoDictend;
             
             [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
@@ -653,8 +665,14 @@
         else { // Abandon goal.
             goal.goalStatus = Abandoned;
             goal.goalCompletionDate = [NSDate date];
-            [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",goal.goalName] type:@"start"];
-            [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",goal.goalName] type:@"end"];
+            if (self.mainTabBarController.testing.getTesting) {
+                [self cancelLocalNotification:[NSString stringWithFormat:@"%@startTesting",goal.goalName] type:@"start"];
+                [self cancelLocalNotification:[NSString stringWithFormat:@"%@endTesting",goal.goalName] type:@"end"];
+            }
+            else {
+                [self cancelLocalNotification:[NSString stringWithFormat:@"%@start",goal.goalName] type:@"start"];
+                [self cancelLocalNotification:[NSString stringWithFormat:@"%@end",goal.goalName] type:@"end"];
+            }
         }
         
         // Update history for the goal.
