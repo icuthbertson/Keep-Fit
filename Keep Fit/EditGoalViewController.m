@@ -508,6 +508,20 @@
     if (self.conversionTypeSelector.selectedSegmentIndex != self.editGoal.goalConversion) {
         self.editGoal.goalConversion = self.conversionTypeSelector.selectedSegmentIndex;
         NSLog(@"Converstion - Save: %d",self.editGoal.goalConversion);
+        if (self.conversionTypeSelector.selectedSegmentIndex == 0) {
+            self.editGoal.goalAmountSteps = [self.numStepsLabel.text intValue];
+            self.editGoal.goalAmountStairs = [self.numStairsLabel.text intValue];
+        }
+        else if (self.conversionTypeSelector.selectedSegmentIndex == 1) {
+            self.editGoal.goalAmountSteps = self.editGoal.goalAmountSteps*2112; // to miles
+            self.editGoal.goalAmountStairs = self.editGoal.goalAmountStairs*1.385; // to feet
+        }
+        else if (self.conversionTypeSelector.selectedSegmentIndex == 2) {
+            self.editGoal.goalAmountSteps = self.editGoal.goalAmountSteps*1312; // to km
+            self.editGoal.goalAmountStairs = self.editGoal.goalAmountStairs*4.545; // to meters
+        }
+        NSLog(@"Stairs - Save: %ld",(long)self.editGoal.goalAmountStairs);
+        NSLog(@"Steps - Save: %ld",(long)self.editGoal.goalAmountSteps);
         self.wasEdit = YES;
     }
     // If the steps amount is different set to the new value.
@@ -692,17 +706,14 @@
 
 - (IBAction)conversionSelector:(id)sender {
     if (self.conversionTypeSelector.selectedSegmentIndex == 0) { //steps and stairs
-        self.editGoal.goalConversion = StepsStairs;
         self.numStepsTitleLabel.text = @"Number of Steps";
         self.numStairsTitleLabel.text = @"Number of Stair";
     }
     else if (self.conversionTypeSelector.selectedSegmentIndex == 1) { //imperial
-        self.editGoal.goalConversion = Imperial;
         self.numStepsTitleLabel.text = @"Number of Miles to walk";
         self.numStairsTitleLabel.text = @"Number of Feet to climb";
     }
     else { //metric
-        self.editGoal.goalConversion = Metric;
         self.numStepsTitleLabel.text = @"Number of Kilometers to walk";
         self.numStairsTitleLabel.text = @"Number of Meters to climb";
     }

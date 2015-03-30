@@ -955,8 +955,10 @@
             }
         }
     }
+    self.conversion = self.viewGoal.goalConversion;
     // Reload the view.
     [self checkGoalStatus];
+    [self showDetails];
 }
 
 -(IBAction)unwindFromHistory:(UIStoryboardSegue *)segue {

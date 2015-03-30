@@ -1570,7 +1570,7 @@
                                             <segment title="Metric"/>
                                         </segments>
                                         <connections>
-                                            <action selector="conversionSelector:" destination="4uL-hu-mZb" eventType="valueChanged" id="cLd-UM-fja"/>
+                                            <action selector="conversionSelector:" destination="4uL-hu-mZb" eventType="valueChanged" id="cip-uo-9h9"/>
                                         </connections>
                                     </segmentedControl>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="d9f-Zq-7fO">
@@ -1605,7 +1605,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="800"/>
                     <connections>
-                        <outlet property="conversionTypeSelector" destination="Nt2-nS-hi3" id="VV1-ol-Xwe"/>
+                        <outlet property="conversionTypeSelector" destination="Nt2-nS-hi3" id="UK8-Nb-lxw"/>
                         <outlet property="editTitleField" destination="Svt-X3-KD7" id="OGo-IF-UJw"/>
                         <outlet property="editTypeField" destination="TtF-pe-mgq" id="Jgz-WP-gyv"/>
                         <outlet property="endDateTextField" destination="q7r-Wt-vZS" id="hhh-Nf-dl4"/>
