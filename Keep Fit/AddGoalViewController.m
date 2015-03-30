@@ -190,7 +190,7 @@
             self.numStairsTitleLabel.text = @"Number of Stair";
             
             [self enableStepper:self.stepsStepper];
-            [self enableStepper:self.stairsStepper];
+            [self disableStepper:self.stairsStepper];
             [self enableSegement:self.conversionTypeSelector];
             [self enableSegement:self.typeSelecter];
             break;
