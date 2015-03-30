@@ -14,6 +14,7 @@
 #import "Schedule.h"
 #import "ChangeTimeViewController.h"
 #import "Settings.h"
+#import "KeepFitGoal.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface SettingsViewController ()
@@ -48,6 +49,7 @@
 
 @property TestSettings *settings;
 
+@property BOOL oldNotif;
 
 @end
 
@@ -77,11 +79,14 @@
     // Initialize the dbManager object.
     self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"goalsDB.sql"];
     
+    self.oldNotif = self.mainTabBarController.settings.notifications;
+    
     [self loadFromDB];
     [self setUpView];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    self.oldNotif = self.mainTabBarController.settings.notifications;
     [self setUpView];
 }
 
@@ -260,6 +265,79 @@
         if (!self.notificationsSwitch.isOn) {
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
         }
+        else if (self.notificationsSwitch.isOn && !self.oldNotif) { //reinitalise notifications
+            NSString *goals = [NSString stringWithFormat:@"select * from %@",self.mainTabBarController.testing.getGoalDBName];
+            NSArray *goalsForNotifs;
+            goalsForNotifs = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:goals]];
+            
+            NSInteger indexOfGoalName = [self.dbManager.arrColumnNames indexOfObject:@"goalName"];
+            NSInteger indexOfGoalStatus = [self.dbManager.arrColumnNames indexOfObject:@"goalStatus"];
+            NSInteger indexOfGoalStartDate = [self.dbManager.arrColumnNames indexOfObject:@"goalStartDate"];
+            NSInteger indexOfGoalDate = [self.dbManager.arrColumnNames indexOfObject:@"goalDate"];
+            
+            for (int i=0; i<[goalsForNotifs count]; i++) {
+                NSString *goalName = [NSString stringWithFormat:@"%@", [[goalsForNotifs objectAtIndex:i] objectAtIndex:indexOfGoalName]];
+                GoalStatus status = (NSInteger)[[[goalsForNotifs objectAtIndex:i] objectAtIndex:indexOfGoalStatus] intValue];
+                NSDate *goalStartDate = [NSDate dateWithTimeIntervalSince1970:[[[goalsForNotifs objectAtIndex:i] objectAtIndex:indexOfGoalStartDate] doubleValue]];
+                NSDate *goalCompletionDate = [NSDate dateWithTimeIntervalSince1970:[[[goalsForNotifs objectAtIndex:i] objectAtIndex:indexOfGoalDate] doubleValue]];
+
+                
+                if (status == Pending) {
+                    UILocalNotification* startNotification = [[UILocalNotification alloc] init];
+                    startNotification.fireDate = goalStartDate;
+                    startNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Active.",goalName];
+                    startNotification.soundName = UILocalNotificationDefaultSoundName;
+                    startNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+                    
+                    NSDictionary *infoDictstart = [[NSDictionary alloc] init];
+                    if (self.mainTabBarController.testing.getTesting) {
+                        infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@startTesting",goalName] forKey:[NSString stringWithFormat:@"%@startTesting",goalName]];
+                    }
+                    else {
+                        infoDictstart = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@start",goalName] forKey:[NSString stringWithFormat:@"%@start",goalName]];
+                    }
+                    startNotification.userInfo = infoDictstart;
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:startNotification];
+                    
+                    UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+                    endNotification.fireDate = goalCompletionDate;
+                    endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goalName];
+                    endNotification.soundName = UILocalNotificationDefaultSoundName;
+                    endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+                    
+                    NSDictionary *infoDictend = [[NSDictionary alloc] init];
+                    if (self.mainTabBarController.testing.getTesting) {
+                        infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@endTesting",goalName] forKey:[NSString stringWithFormat:@"%@endTesting",goalName]];
+                    }
+                    else {
+                        infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goalName] forKey:[NSString stringWithFormat:@"%@end",goalName]];
+                    }
+                    endNotification.userInfo = infoDictend;
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
+                }
+                if (status == Active) {
+                    UILocalNotification* endNotification = [[UILocalNotification alloc] init];
+                    endNotification.fireDate = goalCompletionDate;
+                    endNotification.alertBody = [NSString stringWithFormat:@"Goal %@ is now Overdue.",goalName];
+                    endNotification.soundName = UILocalNotificationDefaultSoundName;
+                    endNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+                    
+                    NSDictionary *infoDictend = [[NSDictionary alloc] init];
+                    if (self.mainTabBarController.testing.getTesting) {
+                        infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@endTesting",goalName] forKey:[NSString stringWithFormat:@"%@endTesting",goalName]];
+                    }
+                    else {
+                        infoDictend = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@end",goalName] forKey:[NSString stringWithFormat:@"%@end",goalName]];
+                    }
+                    endNotification.userInfo = infoDictend;
+                    
+                    [[UIApplication sharedApplication] scheduleLocalNotification:endNotification];
+                }
+            }
+        }
+        
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
             message:[NSString stringWithFormat:@"General Settings Saved."]
             delegate:self cancelButtonTitle:@"OK"
@@ -274,6 +352,7 @@
                                               otherButtonTitles:nil];
         [alert show];
     }
+    self.oldNotif = self.notificationsSwitch.isOn;
 }
 
 -(void) storeGoalStatisticsToDB:(Schedule*) schedule {
