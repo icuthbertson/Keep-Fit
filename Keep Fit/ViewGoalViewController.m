@@ -969,11 +969,17 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showEditGoal"]) {
+        NSLog(@"here");
         EditGoalViewController *destViewController = segue.destinationViewController;
+        NSLog(@"here");
         destViewController.editGoal = self.viewGoal;
+        NSLog(@"here");
         destViewController.listGoalNames = self.listGoalNames;
+        NSLog(@"here");
         destViewController.currentName = self.viewGoal.goalName;
+        NSLog(@"here");
         destViewController.settings = self.settings;
+        NSLog(@"here");
     }
     else if ([segue.identifier isEqualToString:@"showHistory"]) {
         HistoryTableViewController *destViewController = segue.destinationViewController;

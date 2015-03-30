@@ -65,6 +65,7 @@
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
     
+    NSLog(@"field setup");
     // Set up the fields in the view with the values from the goal to be editted.
     self.editTitleField.text = self.editGoal.goalName;
     self.editTypeField.selectedSegmentIndex = self.editGoal.goalType;
@@ -119,7 +120,9 @@
         default:
             break;
     }
+    NSLog(@"field setup");
     
+    NSLog(@"conversion");
     if (self.editGoal.goalConversion == StepsStairs) { //steps and stairs
         self.numStepsTitleLabel.text = @"Number of Steps";
         self.numStairsTitleLabel.text = @"Number of Stair";
@@ -147,6 +150,7 @@
         self.stairsStepper.value = [self.numStairsLabel.text intValue];
         self.conversionTypeSelector.selectedSegmentIndex = 2;
     }
+    NSLog(@"conversion");
     
     self.stepsStepper.maximumValue = 1000000;
     self.stairsStepper.maximumValue = 1000000;
@@ -154,6 +158,7 @@
     [self updateStepsStepperValue];
     [self updateStairsStepperValue];
     
+    NSLog(@"date set up");
     // Set the minimum date of the date pickers to the current time
     // or stored time from the Testing object.
     self.editStartDateField = [[UIDatePicker alloc] init];
@@ -170,6 +175,7 @@
     [self.editDateField addTarget:self action:@selector(updateTextField:)
               forControlEvents:UIControlEventValueChanged];
     [self.endDateTextField setInputView:self.editDateField];
+    NSLog(@"date set up");
     
     if (self.editGoal.goalStatus == Active) {
         [self disableTextField:self.startDateTextField];
@@ -199,7 +205,20 @@
     self.presetGoalPicker.dataSource = self;
     self.presetGoalPicker.showsSelectionIndicator = YES;
     
-    [self.presetGoalPicker selectRow:(self.editGoal.goalType-2) inComponent:0 animated:YES];
+    NSLog(@"picker");
+    if (self.editGoal.goalType == Steps || self.editGoal.goalType == Stairs || self.editGoal.goalType == Both) {
+        [self.presetGoalPicker selectRow:(0) inComponent:0 animated:YES];
+    }
+    else if (self.editGoal.goalType == Everest) {
+        [self.presetGoalPicker selectRow:(1) inComponent:0 animated:YES];
+    }
+    else if (self.editGoal.goalType == Nevis) {
+        [self.presetGoalPicker selectRow:(2) inComponent:0 animated:YES];
+    }
+    else if (self.editGoal.goalType == Pluto) {
+        [self.presetGoalPicker selectRow:(3) inComponent:0 animated:YES];
+    }
+    NSLog(@"picker");
     
     if (self.editGoal.goalProgressSteps > 0 || self.editGoal.goalProgressStairs > 0) {
         [self disablePicker:self.presetGoalPicker];
