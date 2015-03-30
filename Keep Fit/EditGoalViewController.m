@@ -524,6 +524,7 @@
         NSLog(@"Steps - Save: %ld",(long)self.editGoal.goalAmountSteps);
         self.wasEdit = YES;
     }
+    
     // If the steps amount is different set to the new value.
     if (self.editGoal.goalAmountSteps != [self.numStepsLabel.text intValue]) {
         self.editGoal.goalAmountSteps = [self.numStepsLabel.text intValue];
@@ -548,6 +549,7 @@
         NSLog(@"Stairs - Save: %ld",(long)self.editGoal.goalAmountStairs);
         self.wasEdit = YES;
     }
+    
     // If the start date is different set to the new value.
     if (!([self.editGoal.goalStartDate isEqualToDate:self.editStartDateField.date])) {
         self.editGoal.goalStartDate = [self dateWithZeroSeconds:self.editStartDateField.date];
