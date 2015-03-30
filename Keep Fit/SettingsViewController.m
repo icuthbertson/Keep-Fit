@@ -262,10 +262,11 @@
     
     if (self.dbManager.affectedRows != 0) {
         NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
-        if (!self.notificationsSwitch.isOn) {
+        if (!self.notificationsSwitch.isOn) { //cancel notifications
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
         }
-        else if (self.notificationsSwitch.isOn && !self.oldNotif) { //reinitalise notifications
+        else if (self.notificationsSwitch.isOn && !self.oldNotif) { //reinitalise notifications if notifications were off and are now on.
+            
             NSString *goals = [NSString stringWithFormat:@"select * from %@",self.mainTabBarController.testing.getGoalDBName];
             NSArray *goalsForNotifs;
             goalsForNotifs = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:goals]];
