@@ -195,11 +195,13 @@
     
     
     // Set up the labels and other outlet with data of goal to be viewed.
+    [self checkGoalStatus];
     [self loadFromDB];
     //[self showDetails];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self checkGoalStatus];
     [self loadFromDB];
 }
 
